@@ -1,0 +1,1770 @@
+[
+    {
+        "name": "home",
+        "icon": "mdi-home"
+    },
+    {
+        "name": "ab-testing",
+        "icon": "mdi-ab-testing"
+    },
+    {
+        "name": "abacus",
+        "icon": "mdi-abacus"
+    },
+    {
+        "name": "abjad-arabic",
+        "icon": "mdi-abjad-arabic"
+    },
+    {
+        "name": "abjad-hebrew",
+        "icon": "mdi-abjad-hebrew"
+    },
+    {
+        "name": "abugida-devanagari",
+        "icon": "mdi-abugida-devanagari"
+    },
+    {
+        "name": "abugida-thai",
+        "icon": "mdi-abugida-thai"
+    },
+    {
+        "name": "access-point",
+        "icon": "mdi-access-point"
+    },
+    {
+        "name": "access-point-check",
+        "icon": "mdi-access-point-check"
+    },
+    {
+        "name": "access-point-minus",
+        "icon": "mdi-access-point-minus"
+    },
+    {
+        "name": "access-point-network",
+        "icon": "mdi-access-point-network"
+    },
+    {
+        "name": "access-point-network-off",
+        "icon": "mdi-access-point-network-off"
+    },
+    {
+        "name": "access-point-off",
+        "icon": "mdi-access-point-off"
+    },
+    {
+        "name": "access-point-plus",
+        "icon": "mdi-access-point-plus"
+    },
+    {
+        "name": "access-point-remove",
+        "icon": "mdi-access-point-remove"
+    },
+    {
+        "name": "account",
+        "icon": "mdi-account"
+    },
+    {
+        "name": "account-alert",
+        "icon": "mdi-account-alert"
+    },
+    {
+        "name": "account-alert-outline",
+        "icon": "mdi-account-alert-outline"
+    },
+    {
+        "name": "account-arrow-down",
+        "icon": "mdi-account-arrow-down"
+    },
+    {
+        "name": "account-arrow-down-outline",
+        "icon": "mdi-account-arrow-down-outline"
+    },
+    {
+        "name": "account-arrow-left",
+        "icon": "mdi-account-arrow-left"
+    },
+    {
+        "name": "account-arrow-left-outline",
+        "icon": "mdi-account-arrow-left-outline"
+    },
+    {
+        "name": "account-arrow-right",
+        "icon": "mdi-account-arrow-right"
+    },
+    {
+        "name": "account-arrow-right-outline",
+        "icon": "mdi-account-arrow-right-outline"
+    },
+    {
+        "name": "account-arrow-up",
+        "icon": "mdi-account-arrow-up"
+    },
+    {
+        "name": "account-arrow-up-outline",
+        "icon": "mdi-account-arrow-up-outline"
+    },
+    {
+        "name": "account-box",
+        "icon": "mdi-account-box"
+    },
+    {
+        "name": "account-box-multiple",
+        "icon": "mdi-account-box-multiple"
+    },
+    {
+        "name": "account-box-multiple-outline",
+        "icon": "mdi-account-box-multiple-outline"
+    },
+    {
+        "name": "account-box-outline",
+        "icon": "mdi-account-box-outline"
+    },
+    {
+        "name": "account-cancel",
+        "icon": "mdi-account-cancel"
+    },
+    {
+        "name": "account-cancel-outline",
+        "icon": "mdi-account-cancel-outline"
+    },
+    {
+        "name": "account-cash",
+        "icon": "mdi-account-cash"
+    },
+    {
+        "name": "account-cash-outline",
+        "icon": "mdi-account-cash-outline"
+    },
+    {
+        "name": "account-check",
+        "icon": "mdi-account-check"
+    },
+    {
+        "name": "account-check-outline",
+        "icon": "mdi-account-check-outline"
+    },
+    {
+        "name": "account-child",
+        "icon": "mdi-account-child"
+    },
+    {
+        "name": "account-child-circle",
+        "icon": "mdi-account-child-circle"
+    },
+    {
+        "name": "account-child-outline",
+        "icon": "mdi-account-child-outline"
+    },
+    {
+        "name": "account-circle",
+        "icon": "mdi-account-circle"
+    },
+    {
+        "name": "account-circle-outline",
+        "icon": "mdi-account-circle-outline"
+    },
+    {
+        "name": "account-clock",
+        "icon": "mdi-account-clock"
+    },
+    {
+        "name": "account-clock-outline",
+        "icon": "mdi-account-clock-outline"
+    },
+    {
+        "name": "account-cog",
+        "icon": "mdi-account-cog"
+    },
+    {
+        "name": "account-cog-outline",
+        "icon": "mdi-account-cog-outline"
+    },
+    {
+        "name": "account-convert",
+        "icon": "mdi-account-convert"
+    },
+    {
+        "name": "account-convert-outline",
+        "icon": "mdi-account-convert-outline"
+    },
+    {
+        "name": "account-cowboy-hat",
+        "icon": "mdi-account-cowboy-hat"
+    },
+    {
+        "name": "account-cowboy-hat-outline",
+        "icon": "mdi-account-cowboy-hat-outline"
+    },
+    {
+        "name": "account-details",
+        "icon": "mdi-account-details"
+    },
+    {
+        "name": "account-details-outline",
+        "icon": "mdi-account-details-outline"
+    },
+    {
+        "name": "account-edit",
+        "icon": "mdi-account-edit"
+    },
+    {
+        "name": "account-edit-outline",
+        "icon": "mdi-account-edit-outline"
+    },
+    {
+        "name": "account-eye",
+        "icon": "mdi-account-eye"
+    },
+    {
+        "name": "account-eye-outline",
+        "icon": "mdi-account-eye-outline"
+    },
+    {
+        "name": "account-filter",
+        "icon": "mdi-account-filter"
+    },
+    {
+        "name": "account-filter-outline",
+        "icon": "mdi-account-filter-outline"
+    },
+    {
+        "name": "account-group",
+        "icon": "mdi-account-group"
+    },
+    {
+        "name": "account-group-outline",
+        "icon": "mdi-account-group-outline"
+    },
+    {
+        "name": "account-hard-hat",
+        "icon": "mdi-account-hard-hat"
+    },
+    {
+        "name": "account-heart",
+        "icon": "mdi-account-heart"
+    },
+    {
+        "name": "account-heart-outline",
+        "icon": "mdi-account-heart-outline"
+    },
+    {
+        "name": "account-injury",
+        "icon": "mdi-account-injury"
+    },
+    {
+        "name": "account-injury-outline",
+        "icon": "mdi-account-injury-outline"
+    },
+    {
+        "name": "account-key",
+        "icon": "mdi-account-key"
+    },
+    {
+        "name": "account-key-outline",
+        "icon": "mdi-account-key-outline"
+    },
+    {
+        "name": "account-lock",
+        "icon": "mdi-account-lock"
+    },
+    {
+        "name": "account-lock-open",
+        "icon": "mdi-account-lock-open"
+    },
+    {
+        "name": "account-lock-open-outline",
+        "icon": "mdi-account-lock-open-outline"
+    },
+    {
+        "name": "account-lock-outline",
+        "icon": "mdi-account-lock-outline"
+    },
+    {
+        "name": "account-minus",
+        "icon": "mdi-account-minus"
+    },
+    {
+        "name": "account-minus-outline",
+        "icon": "mdi-account-minus-outline"
+    },
+    {
+        "name": "account-multiple",
+        "icon": "mdi-account-multiple"
+    },
+    {
+        "name": "account-multiple-check",
+        "icon": "mdi-account-multiple-check"
+    },
+    {
+        "name": "account-multiple-check-outline",
+        "icon": "mdi-account-multiple-check-outline"
+    },
+    {
+        "name": "account-multiple-minus",
+        "icon": "mdi-account-multiple-minus"
+    },
+    {
+        "name": "account-multiple-minus-outline",
+        "icon": "mdi-account-multiple-minus-outline"
+    },
+    {
+        "name": "account-multiple-outline",
+        "icon": "mdi-account-multiple-outline"
+    },
+    {
+        "name": "account-multiple-plus",
+        "icon": "mdi-account-multiple-plus"
+    },
+    {
+        "name": "account-multiple-plus-outline",
+        "icon": "mdi-account-multiple-plus-outline"
+    },
+    {
+        "name": "account-multiple-remove",
+        "icon": "mdi-account-multiple-remove"
+    },
+    {
+        "name": "account-multiple-remove-outline",
+        "icon": "mdi-account-multiple-remove-outline"
+    },
+    {
+        "name": "account-music",
+        "icon": "mdi-account-music"
+    },
+    {
+        "name": "account-music-outline",
+        "icon": "mdi-account-music-outline"
+    },
+    {
+        "name": "account-network",
+        "icon": "mdi-account-network"
+    },
+    {
+        "name": "account-network-outline",
+        "icon": "mdi-account-network-outline"
+    },
+    {
+        "name": "account-off",
+        "icon": "mdi-account-off"
+    },
+    {
+        "name": "account-off-outline",
+        "icon": "mdi-account-off-outline"
+    },
+    {
+        "name": "account-outline",
+        "icon": "mdi-account-outline"
+    },
+    {
+        "name": "account-plus",
+        "icon": "mdi-account-plus"
+    },
+    {
+        "name": "account-plus-outline",
+        "icon": "mdi-account-plus-outline"
+    },
+    {
+        "name": "account-question",
+        "icon": "mdi-account-question"
+    },
+    {
+        "name": "account-question-outline",
+        "icon": "mdi-account-question-outline"
+    },
+    {
+        "name": "account-reactivate",
+        "icon": "mdi-account-reactivate"
+    },
+    {
+        "name": "account-reactivate-outline",
+        "icon": "mdi-account-reactivate-outline"
+    },
+    {
+        "name": "account-remove",
+        "icon": "mdi-account-remove"
+    },
+    {
+        "name": "account-remove-outline",
+        "icon": "mdi-account-remove-outline"
+    },
+    {
+        "name": "account-search",
+        "icon": "mdi-account-search"
+    },
+    {
+        "name": "account-search-outline",
+        "icon": "mdi-account-search-outline"
+    },
+    {
+        "name": "account-settings",
+        "icon": "mdi-account-settings"
+    },
+    {
+        "name": "account-settings-outline",
+        "icon": "mdi-account-settings-outline"
+    },
+    {
+        "name": "account-star",
+        "icon": "mdi-account-star"
+    },
+    {
+        "name": "account-star-outline",
+        "icon": "mdi-account-star-outline"
+    },
+    {
+        "name": "account-supervisor",
+        "icon": "mdi-account-supervisor"
+    },
+    {
+        "name": "account-supervisor-circle",
+        "icon": "mdi-account-supervisor-circle"
+    },
+    {
+        "name": "account-supervisor-circle-outline",
+        "icon": "mdi-account-supervisor-circle-outline"
+    },
+    {
+        "name": "account-supervisor-outline",
+        "icon": "mdi-account-supervisor-outline"
+    },
+    {
+        "name": "account-switch",
+        "icon": "mdi-account-switch"
+    },
+    {
+        "name": "account-switch-outline",
+        "icon": "mdi-account-switch-outline"
+    },
+    {
+        "name": "account-sync",
+        "icon": "mdi-account-sync"
+    },
+    {
+        "name": "account-sync-outline",
+        "icon": "mdi-account-sync-outline"
+    },
+    {
+        "name": "account-tie",
+        "icon": "mdi-account-tie"
+    },
+    {
+        "name": "account-tie-hat",
+        "icon": "mdi-account-tie-hat"
+    },
+    {
+        "name": "account-tie-hat-outline",
+        "icon": "mdi-account-tie-hat-outline"
+    },
+    {
+        "name": "account-tie-outline",
+        "icon": "mdi-account-tie-outline"
+    },
+    {
+        "name": "account-tie-voice",
+        "icon": "mdi-account-tie-voice"
+    },
+    {
+        "name": "account-tie-voice-off",
+        "icon": "mdi-account-tie-voice-off"
+    },
+    {
+        "name": "account-tie-voice-off-outline",
+        "icon": "mdi-account-tie-voice-off-outline"
+    },
+    {
+        "name": "account-tie-voice-outline",
+        "icon": "mdi-account-tie-voice-outline"
+    },
+    {
+        "name": "account-voice",
+        "icon": "mdi-account-voice"
+    },
+    {
+        "name": "account-voice-off",
+        "icon": "mdi-account-voice-off"
+    },
+    {
+        "name": "account-wrench",
+        "icon": "mdi-account-wrench"
+    },
+    {
+        "name": "account-wrench-outline",
+        "icon": "mdi-account-wrench-outline"
+    },
+    {
+        "name": "adjust",
+        "icon": "mdi-adjust"
+    },
+    {
+        "name": "advertisements",
+        "icon": "mdi-advertisements"
+    },
+    {
+        "name": "advertisements-off",
+        "icon": "mdi-advertisements-off"
+    },
+    {
+        "name": "air-conditioner",
+        "icon": "mdi-air-conditioner"
+    },
+    {
+        "name": "air-filter",
+        "icon": "mdi-air-filter"
+    },
+    {
+        "name": "air-horn",
+        "icon": "mdi-air-horn"
+    },
+    {
+        "name": "air-humidifier",
+        "icon": "mdi-air-humidifier"
+    },
+    {
+        "name": "air-humidifier-off",
+        "icon": "mdi-air-humidifier-off"
+    },
+    {
+        "name": "air-purifier",
+        "icon": "mdi-air-purifier"
+    },
+    {
+        "name": "airbag",
+        "icon": "mdi-airbag"
+    },
+    {
+        "name": "airballoon",
+        "icon": "mdi-airballoon"
+    },
+    {
+        "name": "airballoon-outline",
+        "icon": "mdi-airballoon-outline"
+    },
+    {
+        "name": "airplane",
+        "icon": "mdi-airplane"
+    },
+    {
+        "name": "airplane-alert",
+        "icon": "mdi-airplane-alert"
+    },
+    {
+        "name": "airplane-check",
+        "icon": "mdi-airplane-check"
+    },
+    {
+        "name": "airplane-clock",
+        "icon": "mdi-airplane-clock"
+    },
+    {
+        "name": "airplane-cog",
+        "icon": "mdi-airplane-cog"
+    },
+    {
+        "name": "airplane-edit",
+        "icon": "mdi-airplane-edit"
+    },
+    {
+        "name": "airplane-landing",
+        "icon": "mdi-airplane-landing"
+    },
+    {
+        "name": "airplane-marker",
+        "icon": "mdi-airplane-marker"
+    },
+    {
+        "name": "airplane-minus",
+        "icon": "mdi-airplane-minus"
+    },
+    {
+        "name": "airplane-off",
+        "icon": "mdi-airplane-off"
+    },
+    {
+        "name": "airplane-plus",
+        "icon": "mdi-airplane-plus"
+    },
+    {
+        "name": "airplane-remove",
+        "icon": "mdi-airplane-remove"
+    },
+    {
+        "name": "airplane-search",
+        "icon": "mdi-airplane-search"
+    },
+    {
+        "name": "airplane-settings",
+        "icon": "mdi-airplane-settings"
+    },
+    {
+        "name": "airplane-takeoff",
+        "icon": "mdi-airplane-takeoff"
+    },
+    {
+        "name": "airport",
+        "icon": "mdi-airport"
+    },
+    {
+        "name": "alarm",
+        "icon": "mdi-alarm"
+    },
+    {
+        "name": "alarm-bell",
+        "icon": "mdi-alarm-bell"
+    },
+    {
+        "name": "alarm-check",
+        "icon": "mdi-alarm-check"
+    },
+    {
+        "name": "alarm-light",
+        "icon": "mdi-alarm-light"
+    },
+    {
+        "name": "alarm-light-off",
+        "icon": "mdi-alarm-light-off"
+    },
+    {
+        "name": "alarm-light-off-outline",
+        "icon": "mdi-alarm-light-off-outline"
+    },
+    {
+        "name": "alarm-light-outline",
+        "icon": "mdi-alarm-light-outline"
+    },
+    {
+        "name": "alarm-multiple",
+        "icon": "mdi-alarm-multiple"
+    },
+    {
+        "name": "alarm-note",
+        "icon": "mdi-alarm-note"
+    },
+    {
+        "name": "alarm-note-off",
+        "icon": "mdi-alarm-note-off"
+    },
+    {
+        "name": "alarm-off",
+        "icon": "mdi-alarm-off"
+    },
+    {
+        "name": "alarm-panel",
+        "icon": "mdi-alarm-panel"
+    },
+    {
+        "name": "alarm-panel-outline",
+        "icon": "mdi-alarm-panel-outline"
+    },
+    {
+        "name": "alarm-plus",
+        "icon": "mdi-alarm-plus"
+    },
+    {
+        "name": "alarm-snooze",
+        "icon": "mdi-alarm-snooze"
+    },
+    {
+        "name": "album",
+        "icon": "mdi-album"
+    },
+    {
+        "name": "alert",
+        "icon": "mdi-alert"
+    },
+    {
+        "name": "alert-box",
+        "icon": "mdi-alert-box"
+    },
+    {
+        "name": "alert-circle",
+        "icon": "mdi-alert-circle"
+    },
+    {
+        "name": "alert-circle-check",
+        "icon": "mdi-alert-circle-check"
+    },
+    {
+        "name": "alert-circle-check-outline",
+        "icon": "mdi-alert-circle-check-outline"
+    },
+    {
+        "name": "alert-circle-outline",
+        "icon": "mdi-alert-circle-outline"
+    },
+    {
+        "name": "alert-decagram",
+        "icon": "mdi-alert-decagram"
+    },
+    {
+        "name": "alert-decagram-outline",
+        "icon": "mdi-alert-decagram-outline"
+    },
+    {
+        "name": "alert-outline",
+        "icon": "mdi-alert-outline"
+    },
+    {
+        "name": "alert-plus",
+        "icon": "mdi-alert-plus"
+    },
+    {
+        "name": "alert-plus-outline",
+        "icon": "mdi-alert-plus-outline"
+    },
+    {
+        "name": "alert-remove",
+        "icon": "mdi-alert-remove"
+    },
+    {
+        "name": "alert-remove-outline",
+        "icon": "mdi-alert-remove-outline"
+    },
+    {
+        "name": "alert-rhombus",
+        "icon": "mdi-alert-rhombus"
+    },
+    {
+        "name": "alert-rhombus-outline",
+        "icon": "mdi-alert-rhombus-outline"
+    },
+    {
+        "name": "alien",
+        "icon": "mdi-alien"
+    },
+    {
+        "name": "alien-outline",
+        "icon": "mdi-alien-outline"
+    },
+    {
+        "name": "align-horizontal-center",
+        "icon": "mdi-align-horizontal-center"
+    },
+    {
+        "name": "align-horizontal-distribute",
+        "icon": "mdi-align-horizontal-distribute"
+    },
+    {
+        "name": "align-horizontal-left",
+        "icon": "mdi-align-horizontal-left"
+    },
+    {
+        "name": "align-horizontal-right",
+        "icon": "mdi-align-horizontal-right"
+    },
+    {
+        "name": "align-vertical-bottom",
+        "icon": "mdi-align-vertical-bottom"
+    },
+    {
+        "name": "align-vertical-center",
+        "icon": "mdi-align-vertical-center"
+    },
+    {
+        "name": "align-vertical-distribute",
+        "icon": "mdi-align-vertical-distribute"
+    },
+    {
+        "name": "align-vertical-top",
+        "icon": "mdi-align-vertical-top"
+    },
+    {
+        "name": "all-inclusive",
+        "icon": "mdi-all-inclusive"
+    },
+    {
+        "name": "all-inclusive-box",
+        "icon": "mdi-all-inclusive-box"
+    },
+    {
+        "name": "all-inclusive-box-outline",
+        "icon": "mdi-all-inclusive-box-outline"
+    },
+    {
+        "name": "allergy",
+        "icon": "mdi-allergy"
+    },
+    {
+        "name": "alpha",
+        "icon": "mdi-alpha"
+    },
+    {
+        "name": "alpha-a",
+        "icon": "mdi-alpha-a"
+    },
+    {
+        "name": "alpha-a-box",
+        "icon": "mdi-alpha-a-box"
+    },
+    {
+        "name": "alpha-a-box-outline",
+        "icon": "mdi-alpha-a-box-outline"
+    },
+    {
+        "name": "alpha-a-circle",
+        "icon": "mdi-alpha-a-circle"
+    },
+    {
+        "name": "alpha-a-circle-outline",
+        "icon": "mdi-alpha-a-circle-outline"
+    },
+    {
+        "name": "alpha-b",
+        "icon": "mdi-alpha-b"
+    },
+    {
+        "name": "alpha-b-box",
+        "icon": "mdi-alpha-b-box"
+    },
+    {
+        "name": "alpha-b-box-outline",
+        "icon": "mdi-alpha-b-box-outline"
+    },
+    {
+        "name": "alpha-b-circle",
+        "icon": "mdi-alpha-b-circle"
+    },
+    {
+        "name": "alpha-b-circle-outline",
+        "icon": "mdi-alpha-b-circle-outline"
+    },
+    {
+        "name": "alpha-c",
+        "icon": "mdi-alpha-c"
+    },
+    {
+        "name": "alpha-c-box",
+        "icon": "mdi-alpha-c-box"
+    },
+    {
+        "name": "alpha-c-box-outline",
+        "icon": "mdi-alpha-c-box-outline"
+    },
+    {
+        "name": "alpha-c-circle",
+        "icon": "mdi-alpha-c-circle"
+    },
+    {
+        "name": "alpha-c-circle-outline",
+        "icon": "mdi-alpha-c-circle-outline"
+    },
+    {
+        "name": "alpha-d",
+        "icon": "mdi-alpha-d"
+    },
+    {
+        "name": "alpha-d-box",
+        "icon": "mdi-alpha-d-box"
+    },
+    {
+        "name": "alpha-d-box-outline",
+        "icon": "mdi-alpha-d-box-outline"
+    },
+    {
+        "name": "alpha-d-circle",
+        "icon": "mdi-alpha-d-circle"
+    },
+    {
+        "name": "alpha-d-circle-outline",
+        "icon": "mdi-alpha-d-circle-outline"
+    },
+    {
+        "name": "alpha-e",
+        "icon": "mdi-alpha-e"
+    },
+    {
+        "name": "alpha-e-box",
+        "icon": "mdi-alpha-e-box"
+    },
+    {
+        "name": "alpha-e-box-outline",
+        "icon": "mdi-alpha-e-box-outline"
+    },
+    {
+        "name": "alpha-e-circle",
+        "icon": "mdi-alpha-e-circle"
+    },
+    {
+        "name": "alpha-e-circle-outline",
+        "icon": "mdi-alpha-e-circle-outline"
+    },
+    {
+        "name": "alpha-f",
+        "icon": "mdi-alpha-f"
+    },
+    {
+        "name": "alpha-f-box",
+        "icon": "mdi-alpha-f-box"
+    },
+    {
+        "name": "alpha-f-box-outline",
+        "icon": "mdi-alpha-f-box-outline"
+    },
+    {
+        "name": "alpha-f-circle",
+        "icon": "mdi-alpha-f-circle"
+    },
+    {
+        "name": "alpha-f-circle-outline",
+        "icon": "mdi-alpha-f-circle-outline"
+    },
+    {
+        "name": "alpha-g",
+        "icon": "mdi-alpha-g"
+    },
+    {
+        "name": "alpha-g-box",
+        "icon": "mdi-alpha-g-box"
+    },
+    {
+        "name": "alpha-g-box-outline",
+        "icon": "mdi-alpha-g-box-outline"
+    },
+    {
+        "name": "alpha-g-circle",
+        "icon": "mdi-alpha-g-circle"
+    },
+    {
+        "name": "alpha-g-circle-outline",
+        "icon": "mdi-alpha-g-circle-outline"
+    },
+    {
+        "name": "alpha-h",
+        "icon": "mdi-alpha-h"
+    },
+    {
+        "name": "alpha-h-box",
+        "icon": "mdi-alpha-h-box"
+    },
+    {
+        "name": "alpha-h-box-outline",
+        "icon": "mdi-alpha-h-box-outline"
+    },
+    {
+        "name": "alpha-h-circle",
+        "icon": "mdi-alpha-h-circle"
+    },
+    {
+        "name": "alpha-h-circle-outline",
+        "icon": "mdi-alpha-h-circle-outline"
+    },
+    {
+        "name": "alpha-i",
+        "icon": "mdi-alpha-i"
+    },
+    {
+        "name": "alpha-i-box",
+        "icon": "mdi-alpha-i-box"
+    },
+    {
+        "name": "alpha-i-box-outline",
+        "icon": "mdi-alpha-i-box-outline"
+    },
+    {
+        "name": "alpha-i-circle",
+        "icon": "mdi-alpha-i-circle"
+    },
+    {
+        "name": "alpha-i-circle-outline",
+        "icon": "mdi-alpha-i-circle-outline"
+    },
+    {
+        "name": "alpha-j",
+        "icon": "mdi-alpha-j"
+    },
+    {
+        "name": "alpha-j-box",
+        "icon": "mdi-alpha-j-box"
+    },
+    {
+        "name": "alpha-j-box-outline",
+        "icon": "mdi-alpha-j-box-outline"
+    },
+    {
+        "name": "alpha-j-circle",
+        "icon": "mdi-alpha-j-circle"
+    },
+    {
+        "name": "alpha-j-circle-outline",
+        "icon": "mdi-alpha-j-circle-outline"
+    },
+    {
+        "name": "alpha-k",
+        "icon": "mdi-alpha-k"
+    },
+    {
+        "name": "alpha-k-box",
+        "icon": "mdi-alpha-k-box"
+    },
+    {
+        "name": "alpha-k-box-outline",
+        "icon": "mdi-alpha-k-box-outline"
+    },
+    {
+        "name": "alpha-k-circle",
+        "icon": "mdi-alpha-k-circle"
+    },
+    {
+        "name": "alpha-k-circle-outline",
+        "icon": "mdi-alpha-k-circle-outline"
+    },
+    {
+        "name": "alpha-l",
+        "icon": "mdi-alpha-l"
+    },
+    {
+        "name": "alpha-l-box",
+        "icon": "mdi-alpha-l-box"
+    },
+    {
+        "name": "alpha-l-box-outline",
+        "icon": "mdi-alpha-l-box-outline"
+    },
+    {
+        "name": "alpha-l-circle",
+        "icon": "mdi-alpha-l-circle"
+    },
+    {
+        "name": "alpha-l-circle-outline",
+        "icon": "mdi-alpha-l-circle-outline"
+    },
+    {
+        "name": "alpha-m",
+        "icon": "mdi-alpha-m"
+    },
+    {
+        "name": "alpha-m-box",
+        "icon": "mdi-alpha-m-box"
+    },
+    {
+        "name": "alpha-m-box-outline",
+        "icon": "mdi-alpha-m-box-outline"
+    },
+    {
+        "name": "alpha-m-circle",
+        "icon": "mdi-alpha-m-circle"
+    },
+    {
+        "name": "alpha-m-circle-outline",
+        "icon": "mdi-alpha-m-circle-outline"
+    },
+    {
+        "name": "alpha-n",
+        "icon": "mdi-alpha-n"
+    },
+    {
+        "name": "alpha-n-box",
+        "icon": "mdi-alpha-n-box"
+    },
+    {
+        "name": "alpha-n-box-outline",
+        "icon": "mdi-alpha-n-box-outline"
+    },
+    {
+        "name": "alpha-n-circle",
+        "icon": "mdi-alpha-n-circle"
+    },
+    {
+        "name": "alpha-n-circle-outline",
+        "icon": "mdi-alpha-n-circle-outline"
+    },
+    {
+        "name": "alpha-o",
+        "icon": "mdi-alpha-o"
+    },
+    {
+        "name": "alpha-o-box",
+        "icon": "mdi-alpha-o-box"
+    },
+    {
+        "name": "alpha-o-box-outline",
+        "icon": "mdi-alpha-o-box-outline"
+    },
+    {
+        "name": "alpha-o-circle",
+        "icon": "mdi-alpha-o-circle"
+    },
+    {
+        "name": "alpha-o-circle-outline",
+        "icon": "mdi-alpha-o-circle-outline"
+    },
+    {
+        "name": "alpha-p",
+        "icon": "mdi-alpha-p"
+    },
+    {
+        "name": "alpha-p-box",
+        "icon": "mdi-alpha-p-box"
+    },
+    {
+        "name": "alpha-p-box-outline",
+        "icon": "mdi-alpha-p-box-outline"
+    },
+    {
+        "name": "alpha-p-circle",
+        "icon": "mdi-alpha-p-circle"
+    },
+    {
+        "name": "alpha-p-circle-outline",
+        "icon": "mdi-alpha-p-circle-outline"
+    },
+    {
+        "name": "alpha-q",
+        "icon": "mdi-alpha-q"
+    },
+    {
+        "name": "alpha-q-box",
+        "icon": "mdi-alpha-q-box"
+    },
+    {
+        "name": "alpha-q-box-outline",
+        "icon": "mdi-alpha-q-box-outline"
+    },
+    {
+        "name": "alpha-q-circle",
+        "icon": "mdi-alpha-q-circle"
+    },
+    {
+        "name": "alpha-q-circle-outline",
+        "icon": "mdi-alpha-q-circle-outline"
+    },
+    {
+        "name": "alpha-r",
+        "icon": "mdi-alpha-r"
+    },
+    {
+        "name": "alpha-r-box",
+        "icon": "mdi-alpha-r-box"
+    },
+    {
+        "name": "alpha-r-box-outline",
+        "icon": "mdi-alpha-r-box-outline"
+    },
+    {
+        "name": "alpha-r-circle",
+        "icon": "mdi-alpha-r-circle"
+    },
+    {
+        "name": "alpha-r-circle-outline",
+        "icon": "mdi-alpha-r-circle-outline"
+    },
+    {
+        "name": "alpha-s",
+        "icon": "mdi-alpha-s"
+    },
+    {
+        "name": "alpha-s-box",
+        "icon": "mdi-alpha-s-box"
+    },
+    {
+        "name": "alpha-s-box-outline",
+        "icon": "mdi-alpha-s-box-outline"
+    },
+    {
+        "name": "alpha-s-circle",
+        "icon": "mdi-alpha-s-circle"
+    },
+    {
+        "name": "alpha-s-circle-outline",
+        "icon": "mdi-alpha-s-circle-outline"
+    },
+    {
+        "name": "alpha-t",
+        "icon": "mdi-alpha-t"
+    },
+    {
+        "name": "alpha-t-box",
+        "icon": "mdi-alpha-t-box"
+    },
+    {
+        "name": "alpha-t-box-outline",
+        "icon": "mdi-alpha-t-box-outline"
+    },
+    {
+        "name": "alpha-t-circle",
+        "icon": "mdi-alpha-t-circle"
+    },
+    {
+        "name": "alpha-t-circle-outline",
+        "icon": "mdi-alpha-t-circle-outline"
+    },
+    {
+        "name": "alpha-u",
+        "icon": "mdi-alpha-u"
+    },
+    {
+        "name": "alpha-u-box",
+        "icon": "mdi-alpha-u-box"
+    },
+    {
+        "name": "alpha-u-box-outline",
+        "icon": "mdi-alpha-u-box-outline"
+    },
+    {
+        "name": "alpha-u-circle",
+        "icon": "mdi-alpha-u-circle"
+    },
+    {
+        "name": "alpha-u-circle-outline",
+        "icon": "mdi-alpha-u-circle-outline"
+    },
+    {
+        "name": "alpha-v",
+        "icon": "mdi-alpha-v"
+    },
+    {
+        "name": "alpha-v-box",
+        "icon": "mdi-alpha-v-box"
+    },
+    {
+        "name": "alpha-v-box-outline",
+        "icon": "mdi-alpha-v-box-outline"
+    },
+    {
+        "name": "alpha-v-circle",
+        "icon": "mdi-alpha-v-circle"
+    },
+    {
+        "name": "alpha-v-circle-outline",
+        "icon": "mdi-alpha-v-circle-outline"
+    },
+    {
+        "name": "alpha-w",
+        "icon": "mdi-alpha-w"
+    },
+    {
+        "name": "alpha-w-box",
+        "icon": "mdi-alpha-w-box"
+    },
+    {
+        "name": "alpha-w-box-outline",
+        "icon": "mdi-alpha-w-box-outline"
+    },
+    {
+        "name": "alpha-w-circle",
+        "icon": "mdi-alpha-w-circle"
+    },
+    {
+        "name": "alpha-w-circle-outline",
+        "icon": "mdi-alpha-w-circle-outline"
+    },
+    {
+        "name": "alpha-x",
+        "icon": "mdi-alpha-x"
+    },
+    {
+        "name": "alpha-x-box",
+        "icon": "mdi-alpha-x-box"
+    },
+    {
+        "name": "alpha-x-box-outline",
+        "icon": "mdi-alpha-x-box-outline"
+    },
+    {
+        "name": "alpha-x-circle",
+        "icon": "mdi-alpha-x-circle"
+    },
+    {
+        "name": "alpha-x-circle-outline",
+        "icon": "mdi-alpha-x-circle-outline"
+    },
+    {
+        "name": "alpha-y",
+        "icon": "mdi-alpha-y"
+    },
+    {
+        "name": "alpha-y-box",
+        "icon": "mdi-alpha-y-box"
+    },
+    {
+        "name": "alpha-y-box-outline",
+        "icon": "mdi-alpha-y-box-outline"
+    },
+    {
+        "name": "alpha-y-circle",
+        "icon": "mdi-alpha-y-circle"
+    },
+    {
+        "name": "alpha-y-circle-outline",
+        "icon": "mdi-alpha-y-circle-outline"
+    },
+    {
+        "name": "alpha-z",
+        "icon": "mdi-alpha-z"
+    },
+    {
+        "name": "alpha-z-box",
+        "icon": "mdi-alpha-z-box"
+    },
+    {
+        "name": "alpha-z-box-outline",
+        "icon": "mdi-alpha-z-box-outline"
+    },
+    {
+        "name": "alpha-z-circle",
+        "icon": "mdi-alpha-z-circle"
+    },
+    {
+        "name": "alpha-z-circle-outline",
+        "icon": "mdi-alpha-z-circle-outline"
+    },
+    {
+        "name": "alphabet-aurebesh",
+        "icon": "mdi-alphabet-aurebesh"
+    },
+    {
+        "name": "alphabet-cyrillic",
+        "icon": "mdi-alphabet-cyrillic"
+    },
+    {
+        "name": "alphabet-greek",
+        "icon": "mdi-alphabet-greek"
+    },
+    {
+        "name": "alphabet-latin",
+        "icon": "mdi-alphabet-latin"
+    },
+    {
+        "name": "alphabet-piqad",
+        "icon": "mdi-alphabet-piqad"
+    },
+    {
+        "name": "alphabet-tengwar",
+        "icon": "mdi-alphabet-tengwar"
+    },
+    {
+        "name": "alphabetical",
+        "icon": "mdi-alphabetical"
+    },
+    {
+        "name": "alphabetical-off",
+        "icon": "mdi-alphabetical-off"
+    },
+    {
+        "name": "alphabetical-variant",
+        "icon": "mdi-alphabetical-variant"
+    },
+    {
+        "name": "alphabetical-variant-off",
+        "icon": "mdi-alphabetical-variant-off"
+    },
+    {
+        "name": "altimeter",
+        "icon": "mdi-altimeter"
+    },
+    {
+        "name": "ambulance",
+        "icon": "mdi-ambulance"
+    },
+    {
+        "name": "ammunition",
+        "icon": "mdi-ammunition"
+    },
+    {
+        "name": "ampersand",
+        "icon": "mdi-ampersand"
+    },
+    {
+        "name": "amplifier",
+        "icon": "mdi-amplifier"
+    },
+    {
+        "name": "amplifier-off",
+        "icon": "mdi-amplifier-off"
+    },
+    {
+        "name": "anchor",
+        "icon": "mdi-anchor"
+    },
+    {
+        "name": "android",
+        "icon": "mdi-android"
+    },
+    {
+        "name": "android-messages",
+        "icon": "mdi-android-messages"
+    },
+    {
+        "name": "android-studio",
+        "icon": "mdi-android-studio"
+    },
+    {
+        "name": "angle-acute",
+        "icon": "mdi-angle-acute"
+    },
+    {
+        "name": "angle-obtuse",
+        "icon": "mdi-angle-obtuse"
+    },
+    {
+        "name": "angle-right",
+        "icon": "mdi-angle-right"
+    },
+    {
+        "name": "angular",
+        "icon": "mdi-angular"
+    },
+    {
+        "name": "angularjs",
+        "icon": "mdi-angularjs"
+    },
+    {
+        "name": "animation",
+        "icon": "mdi-animation"
+    },
+    {
+        "name": "animation-outline",
+        "icon": "mdi-animation-outline"
+    },
+    {
+        "name": "animation-play",
+        "icon": "mdi-animation-play"
+    },
+    {
+        "name": "animation-play-outline",
+        "icon": "mdi-animation-play-outline"
+    },
+    {
+        "name": "ansible",
+        "icon": "mdi-ansible"
+    },
+    {
+        "name": "antenna",
+        "icon": "mdi-antenna"
+    },
+    {
+        "name": "anvil",
+        "icon": "mdi-anvil"
+    },
+    {
+        "name": "apache-kafka",
+        "icon": "mdi-apache-kafka"
+    },
+    {
+        "name": "api",
+        "icon": "mdi-api"
+    },
+    {
+        "name": "api-off",
+        "icon": "mdi-api-off"
+    },
+    {
+        "name": "apple",
+        "icon": "mdi-apple"
+    },
+    {
+        "name": "apple-finder",
+        "icon": "mdi-apple-finder"
+    },
+    {
+        "name": "apple-icloud",
+        "icon": "mdi-apple-icloud"
+    },
+    {
+        "name": "apple-ios",
+        "icon": "mdi-apple-ios"
+    },
+    {
+        "name": "apple-safari",
+        "icon": "mdi-apple-safari"
+    },
+    {
+        "name": "application",
+        "icon": "mdi-application"
+    },
+    {
+        "name": "application-array",
+        "icon": "mdi-application-array"
+    },
+    {
+        "name": "application-array-outline",
+        "icon": "mdi-application-array-outline"
+    },
+    {
+        "name": "application-braces",
+        "icon": "mdi-application-braces"
+    },
+    {
+        "name": "application-braces-outline",
+        "icon": "mdi-application-braces-outline"
+    },
+    {
+        "name": "application-brackets",
+        "icon": "mdi-application-brackets"
+    },
+    {
+        "name": "application-brackets-outline",
+        "icon": "mdi-application-brackets-outline"
+    },
+    {
+        "name": "application-brackets",
+        "icon": "mdi-application-brackets"
+    },
+    {
+        "name": "application-brackets-outline",
+        "icon": "mdi-application-brackets-outline"
+    },
+    {
+        "name": "application-cog",
+        "icon": "mdi-application-cog"
+    },
+    {
+        "name": "application-cog-outline",
+        "icon": "mdi-application-cog-outline"
+    },
+    {
+        "name": "application-edit",
+        "icon": "mdi-application-edit"
+    },
+    {
+        "name": "application-edit-outline",
+        "icon": "mdi-application-edit-outline"
+    },
+    {
+        "name": "application-export",
+        "icon": "mdi-application-export"
+    },
+    {
+        "name": "application-import",
+        "icon": "mdi-application-import"
+    },
+    {
+        "name": "application-outline",
+        "icon": "mdi-application-outline"
+    },
+    {
+        "name": "application-parentheses",
+        "icon": "mdi-application-parentheses"
+    },
+    {
+        "name": "application-parentheses-outline",
+        "icon": "mdi-application-parentheses-outline"
+    },
+    {
+        "name": "application-variable",
+        "icon": "mdi-application-variable"
+    },
+    {
+        "name": "application-variable-outline",
+        "icon": "mdi-application-variable-outline"
+    },
+    {
+        "name": "approximately-equal",
+        "icon": "mdi-approximately-equal"
+    },
+    {
+        "name": "approximately-equal-box",
+        "icon": "mdi-approximately-equal-box"
+    },
+    {
+        "name": "apps",
+        "icon": "mdi-apps"
+    },
+    {
+        "name": "apps-box",
+        "icon": "mdi-apps-box"
+    },
+    {
+        "name": "arm-flex",
+        "icon": "mdi-arm-flex"
+    },
+    {
+        "name": "arm-flex-outline",
+        "icon": "mdi-arm-flex-outline"
+    },
+    {
+        "name": "arrange-bring-forward",
+        "icon": "mdi-arrange-bring-forward"
+    },
+    {
+        "name": "arrange-bring-to-front",
+        "icon": "mdi-arrange-bring-to-front"
+    },
+    {
+        "name": "arrange-send-backward",
+        "icon": "mdi-arrange-send-backward"
+    },
+    {
+        "name": "arrange-send-to-back",
+        "icon": "mdi-arrange-send-to-back"
+    },
+    {
+        "name": "arrow-all",
+        "icon": "mdi-arrow-all"
+    },
+    {
+        "name": "arrow-bottom-left",
+        "icon": "mdi-arrow-bottom-left"
+    },
+    {
+        "name": "arrow-bottom-left-bold-box",
+        "icon": "mdi-arrow-bottom-left-bold-box"
+    },
+    {
+        "name": "arrow-bottom-left-bold-box-outline",
+        "icon": "mdi-arrow-bottom-left-bold-box-outline"
+    },
+    {
+        "name": "arrow-bottom-left-bold-outline",
+        "icon": "mdi-arrow-bottom-left-bold-outline"
+    },
+    {
+        "name": "arrow-bottom-left-thick",
+        "icon": "mdi-arrow-bottom-left-thick"
+    },
+    {
+        "name": "arrow-bottom-left-thin",
+        "icon": "mdi-arrow-bottom-left-thin"
+    },
+    {
+        "name": "arrow-bottom-left-thin-circle-outline",
+        "icon": "mdi-arrow-bottom-left-thin-circle-outline"
+    },
+    {
+        "name": "arrow-bottom-right",
+        "icon": "mdi-arrow-bottom-right"
+    },
+    {
+        "name": "arrow-bottom-right-bold-box",
+        "icon": "mdi-arrow-bottom-right-bold-box"
+    },
+    {
+        "name": "arrow-bottom-right-bold-box-outline",
+        "icon": "mdi-arrow-bottom-right-bold-box-outline"
+    },
+    {
+        "name": "arrow-bottom-right-bold-outline",
+        "icon": "mdi-arrow-bottom-right-bold-outline"
+    },
+    {
+        "name": "arrow-bottom-right-thick",
+        "icon": "mdi-arrow-bottom-right-thick"
+    },
+    {
+        "name": "arrow-bottom-right-thin",
+        "icon": "mdi-arrow-bottom-right-thin"
+    },
+    {
+        "name": "arrow-bottom-right-thin-circle-outline",
+        "icon": "mdi-arrow-bottom-right-thin-circle-outline"
+    },
+    {
+        "name": "arrow-collapse",
+        "icon": "mdi-arrow-collapse"
+    },
+    {
+        "name": "arrow-collapse-all",
+        "icon": "mdi-arrow-collapse-all"
+    },
+    {
+        "name": "arrow-collapse-down",
+        "icon": "mdi-arrow-collapse-down"
+    },
+    {
+        "name": "arrow-collapse-horizontal",
+        "icon": "mdi-arrow-collapse-horizontal"
+    },
+    {
+        "name": "arrow-collapse-left",
+        "icon": "mdi-arrow-collapse-left"
+    },
+    {
+        "name": "arrow-collapse-right",
+        "icon": "mdi-arrow-collapse-right"
+    },
+    {
+        "name": "arrow-collapse-up",
+        "icon": "mdi-arrow-collapse-up"
+    },
+    {
+        "name": "arrow-collapse-vertical",
+        "icon": "mdi-arrow-collapse-vertical"
+    },
+    {
+        "name": "arrow-decision",
+        "icon": "mdi-arrow-decision"
+    },
+    {
+        "name": "arrow-decision-auto",
+        "icon": "mdi-arrow-decision-auto"
+    },
+    {
+        "name": "arrow-decision-auto-outline",
+        "icon": "mdi-arrow-decision-auto-outline"
+    },
+    {
+        "name": "arrow-decision-outline",
+        "icon": "mdi-arrow-decision-outline"
+    },
+    {
+        "name": "arrow-down",
+        "icon": "mdi-arrow-down"
+    },
+    {
+        "name": "arrow-down-bold",
+        "icon": "mdi-arrow-down-bold"
+    },
+    {
+        "name": "arrow-down-bold-box",
+        "icon": "mdi-arrow-down-bold-box"
+    },
+    {
+        "name": "arrow-down-bold-box-outline",
+        "icon": "mdi-arrow-down-bold-box-outline"
+    },
+    {
+        "name": "arrow-down-bold-circle",
+        "icon": "mdi-arrow-down-bold-circle"
+    },
+    {
+        "name": "arrow-down-bold-circle-outline",
+        "icon": "mdi-arrow-down-bold-circle-outline"
+    },
+    {
+        "name": "arrow-down-bold-hexagon-outline",
+        "icon": "mdi-arrow-down-bold-hexagon-outline"
+    },
+    {
+        "name": "arrow-down-bold-outline",
+        "icon": "mdi-arrow-down-bold-outline"
+    },
+    {
+        "name": "arrow-down-box",
+        "icon": "mdi-arrow-down-box"
+    },
+    {
+        "name": "arrow-down-circle",
+        "icon": "mdi-arrow-down-circle"
+    },
+    {
+        "name": "arrow-down-circle-outline",
+        "icon": "mdi-arrow-down-circle-outline"
+    },
+    {
+        "name": "arrow-down-drop-circle",
+        "icon": "mdi-arrow-down-drop-circle"
+    },
+    {
+        "name": "arrow-down-drop-circle-outline",
+        "icon": "mdi-arrow-down-drop-circle-outline"
+    },
+    {
+        "name": "arrow-down-left",
+        "icon": "mdi-arrow-down-left"
+    },
+    {
+        "name": "arrow-down-left-bold",
+        "icon": "mdi-arrow-down-left-bold"
+    },
+    {
+        "name": "arrow-down-right",
+        "icon": "mdi-arrow-down-right"
+    },
+    {
+        "name": "arrow-down-right-bold",
+        "icon": "mdi-arrow-down-right-bold"
+    },
+    {
+        "name": "arrow-down-thick",
+        "icon": "mdi-arrow-down-thick"
+    }
+]

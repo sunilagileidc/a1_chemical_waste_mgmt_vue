@@ -1,7 +1,8 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import store from "../store";
 
 const routes = [
+
   {
     path: "/",
     name: "login",
@@ -50,6 +51,12 @@ const routes = [
     name: "users",
     beforeEnter: guardMyroute,
     component: () => import("../components/Cruds/Users/IndexPage.vue"),
+  },
+  {
+    path: "/locked_users",
+    name: "locked_users",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Users/LockedUsers.vue"),
   },
   {
     path: "/user_creation",
@@ -209,7 +216,20 @@ const routes = [
     meta: { layout: "userpages" },
     component: () => import("../Admin/UserPages/OtpValidation.vue"),
   },
- 
+  {
+    path: "/registration_list",
+    name: "registration_list",
+    beforeEnter: guardMyroute,
+    component: () => import("../Admin/UserPages/RegistrationList.vue"),
+  },
+  {
+    path: "/registration_details",
+    name: "registration_details",
+    beforeEnter: guardMyroute,
+    component: () => import("../Admin/UserPages/RegistrationDetails.vue"),
+    props: true,
+  },
+
   //frontend user profile page
   {
     path: "/view-my-profile",
@@ -260,15 +280,282 @@ const routes = [
     component: () => import("../components/Cruds/Documents/IndexPage.vue"),
   },
   {
+    path: "/documents_child",
+    name: "documents_child",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Documents/DocumentChildIndex.vue"),
+  },
+  {
     path: "/documents_amend",
     name: "documents_amend",
     beforeEnter: guardMyroute,
     component: () => import("../components/Cruds/Documents/DocumentsAmend.vue"),
   },
+  {
+    path: "/drug",
+    name: "drug",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Drug/IndexPage.vue"),
+  },
+  {
+    path: "/drug_amend",
+    name: "drug_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Drug/DrugAmend.vue"),
+  },
+  {
+    path: "/wholesaler_amend",
+    name: "wholesaler_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Wholesalers/WholesalerAmend.vue"),
+  },
+  {
+    path: "/wholesalers",
+    name: "wholesalers",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Wholesalers/IndexPage.vue"),
+  },
+  {
+    path: "/policies_questions_setup",
+    name: "policies_questions_setup",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PolicyQuestions/IndexPage.vue"),
+  },
+  {
+    path: "/policy_question_create",
+    name: "policy_question_create",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PolicyQuestions/AmendPage.vue"),
+  },
+  {
+    path: "/policy_question_assign",
+    name: "policy_question_assign",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PolicyQuestions/AssignQuestions.vue"),
+  },
+  {
+    path: "/policy_question_amend",
+    name: "policy_question_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PolicyQuestions/AssignQuestionsAmend.vue"),
+  },
+  {
+    path: "/connected-pharmacy",
+    name: "connected-pharmacy",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConnectedPharmacy/ConnectedIndex.vue"),
+  },
+  {
+    path: "/connected-pharmacy-amend/:tabname?",
+    name: "connected-pharmacy-amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConnectedPharmacy/OutpatientAmend.vue"),
+  },
+
+  {
+    path: "/connected-homecare-amend/:tabname?",
+    name: "connected-homecare-amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConnectedPharmacy/HomecareAmend.vue"),
+  },
+  {
+    path: "/pharmacies",
+    name: "pharmacies",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Pharmacies/IndexPage.vue"),
+  },
+  {
+    path: "/pharmacies_amend",
+    name: "pharmacies_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Pharmacies/PharmacyAmend.vue"),
+  },
+  {
+    path: "/indications",
+    name: "indications",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Indications/IndexPage.vue"),
+  },
+  {
+    path: "/indication_amend/:slug?",
+    name: "indication_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Indications/IndicationAmend.vue"),
+  },
+  {
+    path: "/marketing_holders",
+    name: "marketing_holders",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/MarketingHolder/IndexPage.vue"),
+  },
+  {
+    path: "/marketing_holder_amend/:slug?",
+    name: "marketing_holder_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/MarketingHolder/MarketingHolderAmend.vue"),
+  },
+  {
+    path: "/paf",
+    name: "paf",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/PafIndex.vue"),
+  },
+  {
+    path: "/paf_report",
+    name: "paf_report",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/PafReport.vue"),
+  },
+  {
+    path: "/paf_create",
+    name: "paf_create",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/AmendPage.vue"),
+  },
+  {
+    path: "/hospitals",
+    name: "hospitals",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Hospitals/IndexPage.vue"),
+  },
+  {
+    path: "/hospital_amend",
+    name: "hospital_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Hospitals/HospitalAmend.vue"),
+  },
+  {
+    path: "/audit_log",
+    name: "audit_log",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Audits/IndexPage.vue"),
+  },
+  {
+    path: "/paf_view",
+    name: "paf_view",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/PafView.vue"),
+  },
+  {
+    path: "/user_dashboard",
+    name: "user_dashboard",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/PafIndex.vue"),
+  },
+  {
+    path: "/training_documents",
+    name: "training_documents",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Documents/TrainingDocuments.vue"),
+  },
+  // New Pharmacist registration route without guard
+  {
+    path: "/new-pharmacist-registration",
+    name: "new-pharmacist-registration",
+    component: () => import("../Admin/UserPages/PharmacistRegistration.vue"),
+  },
+  {
+    path: "/institution_selection",
+    name: "institution_selection",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Dashboard/InstitutionSelection.vue"),
+  },
+
+
+  {
+    path: "/connected_nurses",
+    name: "connected_nurses",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConnectedNurses/IndexPage.vue"),
+  },
+  {
+    path: "/nurse_creation",
+    name: "nurse_creation",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConnectedNurses/NurseAmend.vue"),
+  },
+  {
+    path: "/off_label_pafs",
+    name: "off_label_pafs",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/OffLabelPafsReport.vue"),
+  },
+  {
+    path: "/paf_counts",
+    name: "paf_counts",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Reports/PAFCounts.vue"),
+  },
+  {
+    path: "/wholesaler_dashboard",
+    name: "wholesaler_dashboard",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Wholesalers/PharmacyLists.vue"),
+  },
+  {
+    path: "/review_paf",
+    name: "review_paf",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAF/ReviewPaf.vue"),
+  },
+  {
+    path: "/add-wholesaler",
+    name: "add-wholesaler",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/Wholesalers/AddWholesalers.vue"),
+  },
+  {
+    path: "/non-conformace-rules",
+    name: "non-conformace-rules",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConformanceRules/IndexPage.vue"),
+  },
+  {
+    path: "/non-conformace-rules-amend",
+    name: "non-conformace-rules-amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConformanceRules/ConformanceAmend.vue"),
+  },
+  {
+    path: "/confirmation-text",
+    name: "confirmation-text",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConfirmationText/IndexPage.vue"),
+  },
+  {
+    path: "/confirmation-text-amend",
+    name: "confirmation-text-amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/ConfirmationText/ConfirmationTextAmend.vue"),
+  },
+  {
+    path: "/paf_documents",
+    name: "paf_documents",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAFDocuments/IndexPage.vue"),
+  },
+  {
+    path: "/paf_documents_child",
+    name: "paf_documents_child",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAFDocuments/PAFDocumentChildIndex.vue"),
+  },
+  {
+    path: "/paf_documents_amend",
+    name: "paf_documents_amend",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/PAFDocuments/PAFDocumentsAmend.vue"),
+  },
+  {
+    path: "/supplier_sales_data",
+    name: "supplier_sales_data",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/SupplierSalesData/IndexPage.vue"),
+  },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
@@ -286,7 +573,7 @@ router.push = function (location) {
 };
 
 router.replace = function (location) {
-  
+
   return originalReplace.call(this, location).catch((error) => {
     if (error.message && error.message.includes("No match")) {
       return originalReplace.call(this, { name: "not-found" });

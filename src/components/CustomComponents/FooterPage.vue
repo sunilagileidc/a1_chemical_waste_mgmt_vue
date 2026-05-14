@@ -3,18 +3,17 @@
     <div class="footer-container">
       <!-- LEFT SIDE -->
       <div class="footer-left text-center">
-        <img
-          src="@/assets/images/pharmacare.png"
+        <!-- <img
+          src="@/assets/images/logo.png"
           alt="PharmaCare Group Logo"
           class="footer-logo"
-        />
-        <a
-          href="https://pharmacaregroup.co.uk"
-          target="_blank"
-          class="footer-link mr-2"
-        >
-          pharmacaregroup.co.uk
-        </a>
+        /> -->
+        <h2 class="theme-subheader text-left">LOGO</h2>
+        <!-- <a href="#" target="_blank" class="footer-link mr-2">
+          domain_name_here
+        pharmacaregroup.co.uk 
+        </a> -->
+        <p>Lorem ipsum doller set amit</p>
       </div>
 
       <!-- RIGHT SIDE -->
@@ -30,7 +29,8 @@
             size="small"
             class="mr-2 pt-1"
           ></v-icon
-          ><a href="tel:03300430908">0330 043 0908</a>
+          ><a href="tel:0805745745">0805745745</a>
+          <!-- <a href="tel:03300430908">0330 043 0908</a> -->
         </div>
 
         <div class="contact-item footer-link">
@@ -39,8 +39,9 @@
             size="small"
             class="mr-2 pt-2"
           ></v-icon>
-          <a href="mailto:support@pharmacaregroup.co.uk">
-            support@pharmacaregroup.co.uk
+          <a href="mailto:support@gmail.com">
+            <!-- support@pharmacaregroup.co.uk -->
+            support@gmail.com
           </a>
         </div>
       </div>
@@ -71,7 +72,7 @@
 }
 
 .footer-logo {
-  height: 50px;
+  width: 210px;
   object-fit: contain;
 }
 

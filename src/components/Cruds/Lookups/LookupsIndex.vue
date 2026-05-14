@@ -1,152 +1,160 @@
 <template>
-  <div class="main-20">
+  <v-container fluid class="page-wrapper background-inner">
+    <content-loader v-if="loader"></content-loader>
     <confirmation-dialog
       ref="confirmationDialog"
       :title="dialogTitle"
       :message="dialogMessage"
     ></confirmation-dialog>
-    <content-loader v-if="loader"></content-loader>
-    <div
-      flat
-      color="white"
-      class="row my-3 align-items-center component_app_bar"
-    >
-      <div class="col-md-4">
-        <page-title
-          :heading="$t('lookups')"
-          :google_icon="google_icon"
-        ></page-title>
-      </div>
-      <div class="col-md-4">
-        <v-tooltip :text="$t('search')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <v-text-field
-              rounded
-              density="compact"
-              variant="outlined"
-              elevation="24"
-              v-bind="props"
-              v-model="search"
-              append-icon="search"
-              v-bind:label="$t('search')"
-              hide-details
-              class="srch_bar"
-            ></v-text-field>
-          </template>
-        </v-tooltip>
-      </div>
-      <div class="col-md-4 d-flex justify-content-end">
-        <div class="my-3 mr-2">
-          <v-tooltip :text="$t('add_new')" location="bottom">
-            <template v-slot:activator="{ props }">
-              <router-link :to="{ name: 'lookups_amend' }" style="color: white">
-                <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
-                  $t("add_new")
-                }}</v-btn>
-              </router-link>
-            </template>
-          </v-tooltip>
+    <div class="main-section">
+      <div>
+        <div class="d-flex justify-space-between align-center">
+          <page-title
+            :heading="$t('lookups')"
+            :google_icon="google_icon"
+          ></page-title>
+          <div class="col-md-4 d-flex justify-content-end">
+            <div class="my-3 mr-2">
+              <v-tooltip :text="$t('add_new')" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <router-link
+                    :to="{ name: 'lookups_amend' }"
+                    style="color: white"
+                  >
+                    <v-btn
+                      size="small"
+                      class="mb-2 btn-filled"
+                      v-bind="props"
+                      >{{ $t("add_new") }}</v-btn
+                    >
+                  </router-link>
+                </template>
+              </v-tooltip>
+            </div>
+          </div>
         </div>
+        <!-- Stats section -->
+        <!-- <stats-page :stats="stats" /> -->
+        <!-- Stats section -->
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <v-text-field
+            density="comfortable"
+            variant="solo"
+            flat
+            placeholder="Search here..."
+            hide-details
+            append-inner-icon="mdi-magnify"
+            v-model="search"
+            class="search-field"
+          ></v-text-field>
+        </div>
+        <!-- Data Table Card -->
+        <v-card class="table-card pa-4">
+          <v-data-table
+            :headers="headers"
+            :items="lookup"
+            :search="search"
+            :loading="initval"
+            class="table-card"
+          >
+            <template v-slot:item="props">
+              <tr class="vdatatable_tbody">
+                <td>
+                  <div style="max-width: 160px">
+                    {{ props.item.shortname }}
+                  </div>
+                </td>
+                <td>
+                  <div style="max-width: 160px">
+                    {{ props.item.longname }}
+                  </div>
+                </td>
+                <td>
+                  <v-btn
+                    class="hover_shine btn mr-2"
+                    :disabled="isDisabled"
+                    @click="updateLookupsStatus(props.item.id)"
+                    size="small"
+                    v-bind:color="[
+                      props.item.status == 1 ? 'success' : 'warning',
+                    ]"
+                  >
+                    <span
+                      v-if="props.item.status == 1"
+                      class="spanactivesize"
+                      >{{ $t("active") }}</span
+                    >
+                    <span
+                      v-if="props.item.status == 0"
+                      class="spanactivesize"
+                      >{{ $t("inactive") }}</span
+                    >
+                  </v-btn>
+                </td>
+                <td class="text-center px-0">
+                  <router-link
+                    small
+                    :to="{
+                      name: 'lookups_amend',
+                      query: { slug: props.item.slug },
+                    }"
+                  >
+                    <v-tooltip :text="$t('edit')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon
+                          v-bind="props"
+                          small
+                          class="mr-2 edit_btn icon_size"
+                          v-on="on"
+                          >mdi-pencil-outline</v-icon
+                        >
+                      </template>
+                    </v-tooltip>
+                  </router-link>
+                  <router-link
+                    small
+                    class="mr-2"
+                    :to="{
+                      name: 'child_lookup',
+                      query: {
+                        slug: props.item.slug,
+                        parentname: props.item.shortname,
+                      },
+                    }"
+                  >
+                    <v-tooltip :text="$t('child_look_ups')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" class="mr-2 icon_size" v-on="on"
+                          >mdi-cog</v-icon
+                        >
+                      </template>
+                      <span>{{ $t("child_look_ups") }}</span>
+                    </v-tooltip>
+                  </router-link>
+                  <span @click="deleteItem(props.item.id)">
+                    <v-tooltip :text="$t('delete')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon
+                          v-bind="props"
+                          class="delete_btn icon_size"
+                          v-on="on"
+                          small
+                          type="button"
+                          >mdi-trash-can-outline</v-icon
+                        >
+                      </template>
+                      <span>{{ $t("delete") }}</span>
+                    </v-tooltip>
+                  </span>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card>
       </div>
     </div>
-
-    <v-data-table
-      :headers="headers"
-      :items="lookup"
-      :search="search"
-      :loading="initval"
-    >
-      <template v-slot:item="props">
-        <tr class="vdatatable_tbody">
-          <td>
-            <div class="text-truncate" style="max-width: 160px">
-              {{ props.item.shortname }}
-            </div>
-          </td>
-          <td>
-            <div class="text-truncate" style="max-width: 160px">
-              {{ props.item.longname }}
-            </div>
-          </td>
-          <td>
-            <v-btn
-              class="hover_shine btn mr-2"
-              :disabled="isDisabled"
-              @click="updateLookupsStatus(props.item.id)"
-              size="small"
-              v-bind:color="[props.item.status == 1 ? 'success' : 'warning']"
-            >
-              <span v-if="props.item.status == 1" class="spanactivesize">{{
-                $t("active")
-              }}</span>
-              <span v-if="props.item.status == 0" class="spanactivesize">{{
-                $t("inactive")
-              }}</span>
-            </v-btn>
-          </td>
-          <td class="text-center px-0">
-            <router-link
-              small
-              :to="{
-                name: 'lookups_amend',
-                query: { slug: props.item.slug },
-              }"
-            >
-              <v-tooltip :text="$t('edit')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-bind="props"
-                    small
-                    class="mr-2 edit_btn icon_size"
-                    v-on="on"
-                    >mdi-pencil-outline</v-icon
-                  >
-                </template>
-              </v-tooltip>
-            </router-link>
-            <router-link
-              small
-              class="mr-2"
-              :to="{
-                name: 'child_lookup',
-                query: {
-                  slug: props.item.slug,
-                  parentname: props.item.shortname,
-                },
-              }"
-            >
-              <v-tooltip :text="$t('child_look_ups')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-bind="props"
-                    class="mr-2 settings_icon icon_size"
-                    v-on="on"
-                    >mdi-sitemap</v-icon
-                  >
-                </template>
-                <span>{{ $t("child_look_ups") }}</span>
-              </v-tooltip>
-            </router-link>
-            <span @click="deleteItem(props.item.id)">
-              <v-tooltip :text="$t('delete')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-bind="props"
-                    class="delete_btn icon_size"
-                    v-on="on"
-                    small
-                    type="button"
-                    >mdi-trash-can-outline</v-icon
-                  >
-                </template>
-                <span>{{ $t("delete") }}</span>
-              </v-tooltip>
-            </span>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
-  </div>
+  </v-container>
 </template>
 
 <script>

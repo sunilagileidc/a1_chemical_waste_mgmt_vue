@@ -18,7 +18,7 @@
           <div class="font-login">
             <div v-if="app_image_url">
               <span>
-                <img v-bind:src="app_image_url" style="width: 130px" />
+                <img v-bind:src="app_image_url" style="width: 235px" />
               </span>
             </div>
             <div v-else-if="app_image_url == ''">
@@ -181,7 +181,13 @@ export default {
     },
     passwordRules() {
       return [
-        (v) => v.length >= 8 || "Password must have atleast 8 characters",
+        (v) => !!v || "Password required",
+        (v) => v.length >= 12 || "Minimum length of 12 characters required",
+        (v) => /[A-Z]/.test(v) || "Minimum of 1 uppercase letter required",
+        (v) => /\d/.test(v) || "At least 1 number required",
+        (v) =>
+          /[~!@#$%]/.test(v) ||
+          "At least 1 non-alphanumeric character (~!@#$%) required",
       ];
     },
   },
@@ -368,4 +374,3 @@ export default {
   );
 }
 </style>
-

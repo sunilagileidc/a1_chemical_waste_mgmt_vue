@@ -2,10 +2,10 @@
   <div class="role-action-wrapper">
     <content-loader v-if="loader" />
 
-    <v-card v-else class="action-card" elevation="2">
+    <div v-else class="action-card" elevation="2">
       <!-- Search -->
       <div style="max-width: 380px">
-        <v-card-text class="pa-4 pb-0">
+        <v-card-text class="pa-0 pb-0">
           <v-text-field
             v-model="search"
             placeholder="Search actions..."
@@ -78,7 +78,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="isDisabled"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
               >
                 {{ $t("cancel") }}
@@ -95,7 +95,7 @@
                 :disabled="isDisabled"
                 @click="save()"
                 size="small"
-                class="mr-2"
+                class="btn-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -112,7 +112,7 @@
           </template>
         </v-tooltip>
       </div>
-    </v-card>
+    </div>
   </div>
 </template>
 

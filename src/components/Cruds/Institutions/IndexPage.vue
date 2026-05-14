@@ -5,6 +5,7 @@
       :title="dialogTitle"
       :message="dialogMessage"
     ></confirmation-dialog>
+    <content-loader v-if="loader"></content-loader>
     <div
       flat
       color="white"
@@ -66,12 +67,44 @@
             <span v-else>{{ $t("not_appllicable") }}</span>
           </td>
           <td>
+            <span v-if="props.item.ref_number">{{
+              props.item.ref_number
+            }}</span>
+            <span v-else>{{ $t("not_appllicable") }}</span>
+          </td>
+          <td>
             <span v-if="props.item.type">{{ props.item.type }}</span>
             <span v-else>{{ $t("not_appllicable") }}</span>
           </td>
           <td>
             <span v-if="props.item.address">{{ props.item.address }}</span>
             <span v-else>{{ $t("not_appllicable") }}</span>
+          </td>
+          <td>
+            <span v-if="props.item.contact_name">{{
+              props.item.contact_name
+            }}</span>
+            <span v-else>{{ $t("not_appllicable") }}</span>
+          </td>
+          <td>
+            <span v-if="props.item.contact_email">{{
+              props.item.contact_email
+            }}</span>
+            <span v-else>{{ $t("not_appllicable") }}</span>
+          </td>
+          <td>
+            <v-btn
+              class="hover_shine btn mr-2"
+              :disabled="isDisabled"
+              @click="updateInstitutionStatus(props.item.id)"
+              size="small"
+              v-bind:color="[props.item.status == 1 ? 'success' : 'warning']"
+            >
+              <span v-if="props.item.status == 1" class="spanactivesize">{{
+                $t("active")
+              }}</span>
+              <span v-else class="spanactivesize">{{ $t("inactive") }}</span>
+            </v-btn>
           </td>
 
           <td class="px-0 text-center">
@@ -94,7 +127,7 @@
               </v-tooltip>
             </router-link>
 
-            <span @click="deleteItem(props.item.id)">
+            <!-- <span @click="deleteItem(props.item.id)">
               <v-tooltip :text="this.$t('delete')" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-icon
@@ -107,7 +140,7 @@
                   >
                 </template>
               </v-tooltip>
-            </span>
+            </span> -->
           </td>
         </tr>
       </template>
@@ -121,6 +154,7 @@ export default {
     showConfirmDialog: false,
     search: "",
     dialog: false,
+    loader: false,
     institutions: [],
     initval: true,
     message: "",
@@ -140,10 +174,16 @@ export default {
     headers() {
       return [
         {
-          title: "Institution Name",
+          title: "Institution",
           align: "left",
           sortable: true,
           key: "name",
+        },
+        {
+          title: "Ref Number",
+          align: "left",
+          sortable: true,
+          key: "ref_number",
         },
 
         {
@@ -153,6 +193,18 @@ export default {
         {
           title: "Address",
           key: "address",
+        },
+        {
+          title: "Contact Name",
+          key: "contact_name",
+        },
+        {
+          title: "Contact Email",
+          key: "contact_email",
+        },
+        {
+          title: "Status",
+          key: "status",
         },
         {
           title: this.$t("action"),
@@ -168,7 +220,6 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    
   },
 
   created() {
@@ -218,15 +269,52 @@ export default {
           console.log(err);
         });
     },
+    async updateInstitutionStatus(status_id) {
+      const result = await this.showConfirmation(
+        "Confirm",
+        "Are you sure you want to update this institution status ?"
+      );
 
+      if (!result) return;
+      this.loader = true;
+      this.$axios
+        .post("update_institution_status", {
+          id: status_id,
+        })
+        .then((res) => {
+          if (Array.isArray(res.data.message)) {
+            this.array_data = res.data.message.toString();
+          } else {
+            this.array_data = res.data.message;
+          }
+          if (res.data.status == "S") {
+            this.$toast.success(this.array_data);
+            this.loader = false;
+            this.initialize();
+          } else if (res.data.status == "E") {
+            this.$toast.error(this.array_data);
+            this.loader = false;
+          } else {
+            this.$toast.error(this.array_data);
+            this.initialize();
+            this.loader = false;
+          }
+        })
+        .catch((err) => {
+          this.$toast.error(this.array_data);
+          console.log("this error" + err);
+          this.loader = false;
+        });
+    },
     initialize() {
       this.$axios
         .get("institution")
         .then((res) => {
-          console.log("res.data");
-          console.log(res.data);
+          // console.log("res.data");
+          // console.log(res.data);
           this.institutions = res.data.institutions;
           this.initval = false;
+          this.loader = false;
         })
         .catch((err) => {
           this.$toast.error(this.$t("something_went_wrong"));

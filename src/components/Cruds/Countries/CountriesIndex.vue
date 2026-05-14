@@ -39,7 +39,7 @@
           <v-tooltip :text="$t('add_new')" location="bottom">
             <template v-slot:activator="{ props }">
               <router-link :to="{ name: 'countries_amend' }">
-                <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
+                <v-btn size="small" class="mb-2 btn-filled" v-bind="props">{{
                   $t("add_new")
                 }}</v-btn>
               </router-link>
@@ -112,11 +112,8 @@
             >
               <v-tooltip :text="$t('states')" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-bind="props"
-                    class="mr-2 settings_icon icon_size"
-                    v-on="on"
-                    >mdi-sitemap</v-icon
+                  <v-icon v-bind="props" class="mr-2 icon_size" v-on="on"
+                    >mdi-cog</v-icon
                   >
                 </template>
                 <span>{{ $t("states") }}</span>

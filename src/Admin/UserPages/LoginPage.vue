@@ -2,19 +2,23 @@
   <v-app>
     <content-loader v-if="loader" />
 
-    <div class="background d-flex justify-center align-center">
+    <div class="background d-flex align-center">
       <v-card class="pa-6 login-card" elevation="4">
         <!-- ================= LOGO ================= -->
-        <!-- ---{{app_image_url}} -->
+
         <div class="text-center mb-4">
-          <img v-if="app_image_url" :src="app_image_url" width="130" />
+          <img v-if="app_image_url" :src="app_image_url" width="250px" />
           <h3 v-else>{{ application_name }}</h3>
         </div>
 
         <v-divider class="mb-4" />
-
         <!-- ================= LOGIN FORM ==================== -->
-        <v-form v-if="step === 'login'" ref="form" v-model="valid">
+        <v-form
+          v-if="step === 'login'"
+          ref="form"
+          v-model="valid"
+          @submit.prevent="sendLoginOtp"
+        >
           <div class="form-label">Email Address</div>
           <v-text-field
             v-model="userdata.email"
@@ -29,7 +33,7 @@
           />
 
           <div class="form-label mt-4">Password</div>
-          <v-text-field
+          <!-- <v-text-field
             v-model="userdata.password"
             :type="showPass ? 'text' : 'password'"
             :append-inner-icon="
@@ -44,20 +48,65 @@
             @keyup.enter="sendLoginOtp"
             class="styled-field"
             prepend-inner-icon="mdi-lock-outline"
+          /> -->
+          <v-text-field
+            v-model="userdata.password"
+            :type="showPass ? 'text' : 'password'"
+            :append-inner-icon="
+              showPass ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+            "
+            @click:append-inner="showPass = !showPass"
+            placeholder="••••••••••••"
+            density="compact"
+            variant="outlined"
+            hide-details
+            class="styled-field"
+            prepend-inner-icon="mdi-lock-outline"
           />
+          <div v-if="userdata.password && !allPasswordValid" class="mt-2">
+            <div :class="ruleClass(hasMinLength)" class="rule-error">
+              <v-icon size="16" class="mr-2">
+                {{ hasMinLength ? "mdi-check-circle" : "mdi-close-circle" }}
+              </v-icon>
+              Minimum 12 characters
+            </div>
+
+            <div :class="ruleClass(hasUppercase)" class="rule-error">
+              <v-icon size="16" class="mr-2">
+                {{ hasUppercase ? "mdi-check-circle" : "mdi-close-circle" }}
+              </v-icon>
+              At least 1 uppercase letter
+            </div>
+
+            <div :class="ruleClass(hasNumber)" class="rule-error">
+              <v-icon size="16" class="mr-2">
+                {{ hasNumber ? "mdi-check-circle" : "mdi-close-circle" }}
+              </v-icon>
+              At least 1 number
+            </div>
+
+            <div :class="ruleClass(hasSpecial)" class="rule-error">
+              <v-icon size="16" class="mr-2">
+                {{ hasSpecial ? "mdi-check-circle" : "mdi-close-circle" }}
+              </v-icon>
+              At least 1 special character (~!@#$%)
+            </div>
+          </div>
 
           <div class="d-flex justify-end mt-1 mb-1">
             <router-link :to="{ name: 'forgot_password' }" class="forgot-link">
               {{ $t("recoverpassword") }}
             </router-link>
           </div>
-
+          <div v-if="attemptMessage" class="attempt-error">
+            {{ attemptMessage }}
+          </div>
           <v-btn
             block
-            class="mt-3 sign-in-btn"
+            type="submit"
+            class="mt-3 btn-filled"
             :loading="btnloading"
-            :disabled="!valid"
-            @click="sendLoginOtp"
+            :disabled="!valid || !allPasswordValid"
             height="44"
           >
             <span class="btn-text">Sign In</span>
@@ -113,7 +162,7 @@
               variant="outlined"
               @click="step = 'login'"
             >
-              Back
+              {{ $t("cancel") }}
             </v-btn>
 
             <v-spacer />
@@ -136,6 +185,7 @@
 
 <script>
 import localStorageWrapper from "../../localStorageWrapper.js";
+import { helpers } from "../../utils/helpers.js";
 export default {
   data() {
     return {
@@ -156,6 +206,9 @@ export default {
       timecount: 60,
       timer: null,
       login_otp_enabled: 0,
+      attemptMessage: "",
+      permissions: [],
+      attemptTimer: null,
     };
   },
 
@@ -167,16 +220,42 @@ export default {
           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Enter a valid email address",
       ];
     },
-    passwordRules() {
-      return [
-        (v) => !!v || "Password required",
-        (v) => v.length >= 12 || "Minimum 12 characters required",
-        (v) => /[A-Z]/.test(v) || "At least 1 uppercase letter required",
-        (v) =>
-          /[a-zA-Z0-9]/.test(v) || "At least 1 alphanumeric character required",
-        (v) => /\d/.test(v) || "At least 1 number required",
-      ];
+    password() {
+      return this.userdata.password || "";
     },
+    hasMinLength() {
+      return this.userdata.password?.length >= 12;
+    },
+    hasUppercase() {
+      return /[A-Z]/.test(this.userdata.password || "");
+    },
+    hasNumber() {
+      return /\d/.test(this.userdata.password || "");
+    },
+    hasSpecial() {
+      return /[~!@#$%]/.test(this.userdata.password || "");
+    },
+
+    // 🔥 ADD THIS
+    allPasswordValid() {
+      return (
+        this.hasMinLength &&
+        this.hasUppercase &&
+        this.hasNumber &&
+        this.hasSpecial
+      );
+    },
+    // passwordRules() {
+    //   return [
+    //     (v) => !!v || "Password required",
+    //     (v) => v.length >= 12 || "Minimum length of 12 characters required",
+    //     (v) => /[A-Z]/.test(v) || "Minimum of 1 uppercase letter required",
+    //     (v) => /\d/.test(v) || "At least 1 number required",
+    //     (v) =>
+    //       /[~!@#$%]/.test(v) ||
+    //       "At least 1 non-alphanumeric character (~!@#$%) required",
+    //   ];
+    // },
   },
 
   mounted() {
@@ -184,6 +263,11 @@ export default {
   },
 
   methods: {
+    ruleClass(condition) {
+      return condition
+        ? "text-success d-flex align-center"
+        : "text-error d-flex align-center";
+    },
     startTimer() {
       clearInterval(this.timer); // stop old timer if exists
 
@@ -212,6 +296,8 @@ export default {
 
     /* ================= SEND OTP ================= */
     async sendLoginOtp() {
+      this.attemptMessage = "";
+      clearTimeout(this.attemptTimer);
       if (!this.$refs.form.validate()) return;
 
       this.loader = true;
@@ -235,52 +321,75 @@ export default {
           }
         } else {
           await this.$store.dispatch("auth/loginRequest", this.userdata);
-          localStorage.setItem("active_menu", "Dashboard");
-          this.$router.push({ name: "dashboard" });
+          var userdata = JSON.parse(localStorage.getItem("user_data"));
+          helpers.handleUserRouting(
+            userdata,
+            this.$router,
+            this.loadPermissions
+          );
         }
       } catch (err) {
-        // ================= COMMON ERROR HANDLING =================
-        if (err.response) {
-          if (err.response.status === 429) {
-            this.$toast.error(
-              "Too many attempts. Please try again after 2 minutes."
-            );
-          } else {
-            this.$toast.error(
-              err.response.data.message || "Something went wrong"
-            );
-          }
-        } else {
-          this.$toast.error("Network error");
-        }
+        this.handleApiError(err);
       } finally {
         // ================= COMMON LOADER STOP =================
         this.loader = false;
         this.btnloading = false;
       }
     },
+
     /* ================= VERIFY OTP ================= */
-    verifyotp() {
+    async loadPermissions(roleId) {
+      try {
+        const res = await this.$axios.get("check_action_permission", {
+          params: {
+            role_id: roleId,
+          },
+        });
+
+        if (res.data.status === "S") {
+          this.permissions = res.data.permissions;
+          localStorage.setItem(
+            "action_permissions",
+            JSON.stringify(this.permissions)
+          );
+        }
+      } catch (error) {
+        this.permissions = [];
+      }
+    },
+
+    async verifyotp() {
+      this.attemptMessage = "";
+      clearTimeout(this.attemptTimer);
       this.loader = true;
       this.isBtnLoading = true;
 
-      this.$axios
-        .post("login_otp_validate", {
+      try {
+        const res = await this.$axios.post("login_otp_validate", {
           otp: this.verification_code,
           email: this.userdata.email,
-        })
-        .then(async (res) => {
-          if (res.data.status === "S") {
-            await this.$store.dispatch("auth/loginRequest", this.userdata);
-            this.$router.push({ name: "dashboard" });
-          } else {
-            this.$toast.error(res.data.message);
-          }
-        })
-        .finally(() => {
-          this.loader = false;
-          this.isBtnLoading = false;
         });
+
+        if (res.data.status === "S") {
+          this.$toast.success(res.data.message || "OTP verified");
+
+          await this.$store.dispatch("auth/loginRequest", this.userdata);
+
+          const userdata = JSON.parse(localStorage.getItem("user_data"));
+          helpers.handleUserRouting(
+            userdata,
+            this.$router,
+            this.loadPermissions
+          );
+        } else {
+          this.$toast.error(res.data.message);
+        }
+      } catch (err) {
+        this.handleApiError(err);
+      } finally {
+        this.loader = false;
+        this.isBtnLoading = false;
+      }
     },
 
     /* ================= RESEND OTP ================= */
@@ -290,6 +399,51 @@ export default {
       this.$axios.post(`resend_otp_validate?email=${this.userdata.email}`);
       this.$toast.success("OTP resent");
     },
+    showAttemptMessage(msg, seconds = 5) {
+      this.attemptMessage = msg;
+
+      clearTimeout(this.attemptTimer);
+
+      this.attemptTimer = setTimeout(() => {
+        this.attemptMessage = "";
+      }, seconds * 1000);
+    },
+    /* ================= Error Handling ================= */
+    handleApiError(err) {
+      if (!err.response) {
+        this.$toast.error("Network error");
+        return;
+      }
+
+      const status = err.response.status;
+      const message = err.response.data?.message || "Something went wrong";
+
+      switch (status) {
+        case 401:
+          this.$toast.error(message || "Invalid credentials");
+          this.showAttemptMessage(message || "Invalid credentials");
+          break;
+
+        case 403:
+          this.$toast.error(message || "Access denied");
+          this.showAttemptMessage(message || "Access denied");
+          break;
+
+        case 423:
+          this.$toast.error(message || "Account locked");
+          this.showAttemptMessage(message || "Account locked");
+          break;
+
+        case 429:
+          this.$toast.error("Too many attempts. Please try again later.");
+          this.showAttemptMessage("Too many attempts. Please try again later.");
+          break;
+
+        default:
+          this.$toast.error(message);
+          this.showAttemptMessage(message);
+      }
+    },
   },
 };
 </script>
@@ -298,6 +452,7 @@ export default {
 .login-card {
   width: 410px;
   border-radius: 12px;
+  background: #ffffffd6;
 }
 
 .otp-input {
@@ -353,7 +508,6 @@ export default {
 .forgot-link {
   font-size: 12.5px;
   font-weight: 500;
-  color: #3b82f6;
   text-decoration: none;
   letter-spacing: 0.01em;
   transition: color 0.15s;
@@ -475,8 +629,15 @@ export default {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.75); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
 }
 
 /* ── Resend Button ── */
@@ -515,5 +676,10 @@ export default {
   font-weight: 600 !important;
   padding: 0 20px !important;
 }
-
+.attempt-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 500;
+}
 </style>

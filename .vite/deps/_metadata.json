@@ -1,0 +1,154 @@
+{
+  "hash": "2164ff5b",
+  "configHash": "75a7a072",
+  "lockfileHash": "a742cb41",
+  "browserHash": "fe627e6a",
+  "optimized": {
+    "pdfmake/build/pdfmake.js": {
+      "src": "../../node_modules/pdfmake/build/pdfmake.js",
+      "file": "pdfmake_build_pdfmake__js.js",
+      "fileHash": "af01330a",
+      "needsInterop": true
+    },
+    "pdfmake/build/vfs_fonts.js": {
+      "src": "../../node_modules/pdfmake/build/vfs_fonts.js",
+      "file": "pdfmake_build_vfs_fonts__js.js",
+      "fileHash": "cb7d4a1b",
+      "needsInterop": true
+    },
+    "vue": {
+      "src": "../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "5425cea5",
+      "needsInterop": false
+    },
+    "vue-i18n": {
+      "src": "../../node_modules/vue-i18n/dist/vue-i18n.mjs",
+      "file": "vue-i18n.js",
+      "fileHash": "14d4bd34",
+      "needsInterop": false
+    },
+    "moment": {
+      "src": "../../node_modules/moment/dist/moment.js",
+      "file": "moment.js",
+      "fileHash": "b12563af",
+      "needsInterop": false
+    },
+    "mitt": {
+      "src": "../../node_modules/mitt/dist/mitt.mjs",
+      "file": "mitt.js",
+      "fileHash": "437ff37f",
+      "needsInterop": false
+    },
+    "@meforma/vue-toaster": {
+      "src": "../../node_modules/@meforma/vue-toaster/src/index.js",
+      "file": "@meforma_vue-toaster.js",
+      "fileHash": "f3167f58",
+      "needsInterop": false
+    },
+    "vuetify": {
+      "src": "../../node_modules/vuetify/lib/framework.js",
+      "file": "vuetify.js",
+      "fileHash": "145ac657",
+      "needsInterop": false
+    },
+    "vuetify/components": {
+      "src": "../../node_modules/vuetify/lib/components/index.js",
+      "file": "vuetify_components.js",
+      "fileHash": "3b10c1f5",
+      "needsInterop": false
+    },
+    "vuetify/directives": {
+      "src": "../../node_modules/vuetify/lib/directives/index.js",
+      "file": "vuetify_directives.js",
+      "fileHash": "673d4f9e",
+      "needsInterop": false
+    },
+    "vuetify/labs/components": {
+      "src": "../../node_modules/vuetify/lib/labs/components.js",
+      "file": "vuetify_labs_components.js",
+      "fileHash": "79a45c61",
+      "needsInterop": false
+    },
+    "vuetify/iconsets/mdi": {
+      "src": "../../node_modules/vuetify/lib/iconsets/mdi.js",
+      "file": "vuetify_iconsets_mdi.js",
+      "fileHash": "768a85ca",
+      "needsInterop": false
+    },
+    "vuex": {
+      "src": "../../node_modules/vuex/dist/vuex.esm-bundler.js",
+      "file": "vuex.js",
+      "fileHash": "c78a3138",
+      "needsInterop": false
+    },
+    "vuex-persistedstate": {
+      "src": "../../node_modules/vuex-persistedstate/dist/vuex-persistedstate.es.js",
+      "file": "vuex-persistedstate.js",
+      "fileHash": "f9dfbcb1",
+      "needsInterop": false
+    },
+    "vue3-otp-input": {
+      "src": "../../node_modules/vue3-otp-input/dist/vue3-otp-input.esm.js",
+      "file": "vue3-otp-input.js",
+      "fileHash": "4b7b7bb4",
+      "needsInterop": false
+    },
+    "vue-router": {
+      "src": "../../node_modules/vue-router/dist/vue-router.mjs",
+      "file": "vue-router.js",
+      "fileHash": "75556266",
+      "needsInterop": false
+    },
+    "date-fns": {
+      "src": "../../node_modules/date-fns/esm/index.js",
+      "file": "date-fns.js",
+      "fileHash": "a4df207c",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "4dd2e2a8",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-AYVSL3LM": {
+      "file": "chunk-AYVSL3LM.js"
+    },
+    "chunk-5TZDNSUV": {
+      "file": "chunk-5TZDNSUV.js"
+    },
+    "chunk-5DFU2AQ3": {
+      "file": "chunk-5DFU2AQ3.js"
+    },
+    "chunk-2DMYIN4F": {
+      "file": "chunk-2DMYIN4F.js"
+    },
+    "chunk-K3YZ6XMP": {
+      "file": "chunk-K3YZ6XMP.js"
+    },
+    "chunk-TTL4LY2W": {
+      "file": "chunk-TTL4LY2W.js"
+    },
+    "chunk-42CWAHM3": {
+      "file": "chunk-42CWAHM3.js"
+    },
+    "chunk-STF46YTT": {
+      "file": "chunk-STF46YTT.js"
+    },
+    "chunk-VZAIDN6W": {
+      "file": "chunk-VZAIDN6W.js"
+    },
+    "chunk-LQLLNLBF": {
+      "file": "chunk-LQLLNLBF.js"
+    },
+    "chunk-73HNARDV": {
+      "file": "chunk-73HNARDV.js"
+    },
+    "chunk-5FUTL2UF": {
+      "file": "chunk-5FUTL2UF.js"
+    }
+  }
+}

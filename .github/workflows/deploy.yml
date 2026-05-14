@@ -1,0 +1,37 @@
+name: Deploy to EC2 via CodeDeploy
+
+on:
+push:
+branches:
+- release
+
+jobs:
+deploy:
+
+runs-on: ubuntu-latest
+
+steps:
+
+- name: Checkout code
+uses: actions/checkout@v4
+
+- name: Create ZIP
+run: zip -r deploy-${{ github.sha }}.zip .
+
+- name: Configure AWS credentials
+uses: aws-actions/configure-aws-credentials@v4
+with:
+aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+aws-region: ap-south-1
+
+- name: Upload to S3
+run: |
+aws s3 cp deploy-${{ github.sha }}.zip s3://codedeploy-pharmacare/
+
+- name: Deploy via CodeDeploy
+run: |
+aws deploy create-deployment \
+--application-name pharmacare \
+--deployment-group-name pharmacare-prod \
+--s3-location bucket=codedeploy-pharmacare,key=deploy-${{ github.sha }}.zip,bundleType=zip

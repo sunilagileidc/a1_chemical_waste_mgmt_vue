@@ -245,7 +245,7 @@ export default {
       this.sel_file_index = index;
     },
     onFileChange(e) {
-      console.log("evnrnt target", this.sel_file_index);
+      // console.log("evnrnt target", this.sel_file_index);
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createImage(files[0]);
@@ -253,9 +253,9 @@ export default {
       const lastDot = filename.lastIndexOf(".");
       const fileNameWithoutExt = filename.substring(0, lastDot);
       const ext = filename.substring(lastDot + 1);
-      console.log("FileName => " + fileNameWithoutExt);
+      // console.log("FileName => " + fileNameWithoutExt);
       this.filename = fileNameWithoutExt;
-      console.log("Extension => " + ext);
+      // console.log("Extension => " + ext);
       this.extension = ext;
     },
     removeUploadedFile(index) {
@@ -288,7 +288,7 @@ export default {
           extension: this.extension,
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.status == "S") {
             this.message = res.data.message;
 
@@ -306,6 +306,7 @@ export default {
           }
         })
         .catch((err) => {
+          this.loader = false;
           alert("Unable to upload file, try later");
           console.log("this error -> " + err);
         });
@@ -315,7 +316,7 @@ export default {
         index1: this.section_index,
         index2: this.question_index,
       };
-      console.log("index path will be ", index_path);
+      // console.log("index path will be ", index_path);
       this.$emit("update-data", this.documents, index_path);
     },
 

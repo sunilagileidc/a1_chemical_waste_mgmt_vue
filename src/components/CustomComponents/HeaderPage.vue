@@ -1,37 +1,85 @@
 <template>
   <div class="top-bar-wrapper">
     <div class="top-bar-container">
-      
       <!-- LEFT: LOGO -->
-      <div 
-        class="logo"
-        @click="$router.push('/')"
-      >
-        <img src="@/assets/images/headericon.png" alt="ePAF Logo" />
+      <div class="logo" @click="$router.push('/')">
+        <!-- <img src="@/assets/images/headericon.png" alt="ePAF Logo" /> -->
+        <div v-if="app_image_url">
+          <span>
+            <img v-bind:src="app_image_url" style="width: 100%" />
+          </span>
+        </div>
+        <div v-else-if="app_image_url == ''">
+          <span class="font-base-app text-center">
+            {{ application_name }}
+          </span>
+        </div>
       </div>
-
       <!-- RIGHT: BUTTONS -->
-      <div class="auth-buttons">
-        <button
-          class="btn-outline"
+      <div class="auth-buttons" v-if="$route.name != 'not-found'">
+        <v-btn
+          variant="outlined"
+          class="register-btn"
+          size="small"
           @click="$router.push({ name: 'register_user' })"
         >
           Register →
-        </button>
+        </v-btn>
 
-        <button
+        <v-btn
+          variant="filled"
           class="btn-filled"
+          size="small"
           @click="$router.push({ name: 'login' })"
         >
           Login →
-        </button>
+        </v-btn>
       </div>
-
     </div>
   </div>
 </template>
-<style scoped>
+<script>
+import localStorageWrapper from "../../../src/localStorageWrapper.js";
 
+export default {
+  data() {
+    return {
+      drawer: true,
+      loader: false,
+      user: [],
+      active_menu: "",
+      menuitems: [],
+      role_id: "",
+      app_image_url: "",
+      application_name: "",
+      app_name: "",
+
+      lang: "",
+    };
+  },
+  created() {
+    this.appImageUpdate();
+  },
+  mounted() {},
+  watch: {},
+  methods: {
+    appImageUpdate() {
+      if (localStorageWrapper.getItem("App_Image_Url") != null) {
+        this.app_image_url = localStorageWrapper.getItem("App_Image_Url");
+        this.app_name = localStorageWrapper.getItem("App_Name");
+      } else {
+        this.app_image_url = "";
+      }
+      if (localStorageWrapper.getItem("App_Name")) {
+        this.application_name = localStorageWrapper.getItem("App_Name");
+      } else {
+        this.application_name = "";
+      }
+    },
+  },
+};
+</script>
+<style scoped>
 /* OUTER WRAPPER */
 .top-bar-wrapper {
   width: 100%;
@@ -52,7 +100,7 @@
 
 /* LOGO */
 .logo img {
-  height: 45px;
+  height: 65px;
   cursor: pointer;
   object-fit: contain;
 }
@@ -64,16 +112,6 @@
 }
 
 /* OUTLINE BUTTON (Register) */
-.btn-outline {
-  padding: 10px 22px;
-  border-radius: 30px;
-  border: 2px solid #6c63ff;
-  background: transparent;
-  color: #6c63ff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
 
 .btn-outline:hover {
   background: #6c63ff;
@@ -81,16 +119,6 @@
 }
 
 /* FILLED BUTTON (Login) */
-.btn-filled {
-  padding: 10px 22px;
-  border-radius: 30px;
-  border: none;
-  background: linear-gradient(90deg, #6c63ff, #7c4dff);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
 .btn-filled:hover {
   transform: translateY(-2px);
@@ -104,7 +132,7 @@
   }
 
   .logo img {
-    height: 35px;
+    height: 65px;
   }
 
   .btn-outline,
@@ -113,5 +141,4 @@
     font-size: 13px;
   }
 }
-
 </style>

@@ -1,13 +1,20 @@
 <template>
   <div class="file-upload-wrapper">
     <!-- ================= Uploaded View ================= -->
+
     <div v-if="fileData.file_path" class="d-flex align-center ga-2">
       <v-tooltip text="Download file">
         <template #activator="{ props }">
-          <a :href="fullPath" download>
-            <v-chip v-bind="props" size="small" class="cursor-pointer">
+          <a :href="fullPath" target="_blank">
+            <v-chip
+              v-bind="props"
+              size="small"
+              class="cursor-pointer file-chip"
+            >
               <v-icon start size="16">mdi-file</v-icon>
-              {{ fileData.file_name }}
+              <span class="file-name">
+                {{ fileData.file_name }}
+              </span>
             </v-chip>
           </a>
         </template>
@@ -62,7 +69,7 @@ export default {
     disabled: Boolean,
     baseUrl: {
       type: String,
-      default: "/storage/",
+      default: "",
     },
     required: {
       type: Boolean,
@@ -78,7 +85,9 @@ export default {
     },
 
     fullPath() {
-      return this.baseUrl + (this.fileData.file_path || "");
+      return (
+        import.meta.env.VITE_IMAGE_PATH + "/storage/" + this.fileData.file_path
+      );
     },
     inputRules() {
       if (!this.required) return [];
@@ -137,5 +146,18 @@ export default {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.file-chip {
+  max-width: 100%;
+  white-space: normal !important; /* allow wrapping */
+  height: auto !important; /* grow height */
+  align-items: flex-start; /* align top */
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.file-name {
+  word-break: break-word; /* break long words */
+  overflow-wrap: anywhere; /* handle long filenames */
 }
 </style>

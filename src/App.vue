@@ -10,11 +10,16 @@ import { apptheme } from "./store/apptheme.js";
     <div id="app" :class="apptheme.theme_type" class="layout-wrapper">
       <v-card class="app-container">
         <!-- DEFAULT ADMIN LAYOUT -->
-        <NavigationDrawer
-          :key="componentKey"
-          v-if="isReady && layout === 'default-layout'"
-          :sel_lang="sel_lang"
-        />
+
+        <div
+          v-if="user.rolename != 'Prescriber' && user.rolename != 'Pharmacist'"
+        >
+          <NavigationDrawer
+            :key="componentKey"
+            v-if="isReady && layout === 'default-layout'"
+            :sel_lang="sel_lang"
+          />
+        </div>
 
         <v-app-bar
           v-if="isReady && layout === 'default-layout'"
@@ -22,28 +27,42 @@ import { apptheme } from "./store/apptheme.js";
           elevation="3"
           style="border-radius: 0px"
           :style="sel_lang == 'ar' ? 'direction:rtl' : ''"
+          class="system-bg"
         >
           <template v-slot:prepend>
-            <v-app-bar-nav-icon
-              v-show="navigation.drawer === false"
-              @click="navigation.setDrawer(!navigation.drawer)"
-            />
+            <div
+              v-if="
+                user.rolename != 'Prescriber' && user.rolename != 'Pharmacist'
+              "
+            >
+              <v-app-bar-nav-icon
+                v-show="navigation.drawer === false"
+                @click="navigation.setDrawer(!navigation.drawer)"
+              />
+            </div>
 
             <div v-show="navigation.drawer === false">
               <div class="font-login text-center">
                 <div v-if="app_image_url">
-                  <img :src="app_image_url" style="width: 150px" />
+                  <img
+                    :src="app_image_url"
+                    style="width: 235px; cursor: pointer"
+                    @click="goToDashboard"
+                  />
                 </div>
 
                 <div v-else>
-                  <span class="font-base-app text-center">
+                  <span
+                    class="font-base-app text-center"
+                    @click="goToDashboard"
+                    style="cursor: pointer"
+                  >
                     {{ application_name }}
                   </span>
                 </div>
               </div>
             </div>
           </template>
-
           <v-spacer></v-spacer>
           <ProfileView @getuserdetails="fetchUserdetails" />
         </v-app-bar>
@@ -76,6 +95,7 @@ const default_layout = "default";
 import NavigationDrawer from "./Layout/NavigationDrawer.vue";
 import ProfileView from "./Layout/ProfileView.vue";
 import LogoutTimer from "./components/CustomComponents/LogoutTimer.vue";
+import { helpers } from "./utils/helpers.js";
 
 export default {
   components: { NavigationDrawer, ProfileView, LogoutTimer },
@@ -101,6 +121,10 @@ export default {
       sel_lang: "",
       c_loader: false,
       isReady: false,
+      systemparameter: {
+        SESSION_TIMEOUT_DURATION: null,
+        SESSION_WARNING_DURATION: null,
+      },
     };
   },
 
@@ -118,8 +142,12 @@ export default {
     this.emitter.on("app_image_update", () => {
       this.getAppImage();
     });
+    this.emitter.on("app_timer_update", () => {
+      this.fetchAppTimeout();
+    });
 
     this.getAppImage();
+    this.fetchAppTimeout();
   },
 
   watch: {
@@ -162,16 +190,38 @@ export default {
       }
     },
 
-    switchTheme() {
-      const storedTheme = localStorage.getItem("theme-type");
+    /* ================= FETCH APP TIMEOUT ================= */
+    fetchAppTimeout() {
+      this.$axios
+        .get("fetch_systemparameter_data", {
+          params: {
+            parameter_name: [
+              "SESSION_TIMEOUT_DURATION",
+              "SESSION_WARNING_DURATION",
+            ],
+          },
+        })
+        .then((res) => {
+          if (res.data.status === "S") {
+            // Set to component data
+            this.systemparameter = res.data.parameter;
 
-      if (storedTheme === "theme-dark") {
-        localStorage.setItem("theme-type", "theme-light");
-        this.currentTheme = localStorage.getItem("theme-type");
-      } else {
-        localStorage.setItem("theme-type", "theme-dark");
-        this.currentTheme = localStorage.getItem("theme-type");
-      }
+            // Save to localStorage
+            localStorage.setItem(
+              "systemparameter",
+              JSON.stringify(res.data.parameter),
+            );
+          } else {
+            this.$toast.error("Failed to fetch system parameters");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    goToDashboard() {
+      var userdata = JSON.parse(localStorage.getItem("user_data"));
+      helpers.handleUserRouting(userdata, this.$router, this.loadPermissions);
     },
   },
 };

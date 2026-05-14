@@ -57,7 +57,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="loading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -71,7 +71,7 @@
                 :disabled="isBtnLoading"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="status-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -145,8 +145,8 @@ export default {
             .get("edit_states/" + this.$route.query.slug)
             .then((res) => {
               this.state = res.data.states;
-              console.log("this.state");
-              console.log(res.data.states.country.name);
+              // console.log("this.state");
+              // console.log(res.data.states.country.name);
               this.state.country_id = res.data.states.id;
               this.country = res.data.states.country;
               this.loader = false;

@@ -11,8 +11,12 @@
       </div>
 
       <div class="confirm-dialog-buttons d-flex justify-end">
-        <v-btn small class="no-btn bnc mr-2" text @click="close">Back</v-btn>
-        <v-btn small class="yes-btn bnc" text @click="confirm">Confirm</v-btn>
+        <v-btn class="btn-cancel" size="small" @click="close">{{
+          $t("cancel")
+        }}</v-btn>
+        <v-btn size="small" class="btn-approved ml-2" @click="confirm"
+          >Confirm</v-btn
+        >
       </div>
     </div>
   </v-dialog>
@@ -131,9 +135,19 @@ export default {
 
 /* Bounce Animation */
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-8px); }
-  60% { transform: translateY(-4px); }
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
 }
 
 .bnc:hover {

@@ -1,6 +1,6 @@
 <template>
   <div class="session-wrapper">
-
+    <!-- --{{ warningBefore }}--{{ inactiveTime }} -->
     <!-- TOP FLOATING SESSION TIMER -->
     <!-- <div
       v-if="isAuthenticated"
@@ -17,7 +17,6 @@
       transition="scale-transition"
     >
       <v-card class="popup-card">
-
         <!-- HEADER -->
         <div class="popup-header">
           <div class="icon-wrapper">⏳</div>
@@ -26,24 +25,23 @@
 
         <!-- BODY -->
         <v-card-text class="text-center popup-body">
-
           <!-- Circular Countdown -->
           <div class="circle-wrapper">
             <svg class="progress-ring" width="130" height="130">
-
               <defs>
-                <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient
+                  id="gradientStroke"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
                   <stop offset="0%" stop-color="#4a90e2" />
                   <stop offset="100%" stop-color="#6c5ce7" />
                 </linearGradient>
               </defs>
 
-              <circle
-                class="progress-ring-bg"
-                cx="65"
-                cy="65"
-                r="55"
-              />
+              <circle class="progress-ring-bg" cx="65" cy="65" r="55" />
 
               <circle
                 class="progress-ring-circle"
@@ -56,8 +54,11 @@
             </svg>
 
             <!-- WARNING COUNTDOWN -->
-            <div class="circle-text">
-              {{ warningCountdown }}
+            <div
+              class="circle-text"
+              :class="{ 'text-red': warningCountdown <= 30 }"
+            >
+              {{ formattedWarningCountdown }}
             </div>
           </div>
 
@@ -65,31 +66,21 @@
             Your session will expire soon.<br />
             Would you like to extend it?
           </div>
-
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions class="popup-actions">
-          <v-btn
-            class="logout-btn"
-            variant="outlined"
-            @click="handleLogout"
-          >
+          <v-btn class="logout-btn" variant="outlined" @click="handleLogout">
             Logout
           </v-btn>
 
-          <v-btn
-            class="extend-btn"
-            @click="extendSession"
-          >
+          <v-btn class="extend-btn" @click="extendSession">
             Extend Session
           </v-btn>
         </v-card-actions>
-
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 
@@ -103,13 +94,13 @@ export default {
       countdownInterval: null,
       warningInterval: null,
 
-      inactiveTime: 1 * 60 * 1000,   // 30 minutes total session in ms
-      warningBefore: 0.9 * 60 * 1000,     // show popup 2 minutes before logout
+      inactiveTime: 10 * 60 * 1000, // default 10 min
+      warningBefore: 2 * 60 * 1000, // default 2 min
 
       remainingTime: 0,
       warningCountdown: 0,
-
       showWarningPopup: false,
+      sessionStarted: false,
     };
   },
 
@@ -120,12 +111,8 @@ export default {
 
     formattedRemainingTime() {
       const totalSeconds = Math.max(Math.floor(this.remainingTime / 1000), 0);
-      const minutes = Math.floor(totalSeconds / 60)
-        .toString()
-        .padStart(2, "0");
-      const seconds = (totalSeconds % 60)
-        .toString()
-        .padStart(2, "0");
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${minutes}:${seconds}`;
     },
 
@@ -136,23 +123,28 @@ export default {
     dashOffset() {
       const totalWarningSeconds = this.warningBefore / 1000;
       const progress =
-        (this.warningCountdown / totalWarningSeconds) *
-        this.circumference;
+        (this.warningCountdown / totalWarningSeconds) * this.circumference;
 
       return this.circumference - progress;
     },
-  },
+    formattedWarningCountdown() {
+      const totalSeconds = Math.max(Math.floor(this.warningCountdown), 0);
 
-  watch: {
-    isAuthenticated(newVal) {
-      if (!newVal) {
-        this.showWarningPopup = false;
-        this.clearAllTimers();
-      }
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+      return `${minutes}:${seconds}`;
     },
+  },
+  created() {
+    // this.emitter.on("app_timer_update", () => {
+    //   this.loadSessionConfig();
+    // });
   },
 
   mounted() {
+    this.loadSessionConfig();
+
     if (this.isAuthenticated) {
       this.startSession();
     }
@@ -167,14 +159,47 @@ export default {
     this.clearAllTimers();
   },
 
+  watch: {
+    isAuthenticated(val) {
+      if (val) {
+        this.loadSessionConfig();
+        this.startSession();
+      } else {
+        this.showWarningPopup = false;
+        this.clearAllTimers();
+      }
+    },
+  },
+
   methods: {
+    /* =========================
+       LOAD CONFIG FROM LOCALSTORAGE
+    ==========================*/
+    loadSessionConfig() {
+      const storedParams = localStorage.getItem("systemparameter");
+
+      if (storedParams) {
+        const params = JSON.parse(storedParams);
+
+        this.inactiveTime =
+          parseFloat(params.SESSION_TIMEOUT_DURATION || 10) * 60 * 1000;
+
+        this.warningBefore =
+          parseFloat(params.SESSION_WARNING_DURATION || 2) * 60 * 1000;
+      }
+    },
+
     /* =========================
        START SESSION
     ==========================*/
     startSession() {
+      this.clearAllTimers();
+
       this.remainingTime = this.inactiveTime;
-      this.startCountdown();
+      this.sessionStarted = true;
+
       this.startLogoutTimer();
+      this.startCountdown();
     },
 
     startLogoutTimer() {
@@ -189,17 +214,19 @@ export default {
 
         this.remainingTime -= 1000;
 
-        // FIXED CONDITION (<= instead of ===)
+        // 🔥 Prevent immediate popup on fresh login
+        if (this.remainingTime <= 0) {
+          this.clearAllTimers();
+          return;
+        }
+
         if (
+          this.sessionStarted &&
           this.remainingTime <= this.warningBefore &&
           !this.showWarningPopup
         ) {
           this.showWarningPopup = true;
           this.startWarningCountdown();
-        }
-
-        if (this.remainingTime <= 0) {
-          this.clearAllTimers();
         }
       }, 1000);
     },
@@ -221,23 +248,21 @@ export default {
     ==========================*/
     resetLogoutTimer: debounce(function () {
       if (!this.isAuthenticated) return;
-      if (this.showWarningPopup) return;
 
-      this.clearAllTimers();
+      if (this.showWarningPopup) {
+        this.showWarningPopup = false;
+      }
+
       this.startSession();
-    }, 200),
+    }, 300),
 
     /* =========================
        EXTEND SESSION
     ==========================*/
     extendSession() {
-      if (!this.isAuthenticated) {
-        this.showWarningPopup = false;
-        return;
-      }
+      if (!this.isAuthenticated) return;
 
       this.showWarningPopup = false;
-      this.clearAllTimers();
       this.startSession();
     },
 
@@ -247,11 +272,14 @@ export default {
     forceLogout() {
       if (!this.isAuthenticated) return;
 
-      this.$store.dispatch("auth/logoutUser");
-      this.$router.replace({ name: "login" });
+      this.isLoggingOut = true;
 
-      this.showWarningPopup = false;
-      this.clearAllTimers();
+      this.$store.dispatch("auth/logoutUser").finally(() => {
+        this.$router.replace({ name: "login" });
+
+        this.showWarningPopup = false;
+        this.clearAllTimers();
+      });
     },
 
     handleLogout() {
@@ -389,19 +417,42 @@ export default {
 
 /* Animations */
 @keyframes slideFade {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.6; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>

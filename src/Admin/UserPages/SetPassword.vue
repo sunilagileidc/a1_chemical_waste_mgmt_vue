@@ -18,7 +18,7 @@
                 <div class="font-login">
                   <div v-if="app_image_url">
                     <span>
-                      <img v-bind:src="app_image_url" style="width: 130px" />
+                      <img v-bind:src="app_image_url" style="width: 235px" />
                     </span>
                   </div>
                   <div v-else-if="app_image_url == ''">

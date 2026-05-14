@@ -1,8 +1,8 @@
 <template>
   <div class="mx-2 mt-3 p-0">
-    <div class="container my-3 p-0">
+    <div class="container my-3 p-0 mx-0">
       <page-title
-        class="col-md-4 ml-2"
+        class="col-md-5 ml-2"
         :heading="$t('create_system_parameter')"
         :google_icon="google_icon"
       ></page-title>
@@ -17,9 +17,9 @@
               <v-checkbox
                 v-model="system_params.is_file_upload"
                 v-bind:label="$t('is_file_upload')"
-                color="green"
                 @click="uploadImagestatus(system_params.is_file_upload)"
                 :value="1"
+                color="#05668d"
                 hide-details
               ></v-checkbox>
             </v-col>
@@ -32,6 +32,7 @@
                     v-on="on"
                     v-model="system_params.parameter_name"
                     :rules="fieldRules"
+                    :disabled="disableAction(system_params.parameter_name)"
                     v-bind:label="$t('parameter_name')"
                     required
                     v-bind="props"
@@ -165,7 +166,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="isDisabled"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -179,7 +180,7 @@
                 :disabled="isDisabled"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="status-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -260,6 +261,14 @@ export default {
     },
   },
   methods: {
+    disableAction(value) {
+      return [
+        "APP_LOGO",
+        "LOGIN_OTP_ENABLED",
+        "SESSION_TIMEOUT_DURATION",
+        "SESSION_WARNING_DURATION",
+      ].includes(value);
+    },
     deleteImage() {
       this.system_params.parameter_value = "";
     },
@@ -281,16 +290,9 @@ export default {
         this.$axios
           .post("save_system_params", this.system_params)
           .then((res) => {
-            this.emitter.emit("app_image_update");
             this.btnloading = false;
-            let app_image_url = res.data.systemparameter.image_full_url;
-            console.log("res data");
-            console.log(res.data.systemparameter);
-            if (app_image_url) {
-              localStorageWrapper.setItem("App_Image_Url", app_image_url);
-              console.log("app_image_url inside");
-              console.log(app_image_url);
-            }
+            this.emitter.emit("app_image_update");
+            this.emitter.emit("app_timer_update");
             if (Array.isArray(res.data.message)) {
               this.array_data = res.data.message.toString();
             } else {
@@ -298,6 +300,7 @@ export default {
             }
             if (res.data.status == "S") {
               this.$toast.success(this.array_data);
+
               this.message = res.data.message;
               this.$router.push({
                 name: "system_parameter",
@@ -316,12 +319,6 @@ export default {
           });
       }
     },
-    //  addfilename(filename) {
-    //   this.upload_cv.filename = filename;
-    // },
-    //  fileExtension(file_extension) {
-    //   this.upload_cv.mime_type = file_extension;
-    // },
     uploadImagestatus(value) {
       if (value == false) {
         this.system_params.is_file_upload = true;
@@ -353,7 +350,7 @@ input.larger {
   max-width: 110px;
   border-radius: 3px;
 }
-.image-container :deep(img)  {
+.image-container :deep(img) {
   border: 3px dashed black;
 }
 .camera-icon {

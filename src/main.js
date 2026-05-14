@@ -14,6 +14,8 @@ import moment from "moment";
 import { dateMixin } from "./plugins/dateMixin.js";
 import mitt from "mitt";
 
+import { helpers } from "./utils/helpers";
+
 import Toaster from "@meforma/vue-toaster";
 
 // ---------------- VUETIFY ----------------
@@ -66,6 +68,7 @@ app.use(GlobalComponents);
 // ---------------- GLOBAL PROPERTIES ----------------
 app.config.globalProperties.$moment = moment;
 app.config.globalProperties.emitter = emitter;
+app.config.globalProperties.$helpers = helpers;
 
 // ---------------- GLOBAL MIXINS ----------------
 app.mixin(dateMixin);

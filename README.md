@@ -161,3 +161,17 @@ Vue3_Base
 └─ vite.config.mjs
 
 ```
+
+
+<!-- for release -->
+### to create a release worktree 
+```
+git worktree add ../release-worktree release
+```
+
+### to delete branch local and remote
+```
+git branch -d branch_name
+git push origin --delete branch_name
+git fetch --prune
+```

@@ -12,7 +12,7 @@
     >
       <page-title
         class="col-md-3"
-        :heading="$t('states')"
+        :heading="$t('states') + ' of ' + name_val"
         :google_icon="google_icon"
       ></page-title>
       <div class="col-md-4">
@@ -34,6 +34,24 @@
         </v-tooltip>
       </div>
       <div class="add_new_button">
+        <v-tooltip :text="$t('back')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <router-link
+              :to="{
+                name: 'countries',
+              }"
+              style="color: white"
+            >
+              <v-btn
+                size="small"
+                class="btn-cancel mb-2"
+                color="cancel"
+                v-bind="props"
+                >{{ $t("back") }}</v-btn
+              >
+            </router-link>
+          </template>
+        </v-tooltip>
         <v-tooltip :text="$t('add_new')" location="bottom">
           <template v-slot:activator="{ props }">
             <router-link
@@ -45,27 +63,9 @@
               }"
               style="color: white"
             >
-              <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
+              <v-btn size="small" class="mb-2 btn-filled ml-2" v-bind="props">{{
                 $t("add_new")
               }}</v-btn>
-            </router-link>
-          </template>
-        </v-tooltip>
-        <v-tooltip :text="$t('back')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <router-link
-              :to="{
-                name: 'countries',
-              }"
-              style="color: white"
-            >
-              <v-btn
-                size="small"
-                class="mb-2 ml-2"
-                color="cancel"
-                v-bind="props"
-                >{{ $t("back") }}</v-btn
-              >
             </router-link>
           </template>
         </v-tooltip>
@@ -115,11 +115,8 @@
             >
               <v-tooltip :text="$t('city')" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-bind="props"
-                    class="mr-2 settings_icon icon_size"
-                    v-on="on"
-                    >mdi-sitemap</v-icon
+                  <v-icon v-bind="props" class="mr-2 icon_size" v-on="on"
+                    >mdi-cog</v-icon
                   >
                 </template>
                 <span>{{ $t("city") }}</span>
@@ -176,6 +173,7 @@ export default {
     initval: true,
     dialogMessage: "",
     dialogTitle: "",
+    name_val: "",
   }),
   watch: {
     "$route.query.countryslug": {
@@ -188,6 +186,7 @@ export default {
     },
   },
   mounted() {
+    this.name_val = this.$route.query.countryslug;
     this.fetchstates();
   },
   methods: {

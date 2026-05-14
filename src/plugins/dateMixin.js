@@ -3,7 +3,7 @@ export const dateMixin = {
   methods: {
     formatDate(value) {
       const date = new Date(value);
-      return dateFns.format(date, "dd-MM-yyyy");
+      return dateFns.format(date, "dd/MMM/yyyy");
     },
     formatDatewithshortMonth(value) {
       const date = new Date(value);

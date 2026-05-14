@@ -73,7 +73,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="isBtnLoading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -87,7 +87,7 @@
                 :disabled="isBtnLoading"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="status-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}

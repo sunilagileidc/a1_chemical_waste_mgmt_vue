@@ -28,9 +28,9 @@
             <v-row>
               <v-col cols="12" md="4">
                 <div class="field-group">
-                  <label class="field-label">{{
+                  <!-- <label class="field-label">{{
                     $t("current_password")
-                  }}</label>
+                  }}</label> -->
                   <v-tooltip
                     :text="this.$t('current_password')"
                     location="bottom"
@@ -44,7 +44,7 @@
                         :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="show1 ? 'text' : 'password'"
                         :rules="fieldRules"
-                        class="required_field styled-field"
+                        class="field-required styled-field"
                         variant="outlined"
                         density="compact"
                         @click:append-inner="show1 = !show1"
@@ -55,7 +55,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <div class="field-group">
-                  <label class="field-label">{{ $t("new_password") }}</label>
+                  <!-- <label class="field-label">{{ $t("new_password") }}</label> -->
                   <v-tooltip :text="this.$t('new_password')" location="bottom">
                     <template v-slot:activator="{ props }">
                       <v-text-field
@@ -66,7 +66,7 @@
                         v-bind="props"
                         required
                         :rules="passwordRules"
-                        class="required_field styled-field"
+                        class="field-required styled-field"
                         variant="outlined"
                         density="compact"
                         @click:append-inner="show2 = !show2"
@@ -77,9 +77,9 @@
               </v-col>
               <v-col cols="12" md="4">
                 <div class="field-group">
-                  <label class="field-label">{{
+                  <!-- <label class="field-label">{{
                     $t("confirm_password")
-                  }}</label>
+                  }}</label> -->
                   <v-tooltip
                     :text="this.$t('confirm_password')"
                     location="bottom"
@@ -102,7 +102,7 @@
                               fieldItem.confirmpassword ||
                             $t('confirm_password_match'),
                         ]"
-                        class="required_field styled-field"
+                        class="field-required styled-field"
                         variant="outlined"
                         density="compact"
                         @click:append-inner="show3 = !show3"
@@ -212,11 +212,12 @@ export default {
     passwordRules() {
       return [
         (v) => !!v || "Password required",
-        (v) => v.length >= 12 || "Minimum 12 characters required",
-        (v) => /[A-Z]/.test(v) || "At least 1 uppercase letter required",
-        (v) =>
-          /[a-zA-Z0-9]/.test(v) || "At least 1 alphanumeric character required",
+        (v) => v.length >= 12 || "Minimum length of 12 characters required",
+        (v) => /[A-Z]/.test(v) || "Minimum of 1 uppercase letter required",
         (v) => /\d/.test(v) || "At least 1 number required",
+        (v) =>
+          /[~!@#$%]/.test(v) ||
+          "At least 1 non-alphanumeric character (~!@#$%) required",
       ];
     },
   },
@@ -226,70 +227,80 @@ export default {
     this.userprofile = JSON.parse(localStorage.getItem("user_data"));
   },
   methods: {
-    submit() {
-      if (this.$refs.form.validate() && this.valid == true) {
-        if (this.fieldItem.newpassword != this.fieldItem.confirmpassword) {
-          this.message = "Confirm password is not matching with new password";
-          this.$toast.error(this.message);
-        } else {
-          this.isDisabled = true;
-          this.isBtnLoading = true;
-          this.fieldItem.email = this.userprofile.email;
-          this.fieldItem.user_id = this.userprofile.id;
-          this.$axios
-            .post("resetuserpassword", this.fieldItem)
-            .then(
-              (res) => {
-                if (Array.isArray(res.data.message)) {
-                  this.array_data = res.data.message.toString();
-                } else {
-                  this.array_data = res.data.message;
-                }
-                if (res.data.status == "E") {
-                  (this.message = this.array_data), (this.isDisabled = false);
-                  this.isBtnLoading = false;
-                  this.$toast.error(this.message);
-                  this.valid_success = false;
-                } else {
-                  this.$toast.success(this.array_data);
-                  this.valid_success = true;
-                  this.$router.push({ name: "dashboard" });
-                  this.isDisabled = false;
-                  this.isBtnLoading = false;
-                }
-              },
-              (error) => {
-                console.log(error);
-                (this.message = this.$t("too_many_request")),
-                  (this.isDisabled = true),
-                  (this.isBtnLoading = false);
-                this.$toast.error(this.message);
-                setTimeout(() => (this.isDisabled = false), 120000);
-                setTimeout(() => (this.message = "Now try again"), 120000);
-              }
-            )
-            .catch((err) => {
-              console.log("error data", err);
-              this.valid_success = false;
-              this.message = this.$t("password_error");
-              this.$toast.error(this.message);
-            });
-        }
-      } else {
+    async submit() {
+      if (!(this.$refs.form.validate() && this.valid)) {
         this.message = this.$t("invalid_form");
         this.$toast.error(this.message);
+        return;
+      }
+
+      if (this.fieldItem.newpassword !== this.fieldItem.confirmpassword) {
+        this.message = "Confirm password is not matching with new password";
+        this.$toast.error(this.message);
+        return;
+      }
+
+      this.isDisabled = true;
+      this.isBtnLoading = true;
+
+      try {
+        this.fieldItem.email = this.userprofile.email;
+        this.fieldItem.user_id = this.userprofile.id;
+
+        const res = await this.$axios.post("resetuserpassword", this.fieldItem);
+
+        const message = Array.isArray(res.data.message)
+          ? res.data.message.toString()
+          : res.data.message;
+
+        if (res.data.status === "E") {
+          this.$toast.error(message);
+          this.valid_success = false;
+          return;
+        }
+
+        // Success
+        this.$toast.success(message);
+        this.valid_success = true;
+
+        const userdata = JSON.parse(localStorage.getItem("user_data"));
+        helpers.handleUserRouting(userdata, this.$router, this.loadPermissions);
+      } catch (err) {
+        console.log("error data", err);
+
+        if (!err.response) {
+          this.$toast.error("Network error");
+          return;
+        }
+
+        if (err.response.status === 429) {
+          this.message = this.$t("too_many_request");
+          this.$toast.error(this.message);
+
+          // Disable button for 2 mins
+          this.isDisabled = true;
+          setTimeout(() => (this.isDisabled = false), 120000);
+          return;
+        }
+
+        this.valid_success = false;
+        this.message = this.$t("password_error");
+        this.$toast.error(this.message);
+      } finally {
+        // Always executed
+        this.isBtnLoading = false;
+        this.isDisabled = false;
       }
     },
     cancel() {
-      this.$router.push({ name: "dashboard" });
+      const userdata = JSON.parse(localStorage.getItem("user_data"));
+      helpers.handleUserRouting(userdata, this.$router, this.loadPermissions);
     },
   },
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap");
-
 /* ── Card ── */
 .reset-card {
   border-radius: 16px !important;
@@ -412,7 +423,7 @@ export default {
 
 .btn-cancel {
   border-radius: 8px !important;
-  font-family: "DM Sans", sans-serif !important;
+
   font-weight: 500 !important;
   font-size: 13px !important;
   letter-spacing: 0.01em !important;
@@ -421,7 +432,7 @@ export default {
 
 .btn-submit {
   border-radius: 8px !important;
-  font-family: "DM Sans", sans-serif !important;
+
   font-weight: 600 !important;
   font-size: 13px !important;
   letter-spacing: 0.01em !important;

@@ -441,6 +441,7 @@
                   v-bind:false-value="0"
                   v-bind:true-value="1"
                   :label="`Active?: ${status == 1 ? 'Yes' : 'No'}`"
+                  color="#05668d"
                 ></v-checkbox>
               </v-flex>
             </v-layout>
@@ -504,8 +505,8 @@
     </v-layout>
   </div>
 </template>
-  
-  <script>
+
+<script>
 // import vue2Dropzone from "vue2-dropzone";
 //import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
@@ -759,7 +760,6 @@ export default {
                 this.message = res.data.message;
                 this.$vuetify.goTo(0);
               } else {
-                console.log("loader is false");
                 this.loader = false;
                 this.documentDialog = false;
                 this.$emit("uploadedDocument", res.data.filepath);
@@ -787,7 +787,7 @@ export default {
         // formData.append("photo_year", this.photo_year);
         // formData.append("status", this.status);
         // formData.append("id", this.edit_id);
-        console.log("form data will b e", this.selectedfile);
+        // console.log("form data will b e", this.selectedfile);
         this.$axios
           .post("upload", formData)
           .then((res) => {
@@ -801,9 +801,6 @@ export default {
             } else {
               this.documentDialog = false;
               this.loader = false;
-
-              console.log("res. data will be", res.data.filepath);
-
               this.$emit("uploadedDocument", res.data.filepath);
             }
           })
@@ -827,11 +824,11 @@ export default {
   },
 };
 </script>
-  <style scoped>
+<style scoped>
 .mt-20 {
   margin-top: 20px;
 }
-.v-tabs :deep(.v-tabs-bar)  {
+.v-tabs :deep(.v-tabs-bar) {
   /* width: 157px; */
   border-right: 1px solid #dedede !important;
 }
@@ -941,4 +938,3 @@ export default {
   color: gray;
 }
 </style>
-  

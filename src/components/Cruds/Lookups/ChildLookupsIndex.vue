@@ -1,153 +1,165 @@
 <template>
-  <div class="main-20">
+  <v-container fluid class="page-wrapper background-inner">
+    <content-loader v-if="loader"></content-loader>
     <confirmation-dialog
       ref="confirmationDialog"
       :title="dialogTitle"
       :message="dialogMessage"
     ></confirmation-dialog>
-    <div
-      flat
-      color="white"
-      class="row my-3 align-items-center component_app_bar"
-    >
-      <page-title
-        class="col-md-3"
-        :heading="$t('child_look_ups')"
-        :google_icon="google_icon"
-      ></page-title>
-      <div class="col-md-4">
-        <v-tooltip :text="$t('search')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <v-text-field
-              rounded
-              density="compact"
-              variant="outlined"
-              elevation="24"
-              v-bind="props"
-              v-model="search"
-              append-icon="search"
-              v-bind:label="$t('search')"
-              hide-details
-              class="srch_bar"
-            ></v-text-field>
-          </template>
-        </v-tooltip>
-      </div>
-      <div class="add_new_button">
-        <v-tooltip :text="$t('add_new')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <router-link
-              :to="{
-                name: 'child_lookups_amend',
-                query: {
-                  parentslug: $route.query.slug,
-                },
-              }"
-              style="color: white"
-            >
-              <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
-                $t("add_new")
-              }}</v-btn>
-            </router-link>
-          </template>
-        </v-tooltip>
-        <v-tooltip :text="$t('back')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <router-link
-              :to="{
-                name: 'lookups',
-              }"
-              style="color: white"
-            >
-              <v-btn
-                size="small"
-                class="mb-2 ml-2"
-                color="cancel"
-                v-bind="props"
-                >{{ $t("back") }}</v-btn
-              >
-            </router-link>
-          </template>
-        </v-tooltip>
+    <div class="main-section">
+      <div>
+        <div class="d-flex justify-space-between align-center">
+          <page-title
+            class="col-md-6"
+            :heading="$t('child_look_ups') + ' - ' + name_val"
+            :google_icon="google_icon"
+          ></page-title>
+          <div class="add_new_button">
+            <v-tooltip :text="$t('back')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link
+                  :to="{
+                    name: 'lookups',
+                  }"
+                  style="color: white"
+                >
+                  <v-btn
+                    size="small"
+                    class="btn-reject mb-2 ma-1"
+                    color="cancel"
+                    v-bind="props"
+                    >{{ $t("back") }}</v-btn
+                  >
+                </router-link>
+              </template>
+            </v-tooltip>
+            <v-tooltip :text="this.$t('add_new')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link
+                  :to="{
+                    name: 'child_lookups_amend',
+                    query: {
+                      parentslug: $route.query.slug,
+                    },
+                  }"
+                  style="color: white"
+                >
+                  <v-btn size="small" class="mb-2 btn-filled" v-bind="props">{{
+                    $t("add_new")
+                  }}</v-btn>
+                </router-link>
+              </template>
+            </v-tooltip>
+          </div>
+        </div>
+        <!-- Stats section -->
+        <stats-page :stats="stats" />
+        <!-- Stats section -->
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <v-text-field
+            density="comfortable"
+            variant="solo"
+            flat
+            placeholder="Search here..."
+            hide-details
+            append-inner-icon="mdi-magnify"
+            v-model="search"
+            class="search-field"
+          ></v-text-field>
+        </div>
+        <!-- Data Table Card -->
+        <v-card class="table-card pa-4">
+          <v-data-table
+            :headers="headers"
+            :items="lookup"
+            :search="search"
+            :loading="initval"
+            class="table-card"
+          >
+            <template v-slot:item="props">
+              <tr class="vdatatable_tbody">
+                <td>
+                  <div style="max-width: 160px">
+                    {{ props.item.shortname }}
+                  </div>
+                </td>
+                <td>
+                  <div style="max-width: 160px">
+                    {{ props.item.longname }}
+                  </div>
+                </td>
+                <td>
+                  <div style="max-width: 160px">
+                    {{ props.item.seq }}
+                  </div>
+                </td>
+                <td>
+                  <v-btn
+                    class="hover_shine btn mr-2"
+                    :disabled="isDisabled"
+                    @click="statusUpdate(props.item.id)"
+                    size="small"
+                    v-bind:color="[
+                      props.item.status == 1 ? 'success' : 'warning',
+                    ]"
+                  >
+                    <span
+                      v-if="props.item.status == 1"
+                      class="spanactivesize"
+                      >{{ $t("active") }}</span
+                    >
+                    <span
+                      v-if="props.item.status == 0"
+                      class="spanactivesize"
+                      >{{ $t("inactive") }}</span
+                    >
+                  </v-btn>
+                </td>
+
+                <td class="text-center px-0">
+                  <router-link
+                    small
+                    :to="{
+                      name: 'child_lookups_amend',
+                      query: { slug: props.item.slug },
+                    }"
+                  >
+                    <v-tooltip :text="$t('add_new')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon
+                          small
+                          class="mr-2 edit_btn icon_size"
+                          v-on="on"
+                          v-bind="props"
+                          >mdi-pencil-outline</v-icon
+                        >
+                      </template>
+                      <span>{{ $t("edit") }}</span>
+                    </v-tooltip>
+                  </router-link>
+                  <span @click="deleteLookup(props.item.id)">
+                    <v-tooltip :text="$t('delete')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon
+                          class="delete_btn icon_size"
+                          v-on="on"
+                          small
+                          v-bind="props"
+                          type="button"
+                          >mdi-trash-can-outline</v-icon
+                        >
+                      </template>
+                    </v-tooltip>
+                  </span>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card>
       </div>
     </div>
-    <div class="ml-4">
-      <h4>{{ $t("lookup_name") }} : {{ this.$route.query.parentname }}</h4>
-    </div>
-    <v-data-table
-      :headers="headers"
-      :items="lookup"
-      :search="search"
-      :loading="initval"
-    >
-      <template v-slot:item="props">
-        <tr class="vdatatable_tbody">
-          <td>
-            <div class="text-truncate" style="max-width: 160px">
-              {{ props.item.shortname }}
-            </div>
-          </td>
-          <td>
-            <div class="text-truncate" style="max-width: 160px">
-              {{ props.item.longname }}
-            </div>
-          </td>
-          <td>
-            <v-btn
-              class="hover_shine btn mr-2"
-              :disabled="isDisabled"
-              @click="statusUpdate(props.item.id)"
-              size="small"
-              v-bind:color="[props.item.status == 1 ? 'success' : 'warning']"
-            >
-              <span v-if="props.item.status == 1" class="spanactivesize">{{
-                $t("active")
-              }}</span>
-              <span v-if="props.item.status == 0" class="spanactivesize">{{
-                $t("inactive")
-              }}</span>
-            </v-btn>
-          </td>
-          <td class="text-center px-0">
-            <router-link
-              small
-              :to="{
-                name: 'child_lookups_amend',
-                query: { slug: props.item.slug },
-              }"
-            >
-              <v-tooltip :text="$t('add_new')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    small
-                    class="mr-2 edit_btn icon_size"
-                    v-on="on"
-                    v-bind="props"
-                    >mdi-pencil-outline</v-icon
-                  >
-                </template>
-                <span>{{ $t("edit") }}</span>
-              </v-tooltip>
-            </router-link>
-            <span @click="deleteLookup(props.item.id)">
-              <v-tooltip :text="$t('delete')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    class="delete_btn icon_size"
-                    v-on="on"
-                    small
-                    v-bind="props"
-                    type="button"
-                    >mdi-trash-can-outline</v-icon
-                  >
-                </template>
-              </v-tooltip>
-            </span>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -171,11 +183,18 @@ export default {
         key: "longname",
       },
       {
+        title: "Sequence",
+        align: "left",
+        sortable: true,
+        key: "seq",
+      },
+      {
         title: "Status",
         align: "left",
         sortable: false,
         key: "status",
       },
+
       {
         title: "Actions",
         key: "name",
@@ -192,6 +211,7 @@ export default {
     initval: false,
     valid: false,
     message: "",
+    name_val: "",
   }),
   watch: {
     "$route.query.slug": {
@@ -203,7 +223,9 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted() {
+    this.name_val = this.$route.query.parentname;
+  },
   methods: {
     showConfirmation(title, message) {
       this.dialogTitle = title;

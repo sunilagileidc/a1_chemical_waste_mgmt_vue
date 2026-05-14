@@ -1,16 +1,19 @@
 <template>
   <div class="d-flex page-title">
     <div class="d-flex">
-      <div class="page-header ">
+      <div class="theme-header text-title-case">
         <i style="font-size: 35px" :class="google_icon.icon"
           ><span :class="google_icon.color">{{
             google_icon.icon_name
           }}</span></i
         >
       </div>
-      <div class="page-header ml-3 content-size " style="margin-top: 2px;">
+      <div
+        class="theme-header text-title-case ml-3 content-size"
+        style="margin-top: 2px"
+      >
         {{ heading }}
-        <div class="page-title-subheading">{{ subheading }}</div>
+        <div class="theme-subheader text-title-case">{{ subheading }}</div>
       </div>
     </div>
   </div>

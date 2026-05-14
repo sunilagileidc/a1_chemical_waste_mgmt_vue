@@ -2,7 +2,7 @@
   <div class="mx-2 mt-3 p-0">
     <div class="mt-8 p-0">
       <page-title
-        class="col-md-4"
+        class="col-md-5"
         :heading="$t('create_lookup')"
         :google_icon="google_icon"
       ></page-title>
@@ -12,7 +12,7 @@
       <content-loader v-if="loader"></content-loader>
       <v-form ref="form" v-model="valid">
         <v-row class="mx-auto mt-2" max-width="344">
-          <v-col md="6">
+          <v-col md="5" sm="5">
             <v-tooltip :text="$t('shortname')" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-text-field
@@ -30,7 +30,7 @@
               </template>
             </v-tooltip>
           </v-col>
-          <v-col md="6">
+          <v-col md="5" sm="5">
             <v-tooltip :text="$t('longname')" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-text-field
@@ -48,6 +48,24 @@
               </template>
             </v-tooltip>
           </v-col>
+          <v-col md="2" sm="2">
+            <v-tooltip :text="this.$t('sequence')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-text-field
+                  v-bind="props"
+                  v-model="lookup.seq"
+                  :rules="numberRules"
+                  maxlength="5"
+                  v-on:keypress="NumbersOnly"
+                  variant="outlined"
+                  density="compact"
+                  v-bind:label="$t('sequence')"
+                  required
+                  class="required_field"
+                ></v-text-field>
+              </template>
+            </v-tooltip>
+          </v-col>
         </v-row>
         <v-layout>
           <v-row class="mx-auto mt-2" max-width="344">
@@ -56,7 +74,7 @@
                 <template v-slot:activator="{ props }">
                   <v-textarea
                     v-on="on"
-                    rows="2"
+                    rows="1"
                     v-model="lookup.description"
                     v-bind="props"
                     v-bind:label="$t('description')"
@@ -80,7 +98,7 @@
               size="small"
               @click="$router.go(-1)"
               :disabled="loading"
-              class="ma-1"
+              class="btn-cancel ma-1"
               color="cancel"
               >{{ $t("cancel") }}</v-btn
             >
@@ -104,7 +122,7 @@
                 width="1"
                 color="cancel"
                 size="x-small"
-                class="ml-2"
+                class="btn-approved ml-2"
               ></v-progress-circular>
             </v-btn>
           </div>
@@ -135,6 +153,7 @@ export default {
       shortname: "",
       longname: "",
       description: "",
+      seq: "",
       parentslug: "",
     },
     noimagepreview: "",
@@ -160,12 +179,7 @@ export default {
         if (this.$route.query.slug) {
           this.loader = true;
           this.$axios
-            .get(
-              
-                "lookups/" +
-                this.$route.query.slug +
-                "/edit"
-            )
+            .get("lookups/" + this.$route.query.slug + "/edit")
             .then((res) => {
               this.lookup = res.data.lookup;
               // this.lookup.parentslug = this.lookup.parentlookup.slug;
@@ -190,6 +204,19 @@ export default {
       this.selectedFile = e.target.files[0];
 
       // Do whatever you need with the file, liek reading it with FileReader
+    },
+    NumbersOnly(evt) {
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        return true;
+      }
     },
     submit() {
       if (this.$refs.form.validate() && this.valid == true) {
@@ -227,7 +254,9 @@ export default {
           })
           .catch((err) => {
             console.log(err);
-            this.$toast.error(err.response.data.errordata || this.$t("something_went_wrong"));
+            this.$toast.error(
+              err.response.data.errordata || this.$t("something_went_wrong"),
+            );
           })
           .finally(() => {
             this.isBtnLoading = false;

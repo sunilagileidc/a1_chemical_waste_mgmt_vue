@@ -34,33 +34,44 @@ const actions = {
     return axios
       .post(import.meta.env.VITE_API_URL_ADMIN + "login", data)
       .then((res) => {
-        console.log('inside res');
-        console.log(res);
+        // console.log('inside res');
+        // console.log(res);
         if (res.data.status == "S") {
-          console.log(res.data.user);
+          // console.log(res.data.user);
           commit("setUserData", res.data.user);
           commit("setAuthentication", true);
           // const parsedUserData = JSON.stringify(res.data.userdata);
-          console.log('res.data.user');
-          console.log(res.data.user);
           localStorageWrapper.setItem("access_token", res.data.access_token);
+          localStorageWrapper.setItem("expires_at", res.data.expires_at);
           localStorageWrapper.setItem("user_data", JSON.stringify(res.data.user));
           setTimeout(() => {
             commit("updateLoggedIn");
           }, 3000);
-        }else{
+        } else {
           return res.data;
         }
       })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
+    // .catch((error) => {
+    //   console.log(error);
+    // });
   },
 
   logoutUser({ commit }) {
-    localStorage.clear();
-    commit("setAuthentication", false);
-  },
+  const token = localStorage.getItem("access_token");
+
+  return axios
+    .post(import.meta.env.VITE_API_URL_ADMIN + "logout", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .catch(() => {
+    })
+    .finally(() => {
+      localStorage.clear();
+      commit("setAuthentication", false);
+    });
+},
 };
 
 export default {

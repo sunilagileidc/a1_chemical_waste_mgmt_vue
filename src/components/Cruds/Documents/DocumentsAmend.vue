@@ -3,7 +3,7 @@
     <div class="my-3 p-0">
       <page-title
         class="col-md-4 ml-2"
-        heading="Create Document"
+        heading="Create/Amend Document"
         :google_icon="google_icon"
       ></page-title>
     </div>
@@ -32,42 +32,87 @@
                 </template>
               </v-tooltip>
             </v-col>
-            <v-col cols="12" sm="4" md="4" class="pb-0">
-              <v-tooltip text="Category" location="bottom">
+            <v-col cols="12" sm="4" md="4">
+              <v-select
+                variant="outlined"
+                density="compact"
+                outlined
+                required
+                dense
+                v-model="documents.category"
+                :items="ref_type_array"
+                item-title="longname"
+                item-value="shortname"
+                :rules="fieldRules"
+                label="Category"
+                class="field-required"
+              ></v-select>
+
+              <!-- Ref Value -->
+            </v-col>
+            <v-col cols="12" sm="4" md="4">
+              <v-tooltip text="Group" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-autocomplete
-                    v-bind:label="$t('category')"
+                    v-bind:label="$t('group')"
                     item-value="shortname"
                     item-title="longname"
                     density="compact"
                     variant="outlined"
                     v-bind="props"
                     index="id"
-                    v-model="documents.category"
-                    class="required_field"
-                    :rules="fieldRules"
-                    :items="doc_category"
-                    outlined
+                    v-model="documents.group"
+                    :class="{
+                      'field-required': documents.category === 'Drugs',
+                    }"
+                    :rules="documents.category === 'Drugs' ? fieldRules : []"
+                    :items="groupItems"
                     required
-                    dense
                   ></v-autocomplete>
                 </template>
               </v-tooltip>
             </v-col>
             <v-col cols="12" sm="4" md="4">
-              <document-upload
-                v-model="documents.file"
-                required
-                folder="Documents"
-                label="Document"
-              />
+              <v-tooltip text="Drug" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <v-autocomplete
+                    variant="outlined"
+                    density="compact"
+                    v-model="documents.drug_id"
+                    :items="ref_value_array"
+                    item-title="drug_name"
+                    item-value="id"
+                    :rules="documents.category === 'Drugs' ? fieldRules : []"
+                    :label="'Drugs'"
+                    :loading="refListLoader"
+                    :class="{
+                      'field-required': documents.category === 'Drugs',
+                    }"
+                  ></v-autocomplete>
+                </template>
+              </v-tooltip>
             </v-col>
-            <v-col cols="12" sm="12" md="12">
+
+            <!-- Sequence -->
+            <v-col cols="12" sm="4" md="4">
+              <v-number-input
+                variant="outlined"
+                density="compact"
+                v-model="documents.sequence"
+                :rules="numberRules"
+                label="Sequence"
+                class="field-required"
+                :min="1"
+                hide-details="auto"
+              >
+              </v-number-input>
+            </v-col>
+            <v-col cols="12" sm="4" md="4">
               <v-tooltip text="description" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-textarea
                     v-bind="props"
-                    rows="3"
+                    rows="1"
                     v-model="documents.description"
                     label="Description"
                     variant="outlined"
@@ -79,6 +124,50 @@
                   ></v-textarea>
                 </template>
               </v-tooltip>
+            </v-col>
+            <v-col cols="12" sm="4" md="4">
+              <document-upload
+                v-model="documents.file"
+                required
+                folder="Documents"
+                label="Document"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-switch
+                v-if="!isViewMode"
+                v-model="documents.is_re_registration"
+                :label="$t('is_re_registration')"
+                :true-value="1"
+                :false-value="0"
+                color="success"
+                inset
+                small
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-switch
+                v-if="!isViewMode"
+                v-model="documents.is_training_document"
+                :label="$t('is_training_document')"
+                :true-value="1"
+                :false-value="0"
+                color="success"
+                inset
+                small
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-switch
+                v-if="!isViewMode"
+                v-model="documents.download_alert"
+                :label="$t('download_alert')"
+                :true-value="1"
+                :false-value="0"
+                color="success"
+                inset
+                small
+              />
             </v-col>
           </v-row>
         </v-form>
@@ -92,7 +181,7 @@
                 size="small"
                 @click="cancel()"
                 :disabled="loading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -143,11 +232,19 @@ export default {
     loading: false,
     isDisabled: false,
     doc_category: [],
+    doc_group: [],
+    general_group: [],
     documents: {
       id: 0,
       title: "",
       category: "",
+      group: "",
+      drug_id: "",
+      sequence: 1,
       description: "",
+      is_re_registration: 0,
+      is_training_document: 0,
+      download_alert: 0,
       file: {},
     },
     items: [],
@@ -155,6 +252,9 @@ export default {
       id: 0,
       title: "None",
     },
+    ref_type_array: ["Drugs", "General"],
+    ref_value_array: [],
+    refListLoader: false,
   }),
 
   computed: {
@@ -165,9 +265,16 @@ export default {
     numberRules() {
       return [(v) => !!v || this.$t("number_required")];
     },
+    groupItems() {
+      if (this.documents.category === "Drugs") {
+        return this.doc_group;
+      }
+      return this.general_group;
+    },
   },
   mounted() {
     this.fetchLookup();
+    this.fetchDrugList("Drugs");
   },
   created() {},
   watch: {
@@ -176,19 +283,24 @@ export default {
       handler() {
         if (this.$route.query.slug) {
           this.loader = true;
+
           this.$axios
             .get("documents/" + this.$route.query.slug)
             .then((res) => {
-              if (res.data.status == "S") {
+              if (res.data.status === "S") {
                 const d = res.data.documents;
 
                 this.documents = {
                   id: d.id,
                   title: d.title,
                   category: d.category,
+                  drug_id: d.drug_id,
+                  group: d.group,
                   description: d.description,
-
-                  // VERY IMPORTANT — normalize file
+                  is_re_registration: d.is_re_registration,
+                  is_training_document: d.is_training_document,
+                  download_alert: d.download_alert,
+                  sequence: d.sequence,
                   file: d.file_path
                     ? {
                         file_name: d.file_name,
@@ -199,26 +311,17 @@ export default {
                       }
                     : {},
                 };
-
-                this.loader = false;
               }
             })
             .catch((err) => {
-              this.loader = false;
               this.$toast.error(this.$t("something_went_wrong"));
+              console.log(err);
+            })
+            .finally(() => {
               this.loader = false;
-              console.log("error", err);
             });
         }
       },
-    },
-    "$i18n.locale"(newLocale) {
-      if (newLocale === "ar") {
-        this.sel_lang = "ar";
-      } else {
-        ("");
-        this.sel_lang = "en";
-      }
     },
   },
   methods: {
@@ -235,6 +338,48 @@ export default {
         .catch((err) => {
           this.$toast.error(this.$t("something_went_wrong"));
           console.log(err);
+        });
+      this.$axios
+        .get("fetchlookup", {
+          params: {
+            lookup_type: "DOCUMENT_GROUP",
+          },
+        })
+        .then((response) => {
+          this.doc_group = (response.data.lookup_details || []).filter(
+            (item) => item.shortname !== "RAF"
+          );
+        })
+        .catch((err) => {
+          this.$toast.error(this.$t("something_went_wrong"));
+          console.log(err);
+        });
+      this.$axios
+        .get("fetchlookup", {
+          params: {
+            lookup_type: "GENERAL_GROUP",
+          },
+        })
+        .then((response) => {
+          this.general_group = response.data.lookup_details;
+        })
+        .catch((err) => {
+          this.$toast.error(this.$t("something_went_wrong"));
+          console.log(err);
+        });
+    },
+    fetchDrugList(type) {
+      this.refListLoader = true;
+      this.$axios
+        .get("fetch_active_drugs")
+        .then((res) => {
+          this.ref_value_array = res.data.drugs;
+        })
+        .catch(() => {
+          this.$toast.error(this.$t("something_went_wrong"));
+        })
+        .finally(() => {
+          this.refListLoader = false;
         });
     },
     cancel() {

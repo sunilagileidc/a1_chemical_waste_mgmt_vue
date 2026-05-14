@@ -1,40 +1,16 @@
 <template>
-  <v-overlay
-    v-model="loader"
-    persistent
-    class="pharma-overlay"
-  >
-    <div class="loader-card">
-
-      <!-- Medical cross glow -->
-      <div class="cross-wrapper">
-        <div class="medical-cross">
-          <span class="v"></span>
-          <span class="h"></span>
-        </div>
+  <v-overlay v-model="loader" persistent class="pharma-overlay">
+    <!-- From Uiverse.io by Sharan-Rohith -->
+    <div class="hourglassBackground">
+      <div class="hourglassContainer">
+        <div class="hourglassCurves"></div>
+        <div class="hourglassCapTop"></div>
+        <div class="hourglassGlassTop"></div>
+        <div class="hourglassSand"></div>
+        <div class="hourglassSandStream"></div>
+        <div class="hourglassCapBottom"></div>
+        <div class="hourglassGlass"></div>
       </div>
-
-      <!-- Rotating capsule -->
-      <div class="capsule-rotate">
-        <div class="capsule">
-          <div class="cap left"></div>
-          <div class="divider"></div>
-          <div class="cap right"></div>
-        </div>
-      </div>
-
-      <!-- ECG line -->
-      <svg class="ecg" viewBox="0 0 120 30">
-        <polyline
-          points="0,15 15,15 22,6 30,24 38,15 55,15 62,6 70,24 78,15 120,15"
-        />
-      </svg>
-
-      <!-- Text -->
-      <div class="loading-text">
-        Preparing your medicines…
-      </div>
-
     </div>
   </v-overlay>
 </template>
@@ -45,8 +21,8 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     loader: {
@@ -55,161 +31,502 @@ export default {
       },
       set(val) {
         this.$emit("input", val);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700&display=swap");
-
-/* ─── Overlay ─────────────────────────────────────────────── */
 .pharma-overlay {
   background: rgba(0, 0, 0, 0.04);
   backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Nunito", sans-serif;
 }
 
 /* ─── Card ────────────────────────────────────────────────── */
-.loader-card {
-  width: 220px;
-  padding: 28px 22px 26px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(18px);
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.45);
-  /* text-align: center; */
-}
-.loader-card {
-  position: relative;
-  border: 2px solid rgba(42, 157, 143, 0.35);
-  animation: borderFade 2.4s ease-in-out infinite;
-}
-@keyframes borderFade {
-  0%, 100% {
-    border-color: rgba(42, 157, 143, 0.25);
-  }
-  50% {
-    border-color: rgba(42, 157, 143, 0.85);
-  }
-}
 
-/* ─── Cross glow ──────────────────────────────────────────── */
-.cross-wrapper {
+.content {
+  width: 50vmin;
+  height: 50vmin;
+  background: #fff0;
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
+  transform: scale(0.5);
 }
 
-.medical-cross {
+.hourglassBackground {
   position: relative;
-  width: 28px;
-  height: 28px;
-  animation: glow 2s ease-in-out infinite;
+  /* background-color: rgb(71, 60, 60); */
+  height: 130px;
+  width: 130px;
+  border-radius: 50%;
+  margin: 30px auto;
 }
 
-.medical-cross span {
+.hourglassContainer {
   position: absolute;
-  background: #2a9d8f;
-  border-radius: 4px;
+  top: 30px;
+  left: 40px;
+  width: 50px;
+  height: 70px;
+  -webkit-animation: hourglassRotate 2s ease-in 0s infinite;
+  animation: hourglassRotate 2s ease-in 0s infinite;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-.medical-cross .v {
-  width: 6px;
-  height: 28px;
-  left: 50%;
-  transform: translateX(-50%);
+.hourglassContainer div,
+.hourglassContainer div:before,
+.hourglassContainer div:after {
+  transform-style: preserve-3d;
 }
 
-.medical-cross .h {
-  width: 28px;
-  height: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-}
+@-webkit-keyframes hourglassRotate {
+  0% {
+    transform: rotateX(0deg);
+  }
 
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 6px rgba(42,157,143,0.4); }
-  50% { box-shadow: 0 0 14px rgba(42,157,143,0.9); }
-}
+  50% {
+    transform: rotateX(180deg);
+  }
 
-/* ─── Capsule rotation ────────────────────────────────────── */
-.capsule-rotate {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
-  animation: spin 2.2s ease-in-out infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(180deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.capsule {
-  width: 90px;
-  height: 34px;
-  border-radius: 40px;
-  display: flex;
-  overflow: hidden;
-}
-
-.cap.left {
-  flex: 1;
-  background: linear-gradient(135deg, #ff6b6b, #ff9a9a);
-}
-
-.cap.right {
-  flex: 1;
-  background: linear-gradient(135deg, #ffffff, #f1f1f1);
-}
-
-.divider {
-  width: 3px;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-/* ─── ECG animation ───────────────────────────────────────── */
-.ecg {
-  width: 100%;
-  height: 30px;
-  margin-bottom: 12px;
-}
-
-.ecg polyline {
-  fill: none;
-  stroke: #2a9d8f;
-  stroke-width: 2;
-  stroke-dasharray: 120;
-  stroke-dashoffset: 120;
-  animation: ecgMove 1.6s linear infinite;
-}
-
-@keyframes ecgMove {
-  to {
-    stroke-dashoffset: 0;
+  100% {
+    transform: rotateX(180deg);
   }
 }
 
-/* ─── Text ────────────────────────────────────────────────── */
-.loading-text {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  color: #2a9d8f;
+@keyframes hourglassRotate {
+  0% {
+    transform: rotateX(0deg);
+  }
+
+  50% {
+    transform: rotateX(180deg);
+  }
+
+  100% {
+    transform: rotateX(180deg);
+  }
 }
 
-/* ─── Reduced motion ──────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
+.hourglassCapTop {
+  top: 0;
+}
+
+.hourglassCapTop:before {
+  top: -25px;
+}
+
+.hourglassCapTop:after {
+  top: -20px;
+}
+
+.hourglassCapBottom {
+  bottom: 0;
+}
+
+.hourglassCapBottom:before {
+  bottom: -25px;
+}
+
+.hourglassCapBottom:after {
+  bottom: -20px;
+}
+
+.hourglassGlassTop {
+  transform: rotateX(90deg);
+  position: absolute;
+  top: -16px;
+  left: 3px;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  background-color: #999999;
+}
+
+.hourglassGlass {
+  perspective: 100px;
+  position: absolute;
+  top: 32px;
+  left: 20px;
+  width: 10px;
+  height: 6px;
+  background-color: #999999;
+  opacity: 0.5;
+}
+
+.hourglassGlass:before,
+.hourglassGlass:after {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: #017268;
+  left: -17px;
+  width: 44px;
+  height: 28px;
+}
+
+.hourglassGlass:before {
+  top: -27px;
+  border-radius: 0 0 25px 25px;
+}
+
+.hourglassGlass:after {
+  bottom: -27px;
+  border-radius: 25px 25px 0 0;
+}
+
+.hourglassCurves:before,
+.hourglassCurves:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 32px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #333;
+  animation: hideCurves 2s ease-in 0s infinite;
+}
+
+.hourglassCurves:before {
+  left: 15px;
+}
+
+.hourglassCurves:after {
+  left: 29px;
+}
+
+@-webkit-keyframes hideCurves {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes hideCurves {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.hourglassSandStream:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 24px;
+  width: 3px;
+  background-color: white;
+  -webkit-animation: sandStream1 2s ease-in 0s infinite;
+  animation: sandStream1 2s ease-in 0s infinite;
+}
+
+.hourglassSandStream:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 36px;
+  left: 19px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #fff;
+  animation: sandStream2 2s ease-in 0s infinite;
+}
+
+@-webkit-keyframes sandStream1 {
+  0% {
+    height: 0;
+    top: 35px;
+  }
+
+  50% {
+    height: 0;
+    top: 45px;
+  }
+
+  60% {
+    height: 35px;
+    top: 8px;
+  }
+
+  85% {
+    height: 35px;
+    top: 8px;
+  }
+
+  100% {
+    height: 0;
+    top: 8px;
+  }
+}
+
+@keyframes sandStream1 {
+  0% {
+    height: 0;
+    top: 35px;
+  }
+
+  50% {
+    height: 0;
+    top: 45px;
+  }
+
+  60% {
+    height: 35px;
+    top: 8px;
+  }
+
+  85% {
+    height: 35px;
+    top: 8px;
+  }
+
+  100% {
+    height: 0;
+    top: 8px;
+  }
+}
+
+@-webkit-keyframes sandStream2 {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  51% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  91% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sandStream2 {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  51% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  91% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.hourglassSand:before,
+.hourglassSand:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 6px;
+  background-color: white;
+  perspective: 500px;
+}
+
+.hourglassSand:before {
+  top: 8px;
+  width: 39px;
+  border-radius: 3px 3px 30px 30px;
+  animation: sandFillup 2s ease-in 0s infinite;
+}
+
+.hourglassSand:after {
+  border-radius: 30px 30px 3px 3px;
+  animation: sandDeplete 2s ease-in 0s infinite;
+}
+
+@-webkit-keyframes sandFillup {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+
+  60% {
+    opacity: 1;
+    height: 0;
+  }
+
+  100% {
+    opacity: 1;
+    height: 17px;
+  }
+}
+
+@keyframes sandFillup {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+
+  60% {
+    opacity: 1;
+    height: 0;
+  }
+
+  100% {
+    opacity: 1;
+    height: 17px;
+  }
+}
+
+@-webkit-keyframes sandDeplete {
+  0% {
+    opacity: 0;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  1% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  24% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  25% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  50% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  90% {
+    opacity: 1;
+    top: 41px;
+    height: 0;
+    width: 10px;
+    left: 20px;
+  }
+}
+
+@keyframes sandDeplete {
+  0% {
+    opacity: 0;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  1% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  24% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  25% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  50% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+
+  90% {
+    opacity: 1;
+    top: 41px;
+    height: 0;
+    width: 10px;
+    left: 20px;
   }
 }
 </style>

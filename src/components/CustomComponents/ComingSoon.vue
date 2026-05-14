@@ -1,6 +1,6 @@
 <template>
-  <div class="centered-container">
-    <span class="text-label">Coming soon</span>
+  <div class="centered-container background">
+    <span class="text-label">Coming soon...</span>
   </div>
 </template>
 
@@ -15,7 +15,7 @@
 .text-label {
   font-weight: bold;
   font-size: 40px;
-  color: #808080ba;
+  color: #000000ba;
   animation: fadeInUp 1s forwards;
 }
 

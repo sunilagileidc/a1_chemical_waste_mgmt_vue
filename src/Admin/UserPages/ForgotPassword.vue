@@ -53,7 +53,7 @@
               <!-- SUBMIT BUTTON -->
               <v-btn
                 block
-                class="mt-4 sign-in-btn"
+                class="mt-4 btn-filled"
                 :loading="btnloading"
                 :disabled="btnloading || valid == false || !userdata.email"
                 height="44"
@@ -339,5 +339,4 @@ export default {
   display: flex;
   align-items: center;
 }
-
 </style>

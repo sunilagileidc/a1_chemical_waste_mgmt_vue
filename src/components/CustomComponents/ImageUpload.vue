@@ -128,13 +128,13 @@ export default {
       const filename = event.target.files[0].name;
       if (file) {
         this.selectedFile = URL.createObjectURL(file);
-        console.log("all files are ", event.target.files[0]);
+        // console.log("all files are ", event.target.files[0]);
         const lastDot = filename.lastIndexOf(".");
         const fileNameWithoutExt = filename.substring(0, lastDot);
         const ext = filename.substring(lastDot + 1);
-        console.log("FileName => " + fileNameWithoutExt);
+        // console.log("FileName => " + fileNameWithoutExt);
         this.filename = fileNameWithoutExt;
-        console.log("Extension => " + ext);
+        // console.log("Extension => " + ext);
         this.extension = ext;
         this.dialogVisible = true;
       } else {
@@ -166,7 +166,7 @@ export default {
         })
         .then((res) => {
           this.loader = false;
-          console.log(res.data);
+          // console.log(res.data);
           this.imageloading = false;
           if (res.data.status == "S") {
             this.message = res.data.message;

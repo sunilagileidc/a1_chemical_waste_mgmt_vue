@@ -1,9 +1,9 @@
 <template>
-  <div class="role-menu-wrapper">
+  <div class="role-menu-wrapper m-0 p-0">
     <content-loader v-if="loader" />
 
-    <v-card v-else class="menu-card" elevation="2">
-      <v-card-text class="pa-4">
+    <div v-else class="menu-card" elevation="2">
+      <v-card-text class="pa-0">
         <!-- Search Field -->
         <div style="max-width: 380px">
           <v-text-field
@@ -17,9 +17,10 @@
             class="mb-3"
           />
         </div>
-
         <!-- Tree List -->
-        <v-list v-model:opened="opened" density="compact" class="role-tree">
+        <v-list v-model:opened="opened" density="compact" class="role-tree pa-3">
+        <no-data-found v-if="filteredItems.length == 0" text="No data found" />
+
           <template v-for="(item, i) in filteredItems" :key="i">
             <!-- IF HAS CHILDREN -->
             <v-list-group
@@ -36,6 +37,7 @@
                     :label="item.name"
                     density="compact"
                     hide-details
+                    color="#05668d"
                     class="ma-0 pa-0"
                   />
 
@@ -46,6 +48,7 @@
                     :label="item.name"
                     density="compact"
                     hide-details
+                    color="#05668d"
                     class="ma-0 pa-0"
                   />
                 </v-list-item>
@@ -56,6 +59,7 @@
                 v-for="(child, j) in item.children"
                 :key="j"
                 class="tree-child-item"
+                style="background-color: transparent !important"
               >
                 <v-checkbox
                   v-if="selected.includes(child.id)"
@@ -64,6 +68,7 @@
                   :label="child.name"
                   density="compact"
                   hide-details
+                  color="#05668d"
                   class="ma-0 pa-0"
                 />
 
@@ -74,6 +79,7 @@
                   :label="child.name"
                   density="compact"
                   hide-details
+                  color="#05668d"
                   class="ma-0 pa-0"
                 />
               </v-list-item>
@@ -87,6 +93,7 @@
                 @click.stop="updateMenuAssignment(false, item)"
                 :label="item.name"
                 density="compact"
+                color="#05668d"
                 hide-details
                 class="ma-0 pa-0"
               />
@@ -97,6 +104,7 @@
                 @click.stop="updateMenuAssignment(true, item)"
                 :label="item.name"
                 density="compact"
+                color="#05668d"
                 hide-details
                 class="ma-0 pa-0"
               />
@@ -118,7 +126,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="isDisabled"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
               >
                 {{ $t("cancel") }}
@@ -135,7 +143,7 @@
                 :disabled="isDisabled"
                 @click="save()"
                 size="small"
-                class="mr-2"
+                class="btn-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -152,7 +160,7 @@
           </template>
         </v-tooltip>
       </div>
-    </v-card>
+    </div>
   </div>
 </template>
 
@@ -221,7 +229,6 @@ export default {
               } else {
                 this.array_data = res.data.message;
               }
-
               if (res.data.status == "S") {
                 this.items = res.data.menu;
 
@@ -230,8 +237,10 @@ export default {
                   .map((item) => item.id);
 
                 this.selectedmenus(this.$route.query.id);
+                this.loader = false;
               } else {
                 this.$toast.error(this.array_data);
+                this.loader = false;
               }
             })
             .catch((err) => {

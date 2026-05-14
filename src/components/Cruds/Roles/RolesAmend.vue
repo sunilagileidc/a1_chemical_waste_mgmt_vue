@@ -56,7 +56,7 @@
                 size="small"
                 @click="cancel"
                 :disabled="loading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -70,7 +70,7 @@
                 :disabled="isDisabled"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="btn-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}

@@ -4,7 +4,7 @@
       <!-- v-bind:class="[sel_lang == 'ar' ? 'rtl-page-title' : '']" -->
       <page-title
         class="col-md-4 ml-2"
-        heading="Create Institution"
+        heading="Create/Amend Institution"
         :google_icon="google_icon"
       ></page-title>
     </div>
@@ -14,13 +14,13 @@
         <v-form ref="form" v-model="valid">
           <v-row class="px-6">
             <v-col cols="12" sm="6" md="6" class="pb-0">
-              <v-tooltip text="Institution Name" location="bottom">
+              <v-tooltip text="Institution" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-text-field
                     v-bind="props"
                     v-model="institution.name"
                     :rules="fieldRules"
-                    label="Institution Name"
+                    label="Institution"
                     variant="outlined"
                     density="compact"
                     required
@@ -36,20 +36,22 @@
             <v-col cols="12" sm="6" md="6" class="pb-0">
               <v-tooltip text="Institution Type" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-text-field
+                  <v-autocomplete
+                    label="Institution Type"
+                    item-value="shortname"
+                    item-title="shortname"
+                    density="compact"
+                    variant="outlined"
                     v-bind="props"
+                    index="id"
                     v-model="institution.type"
                     :rules="fieldRules"
-                    label="Institution Type"
-                    variant="outlined"
-                    density="compact"
-                    required
-                    counter="100"
-                    counter-value="100"
+                    :items="inst_types"
                     class="required_field"
-                    maxlength="100"
-                    v-bind:class="[fieldRules ? 'form-group--error' : '']"
-                  ></v-text-field>
+                    outlined
+                    required
+                    dense
+                  ></v-autocomplete>
                 </template>
               </v-tooltip>
             </v-col>
@@ -73,6 +75,43 @@
                 </template>
               </v-tooltip>
             </v-col>
+            <v-col cols="12" sm="6" md="6" class="pb-0">
+              <v-tooltip text="Contact Name" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <v-text-field
+                    v-bind="props"
+                    v-model="institution.contact_name"
+                    :rules="fieldRules"
+                    label="Contact Name"
+                    variant="outlined"
+                    density="compact"
+                    required
+                    counter="100"
+                    counter-value="100"
+                    class="required_field"
+                    maxlength="100"
+                    v-bind:class="[fieldRules ? 'form-group--error' : '']"
+                  ></v-text-field>
+                </template>
+              </v-tooltip>
+            </v-col>
+            <v-col cols="12" md="6" sm="6" lg="6">
+              <v-tooltip :text="$t('email')" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <v-text-field
+                    v-bind="props"
+                    variant="outlined"
+                    density="compact"
+                    v-model="institution.contact_email"
+                    :rules="emailRules"
+                    class="required_field mt_30"
+                    v-bind:label="$t('email')"
+                    required
+                    maxlength="100"
+                  ></v-text-field>
+                </template>
+              </v-tooltip>
+            </v-col>
           </v-row>
         </v-form>
       </div>
@@ -85,7 +124,7 @@
                 size="small"
                 @click="cancel()"
                 :disabled="loading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
                 >{{ $t("cancel") }}</v-btn
               >
@@ -99,7 +138,7 @@
                 :disabled="isDisabled"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="status-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -142,8 +181,11 @@ export default {
       name: "",
       type: "",
       address: "",
+      contact_name: "",
+      contact_email: "",
     },
     items: [],
+    inst_types: [],
     empty_item: {
       id: 0,
       title: "None",
@@ -151,6 +193,15 @@ export default {
   }),
 
   computed: {
+    emailRules() {
+      return [
+        (v) => !!v || this.$t("email_required"),
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          this.$t("email_valid"),
+      ];
+    },
     fieldRules() {
       return [(v) => !!v || this.$t("field_required")];
     },
@@ -160,7 +211,9 @@ export default {
     },
   },
 
-  created() {},
+  created() {
+    this.fetchLookup();
+  },
   watch: {
     "$route.query.slug": {
       immediate: true,
@@ -176,7 +229,6 @@ export default {
               }
             })
             .catch((err) => {
-              this.loader = false;
               this.$toast.error(this.$t("something_went_wrong"));
               this.loader = false;
               console.log("error", err);
@@ -199,14 +251,28 @@ export default {
         name: "institutions",
       });
     },
+    fetchLookup() {
+      this.$axios
+        .get("fetchlookup", {
+          params: {
+            lookup_type: "INSTITUTION_TYPE",
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          this.inst_types = response.data.lookup_details;
+        })
+        .catch((err) => {
+          this.$toast.error(this.$t("something_went_wrong"));
+          console.log(err);
+        });
+    },
     submit() {
       if (this.$refs.form.validate() && this.valid) {
         if (this.institution.id == 0) {
           this.isDisabled = true;
           this.$axios
-            .post("institution",
-              this.institution
-            )
+            .post("institution", this.institution)
             .then((res) => {
               if (Array.isArray(res.data.message)) {
                 this.array_data = res.data.message.toString();
@@ -236,11 +302,7 @@ export default {
         } else {
           this.isDisabled = true;
           this.$axios
-            .patch(
-                "institution/" +
-                this.institution.id,
-              this.institution
-            )
+            .patch("institution/" + this.institution.id, this.institution)
             .then((res) => {
               if (Array.isArray(res.data.message)) {
                 this.array_data = res.data.message.toString();

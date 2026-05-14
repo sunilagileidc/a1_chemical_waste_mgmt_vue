@@ -11,17 +11,23 @@ instance.interceptors.request.use((config) => {
   }
 
   if (config.method === "get") {
-    const language = localStorage.getItem("pref_lang") || "en";
-    config.params = { ...config.params, lang: language };
+    // const language = localStorage.getItem("pref_lang") || "en";
+    config.params = { ...config.params };
+    // config.params = { ...config.params, lang: language };
   }
   return config;
 });
 
 instance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
+    // if (error.response && error.response.status === 401) {
+    //   localStorage.removeItem("access_token");
+
+    //   // Redirect safely
+    //   window.location.href = "/login";
+    // }
+
     return Promise.reject(error);
   }
 );

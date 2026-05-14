@@ -12,7 +12,7 @@
       <div class="card-body" style="box-shadow: none !important">
         <v-form ref="form" v-model="valid">
           <v-row class="px-6 mt-4">
-            <v-col cols="12" sm="6" md="6">
+            <v-col cols="12" sm="2" md="2">
               <v-tooltip :text="$t('select_mode')" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-autocomplete
@@ -51,6 +51,30 @@
                   ></v-text-field>
                 </template>
               </v-tooltip>
+            </v-col>
+            <v-col cols="2" md="2">
+              <v-switch
+                v-model="fieldItem.status"
+                :label="$t('status')"
+                :true-value="1"
+                :false-value="0"
+                color="success"
+                hide-details
+                inset
+                small
+              />
+            </v-col>
+            <v-col cols="2" md="2">
+              <v-switch
+                v-model="fieldItem.is_mandatory"
+                :label="$t('is_mandatory')"
+                :true-value="1"
+                :false-value="0"
+                color="success"
+                hide-details
+                inset
+                small
+              />
             </v-col>
           </v-row>
           <v-row class="px-6">
@@ -150,7 +174,7 @@
                 size="small"
                 @click="$router.go(-1)"
                 :disabled="loading"
-                class="ma-1"
+                class="btn-cancel ma-1"
                 color="cancel"
               >
                 {{ $t("cancel") }}
@@ -165,7 +189,7 @@
                 :disabled="isDisabled"
                 @click="submit"
                 size="small"
-                class="mr-2"
+                class="btn-approved mr-2"
                 color="success"
               >
                 {{ $t("submit") }}
@@ -185,7 +209,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -263,6 +287,8 @@ export default {
       template_signature: "",
       can_override: "N",
       template_type_id: "",
+      status: 1,
+      is_mandatory: 1,
     },
     template_slug: "",
     passwordvalue: String,
@@ -295,11 +321,7 @@ export default {
           this.loader = true;
           this.template_slug = this.$route.query.slug;
           this.$axios
-            .get(
-              
-                "emailtemplates/" +
-                this.$route.query.slug
-            )
+            .get("emailtemplates/" + this.$route.query.slug)
             .then((res) => {
               this.loader = false;
               this.fieldItem = res.data.email_template;
@@ -346,7 +368,7 @@ export default {
 
     fetchLookup() {
       this.$axios
-        .get( "fetchlookup", {
+        .get("fetchlookup", {
           params: {
             lookup_type: "TEMPLATE_TYPE",
           },
@@ -379,10 +401,7 @@ export default {
         this.isDisabled = true;
         if (this.template_slug == "") {
           this.$axios
-            .post(
-               "emailtemplates",
-              this.fieldItem
-            )
+            .post("emailtemplates", this.fieldItem)
             .then((res) => {
               if (Array.isArray(res.data.message)) {
                 this.array_data = res.data.message.toString();
@@ -408,12 +427,7 @@ export default {
             });
         } else {
           this.$axios
-            .patch(
-              
-                "emailtemplates/" +
-                this.template_slug,
-              this.fieldItem
-            )
+            .patch("emailtemplates/" + this.template_slug, this.fieldItem)
             .then((res) => {
               this.btnloading = false;
               if (Array.isArray(res.data.message)) {
@@ -471,7 +485,7 @@ export default {
 .ql-tooltip {
   display: none !important;
 }
-.hide_quill_input :deep(input)  {
+.hide_quill_input :deep(input) {
   display: none !important;
 }
 .required_item {
@@ -501,4 +515,3 @@ export default {
   }
 }
 </style>
-  

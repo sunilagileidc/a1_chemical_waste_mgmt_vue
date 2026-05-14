@@ -1,207 +1,182 @@
 <template>
   <div>
+    <v-text-field
+      maxlength="11"
+      ref="textfield"
+      v-model="inputValue"
+      :label="label"
+      :rules="rules"
+      :disabled="disable_field"
+      :clearable="clearable"
+      placeholder="dd/MMM/yyyy"
+      variant="outlined"
+      density="compact"
+      hint="Format: DD/MMM/YYYY (e.g. 27/Mar/2026) or select from calendar"
+      persistent-hint
+      append-inner-icon="mdi-calendar"
+      :class="class_required ? 'required_field' : ''"
+      :hide-details="hide_details"
+      :filled="filled"
+      @click:append-inner.stop="openMenu" 
+      @click:clear="clearDate"
+      @blur="validateTypedDate"
+      @keydown.enter="validateTypedDate"
+      @input="handleTyping"
+    />
+
     <v-menu
-      ref="menu1"
-      v-model="menu1"
-      transition="scale-transition"
-      offset-y
-      max-width="290px"
-      min-width="auto"
+      v-model="menu"
       :close-on-content-click="false"
-      :return-value="show_date"
+      location="bottom start"
+      offset="8"
+      transition="scale-transition"
+      :target="textfieldEl"
+      max-width="290"
     >
-      <template v-slot:activator="{ props }">
-        <v-text-field
-          density="compact"
-          v-model="DateFormatted"
-          :label="label"
-          :rules="fieldRules"
-          append-inner-icon="mdi-calendar"
-          :readonly="true"
-          :disabled="disable_field"
-          v-bind:class="class_required ? 'required_field' : ''"
-          variant="outlined"
-          @blur="date = parseDate(dateFormatted)"
-          v-bind="props"
-        ></v-text-field>
-      </template>
-      <datepicker
-        @selected="handleSelectDate"
-        :disabled-dates="disabledDates"
-        :prevent-disable-date-selection="preventDisableDateSelection"
-        v-model="show_date"
-        inline="true"
-        format="dd/MMM/yyyy"
-        @input="selectdatemodel()"
-        class="datepickerpackage"
-      >
-      </datepicker>
+      <v-date-picker
+        :min="min"
+        :max="max"
+        v-bind="$attrs"
+        :model-value="internalDate"
+        @update:modelValue="updateDate"
+      />
     </v-menu>
   </div>
 </template>
 
 <script>
-import Datepicker from "vuejs3-datepicker";
+import { parse, isValid, format } from "date-fns";
+
 export default {
-  props: [
-    "label",
-    "max",
-    "min",
-    "translation",
-    "stored_date",
-    "rules",
-    "class_required",
-    "disable_field",
-    "list_index",
-    "array_index",
-    "slot_index",
-  ],
-  components: {
-    Datepicker,
+  name: "EnhancedDatePicker",
+  inheritAttrs: false,
+
+  props: {
+    modelValue: [String, Date],
+    label: String,
+    rules: { type: Array, default: () => [] },
+    class_required: Boolean,
+    disable_field: Boolean,
+    hide_details: Boolean,
+    filled: Boolean,
+    min: { type: String, default: null },
+    max: { type: String, default: null },
+    clearable: { type: Boolean, default: true },
   },
-  data: () => ({
-    show_date: "",
-    padStart: "",
-    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-      .toISOString()
-      .substr(0, 10),
-    //dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
 
-    disabledDates: {
-      to: "",
-      from: "",
-      preventDisableDateSelection: true,
-    },
-    // disabledDates: {
-    //   to: '',
-    //   from: new Date(2024, 1, 29), // Disable all dates after specific date
+  data() {
+    return {
+      menu: false,
+      internalDate: this.modelValue || null,
+      inputValue: "",
+      textfieldEl: null,
+    };
+  },
 
-    //   preventDisableDateSelection: true
-    // }
-  }),
+  mounted() {
+    this.textfieldEl = this.$refs.textfield?.$el;
 
-  computed: {
-    fieldRules() {
-      if (this.translation == "arabic") {
-        return [(v) => !!v || !this.rules || this.$t("field_required_ar")];
-      } else {
-        return [(v) => !!v || !this.rules || this.$t("field_required")];
-      }
-    },
-
-    DateFormatted() {
-      if (this.array_index != null) {
-        // console.log('inside if');
-        this.$emit("formatted_date", this.show_date, this.array_index);
-        return this.formatDate(this.show_date);
-      } else {
-        // console.log('inside else');
-        if (this.list_index >= 0) {
-          this.$emit("formatted_date_index", this.show_date, this.list_index);
-          return this.formatDate(this.show_date);
-        } else {
-          if (this.slot_index>=0) {
-            this.$emit("formatted_service_start_date", this.slot_index,this.show_date);
-          } else {
-            this.$emit("formatted_date", this.show_date);
-          }
-          return this.formatDate(this.show_date);
-        }
-      }
-    },
+    if (this.internalDate) {
+      this.inputValue = this.formatDisplay(this.internalDate);
+    }
   },
 
   watch: {
-    stored_date: {
-      immediate: true,
-      handler() {
-        if (this.stored_date == "") {
-          this.show_date = "";
-        } else {
-          this.show_date = this.stored_date;
-        }
-      },
-    },
-    min: {
-      immediate: true,
-      handler() {
-        if (this.min) {
-          this.disabledDates.to = new Date(
-            this.min.split("-")[0],
-            this.min.split("-")[1] - 1,
-            this.min.split("-")[2]
-          );
-        } else {
-          this.disabledDates.to = "";
-        }
-      },
-    },
-    max: {
-      immediate: true,
-      handler() {
-        if (this.max) {
-          const dateObject = new Date(
-            this.max.split("-")[0],
-            this.max.split("-")[1] - 1,
-            this.max.split("-")[2]
-          );
-          dateObject.setDate(dateObject.getDate() + 1);
-          this.disabledDates.from = dateObject;
-        } else {
-          this.disabledDates.from = "";
-        }
-      },
-    },
-    date() {
-      this.dateFormatted = this.formatDate(this.show_date);
-    },
-    menu(val) {
-      val && this.$nextTick(() => (this.$refs.picker.activePicker = "YEAR"));
+    modelValue(val) {
+      this.internalDate = val;
+      this.inputValue = val ? this.formatDisplay(val) : "";
     },
   },
+
   methods: {
-    handleSelectDate() {
-      this.$emit("on-change");
-    },
-    selectdatemodel() {
-      this.menu1 = false;
-      const emitDate = this.show_date.toISOString().substring(0, 10);
-      this.$emit("formatted_date", emitDate);
-      return this.formatDate(emitDate);
+    openMenu() {
+      this.menu = true;
     },
 
-    formatDate(date) {
-      if (!date) {
-        return null;
-      } else {
-        const formatted_date =
-          ("0" + new Date(this.show_date).getDate()).slice(-2) +
-          "/" +
-          ("0" + (new Date(this.show_date).getMonth() + 1)).slice(-2) +
-          "/" +
-          new Date(this.show_date).getFullYear();
-        return formatted_date;
+    updateDate(date) {
+      const selected = Array.isArray(date) ? date[0] : date;
+      if (!selected) return;
+
+      const formatted = format(new Date(selected), "yyyy-MM-dd");
+
+      this.internalDate = formatted;
+      this.inputValue = this.formatDisplay(formatted);
+      this.menu = false;
+
+      this.$emit("update:modelValue", formatted);
+      this.$emit("change", formatted);
+    },
+
+    validateTypedDate() {
+      if (!this.inputValue) return;
+
+      const parsed = parse(this.inputValue, "dd/MMM/yyyy", new Date());
+
+      if (!isValid(parsed)) {
+        this.resetInput();
+        return;
+      }
+
+      const formatted = format(parsed, "yyyy-MM-dd");
+
+      const selectedDate = new Date(formatted);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      const min = this.min ? new Date(this.min) : null;
+      const max = this.max ? new Date(this.max) : null;
+
+      if (min) min.setHours(0, 0, 0, 0);
+      if (max) max.setHours(0, 0, 0, 0);
+
+      if (min && selectedDate < min) return this.resetInput();
+      if (max && selectedDate > max) return this.resetInput();
+
+      this.internalDate = formatted;
+
+      this.$emit("update:modelValue", formatted);
+      this.$emit("change", formatted);
+    },
+
+    resetInput() {
+      this.inputValue = this.internalDate
+        ? this.formatDisplay(this.internalDate)
+        : "";
+    },
+
+    handleTyping(e) {
+      let value = e.target.value;
+
+      // allow only letters, numbers and '/'
+      value = value.replace(/[^0-9a-zA-Z/]/g, "");
+
+      // auto add slashes
+      if (value.length === 2 && !value.includes("/")) {
+        value += "/";
+      }
+
+      if (value.length === 6 && value.split("/").length === 2) {
+        value += "/";
+      }
+
+      this.inputValue = value;
+
+      // validate when full length reached
+      if (value.length >= 11) {
+        this.validateTypedDate();
       }
     },
-    parseDate(date) {
-      if (!date) {
-        return null;
-      } else {
-        const formatted_date =
-          ("0" + new Date(this.show_date).getDate()).slice(-2) +
-          "/" +
-          ("0" + (new Date(this.show_date).getMonth() + 1)).slice(-2) +
-          "/" +
-          new Date(this.show_date).getFullYear();
-        return formatted_date;
-      }
+
+    clearDate() {
+      this.internalDate = null;
+      this.inputValue = "";
+
+      this.$emit("update:modelValue", null);
+      this.$emit("change", null);
+    },
+
+    formatDisplay(date) {
+      return format(new Date(date), "dd/MMM/yyyy");
     },
   },
 };
 </script>
-<style scoped>
-.datepickerpackage :deep(.vuejs3-datepicker__calendar-topbar) {
-  display: none !important;
-}
-</style>

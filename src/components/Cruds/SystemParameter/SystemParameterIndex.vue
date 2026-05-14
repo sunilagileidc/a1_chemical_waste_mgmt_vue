@@ -43,7 +43,7 @@
                 :to="{ name: 'system_parameter_amend' }"
                 style="color: white"
               >
-                <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
+                <v-btn size="small" class="mb-2 btn-filled" v-bind="props">{{
                   $t("add_new")
                 }}</v-btn>
               </router-link>
@@ -70,16 +70,16 @@
             <v-btn
               class="hover_shine btn mr-2"
               :disabled="isDisabled"
-              @click="statusUpdate(props.item.id)"
+              @click="statusUpdate(props.item?.id)"
               size="small"
               v-bind:color="[props.item.status == 1 ? 'success' : 'warning']"
             >
-              <span v-if="props.item.status == 1" class="spanactivesize">{{
-                $t("active")
-              }}</span>
-              <span v-if="props.item.status == 0" class="spanactivesize">{{
-                $t("inactive")
-              }}</span>
+              <span v-if="props.item.status == 1" class="spanactivesize">
+                {{ $t("active") }}
+              </span>
+              <span v-if="props.item.status == 0" class="spanactivesize">
+                {{ $t("inactive") }}
+              </span>
             </v-btn>
           </td>
 
@@ -92,35 +92,33 @@
             >
               <v-tooltip :text="$t('edit')" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-icon
-                    v-on="on"
-                    small
-                    class="mr-2 edit_btn icon_size"
-                    v-bind="props"
-                    >mdi-pencil-outline</v-icon
-                  >
+                  <v-icon small class="mr-2 edit_btn icon_size" v-bind="props">
+                    mdi-pencil-outline
+                  </v-icon>
                 </template>
               </v-tooltip>
             </router-link>
-            <span @click="deletesystemparameter(props.item.id)">
+
+            <!-- <span>
               <v-tooltip :text="$t('delete')" location="bottom">
-                <template v-slot:activator="{ props }">
+                <template v-slot:activator="{ tooltipProps }">
                   <v-icon
                     class="delete_btn icon_size"
-                    v-bind="props"
-                    v-on="on"
+                    @click="deletesystemparameter(props.item?.id)"
+                    v-bind="tooltipProps"
+                    :disabled="disableAction(props.item.parameter_name)"
                     small
                     type="button"
-                    >mdi-trash-can-outline</v-icon
                   >
+                    mdi-trash-can-outline
+                  </v-icon>
                 </template>
               </v-tooltip>
-            </span>
+            </span> -->
           </td>
         </tr>
       </template>
     </v-data-table>
-    
   </div>
 </template>
 
@@ -176,12 +174,20 @@ export default {
     search: "",
     valid: false,
     message: "",
-  
   }),
   mounted() {
     this.fetchSystemParameters();
   },
   methods: {
+    disableAction(value) {
+      return [
+        "APP_LOGO",
+        "LOGIN_OTP_ENABLED",
+        "SESSION_TIMEOUT_DURATION",
+        "SESSION_WARNING_DURATION",
+        "USER_LOCK_ATTEMPT_LIMIT",
+      ].includes(value);
+    },
     showConfirmation(title, message) {
       this.dialogTitle = title;
       this.dialogMessage = message;
@@ -318,6 +324,7 @@ export default {
   min-height: 38px !important;
   width: 353px;
 }
+
 .param-value {
   max-width: 200px;
   text-overflow: ellipsis;
@@ -328,6 +335,7 @@ export default {
 .v-btn:not(.v-btn--round).v-size--small {
   min-width: 90px !important;
 }
+
 .desc_div_overflow {
   white-space: nowrap;
   max-width: 300px;

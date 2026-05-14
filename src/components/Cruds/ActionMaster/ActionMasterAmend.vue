@@ -1,110 +1,122 @@
 <template>
-  <div class="mt-3 p-0">
-    <div class="my-3 p-0">
-      <page-title
-        class="col-md-4"
-        :heading="$route.query.slug ? $t('edit_action') : $t('create_action')"
-        :google_icon="google_icon"
-      />
-    </div>
+  <div>
+    <v-container fluid class="page-wrapper background-inner">
+      <content-loader v-if="loader"></content-loader>
+      <confirmation-dialog
+        ref="confirmationDialog"
+        :title="dialogTitle"
+        :message="dialogMessage"
+      ></confirmation-dialog>
+      <div class="main-section">
+        <div>
+          <div class="d-flex justify-space-between align-center">
+            <page-title
+              class="col-md-4"
+              :heading="
+                $route.query.slug ? $t('edit_action') : $t('create_action')
+              "
+              :google_icon="google_icon"
+            />
+          </div>
+          <!-- Data Table Card -->
+          <div class="mb-3 mx-auto">
+            <div class="card-body">
+              <content-loader v-if="loader"></content-loader>
+              <v-form ref="form" v-model="valid">
+                <v-row class="px-6">
+                  <!-- Action Name -->
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="action.action_name"
+                      :rules="[...fieldRules, ...actionNameRules]"
+                      label="Action Name"
+                      required
+                      variant="outlined"
+                      density="compact"
+                      hide-details="auto"
+                      class="field-required"
+                      @keydown="allowOnlyValidChars"
+                      hint="Only uppercase letters, numbers and underscore allowed"
+                      counter
+                      maxlength="30"
+                    />
+                  </v-col>
 
-    <content-loader v-if="loader" />
+                  <!-- Category -->
+                  <v-col cols="12" md="4">
+                    <v-autocomplete
+                      v-model="action.category"
+                      :items="categories"
+                      item-title="longname"
+                      item-value="shortname"
+                      label="Category"
+                      variant="outlined"
+                      density="compact"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-switch
+                      v-model="action.status"
+                      :label="$t('status')"
+                      :true-value="1"
+                      :false-value="0"
+                      color="success"
+                      hide-details
+                      inset
+                      small
+                    />
+                  </v-col>
+                </v-row>
 
-    <div class="mb-3 mx-auto">
-      <div class="card-body">
-        <v-form ref="form" v-model="valid">
-          <v-row class="px-6">
-            <!-- Action Name -->
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="action.action_name"
-                :rules="[...fieldRules, ...actionNameRules]"
-                label="Action Name"
-                required
-                variant="outlined"
-                density="compact"
-                hide-details="auto"
-                @keydown="allowOnlyValidChars"
-                hint="Only uppercase letters, numbers and underscore allowed"
-                counter
-                maxlength="30"
-              />
-            </v-col>
+                <!-- Description -->
+                <v-row class="px-6">
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="action.description"
+                      label="Description"
+                      rows="2"
+                      maxlength="500"
+                      counter
+                      variant="outlined"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </v-form>
+            </div>
+            <div class="d-block mr-4 mt-3 pb-3 text-right">
+              <v-btn
+                size="small"
+                @click="goBack()"
+                :disabled="isDisabled"
+                class="btn-cancel ma-1"
+                color="cancel"
+              >
+                {{ $t("cancel") }}
+              </v-btn>
 
-            <!-- Category -->
-            <v-col cols="12" md="4">
-              <v-autocomplete
-                v-model="action.category"
-                :items="categories"
-                item-title="longname"
-                item-value="shortname"
-                label="Category"
-                variant="outlined"
-                density="compact"
-                hide-details="auto"
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-switch
-                v-model="action.status"
-                :label="$t('status')"
-                :true-value="1"
-                :false-value="0"
+              <v-btn
+                :disabled="isDisabled"
+                @click="submit"
+                size="small"
+                class="mr-2"
                 color="success"
-                hide-details
-                inset
-                small
-              />
-            </v-col>
-          </v-row>
-
-          <!-- Description -->
-          <v-row class="px-6">
-            <v-col cols="12">
-              <v-textarea
-                v-model="action.description"
-                label="Description"
-                rows="2"
-                maxlength="500"
-                counter
-                variant="outlined"
-                hide-details="auto"
-              />
-            </v-col>
-          </v-row>
-        </v-form>
+              >
+                {{ $t("submit") }}
+                <v-progress-circular
+                  v-if="isDisabled"
+                  indeterminate
+                  width="1"
+                  size="x-small"
+                  class="ml-2"
+                />
+              </v-btn>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- Buttons -->
-      <div class="d-block mr-4 mt-3 pb-3 text-right">
-        <v-btn
-          size="small"
-          @click="$router.go(-1)"
-          :disabled="isDisabled"
-          class="ma-1"
-          color="cancel"
-        >
-          {{ $t("cancel") }}
-        </v-btn>
-
-        <v-btn
-          :disabled="isDisabled"
-          @click="submit"
-          size="small"
-          class="mr-2"
-          color="success"
-        >
-          {{ $t("submit") }}
-          <v-progress-circular
-            v-if="isDisabled"
-            indeterminate
-            width="1"
-            size="x-small"
-            class="ml-2"
-          />
-        </v-btn>
-      </div>
-    </div>
+    </v-container>
   </div>
 </template>
 
@@ -172,6 +184,9 @@ export default {
   },
 
   methods: {
+    goBack() {
+      this.$router.push({ name: "action_master" });
+    },
     fetchLookup() {
       this.$axios
         .get("fetchlookup", {

@@ -1,35 +1,46 @@
 <template>
-  <div class="mt-3 p-0">
-    <div class=" p-0">
-      <page-title
-        class="col-md-4 ml-2"
-        :heading="'Assign Menus/Actions to ' + name_val"
-        :google_icon="google_icon"
-      />
-    </div>
+  <div>
+    <v-container fluid class="page-wrapper background-inner">
+      <content-loader v-if="loader"></content-loader>
+      <confirmation-dialog
+        ref="confirmationDialog"
+        :title="dialogTitle"
+        :message="dialogMessage"
+      ></confirmation-dialog>
+      <div class="main-section">
+        <div>
+          <div class="d-flex justify-space-between align-center">
+            <page-title
+              class="col-md-5 ml-2"
+              :heading="'Assign Menus/Actions to ' + name_val"
+              :google_icon="google_icon"
+            />
+          </div>
+          <!-- Data Table Card -->
+          <div class="mb-3 mx-auto">
+            <div class="card-body">
+              <content-loader v-if="loader"></content-loader>
+              <v-tabs v-model="tab">
+                <v-tab value="menu">Role Menu</v-tab>
+                <v-tab value="action">Role Action</v-tab>
+              </v-tabs>
 
-    <content-loader v-if="loader" />
+              <v-window v-model="tab" class="mt-4">
+                <!-- Role Menu -->
+                <v-window-item value="menu">
+                  <RoleMenu />
+                </v-window-item>
 
-    <v-card v-else elevation="0">
-      <v-tabs v-model="tab">
-        <v-tab value="menu">Role Menu</v-tab>
-        <v-tab value="action">Role Action</v-tab>
-      </v-tabs>
-
-      <v-window v-model="tab" class="mt-4">
-        <!-- Role Menu -->
-        <v-window-item value="menu">
-          <RoleMenu
-          />
-        </v-window-item>
-
-        <!-- Role Action -->
-        <v-window-item value="action">
-          <RoleAction
-          />
-        </v-window-item>
-      </v-window>
-    </v-card>
+                <!-- Role Action -->
+                <v-window-item value="action">
+                  <RoleAction />
+                </v-window-item>
+              </v-window>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-container>
   </div>
 </template>
 
@@ -55,9 +66,9 @@ export default {
     name_val: "",
     tab: "menu",
   }),
-
-  watch: {
-    
+  mounted() {
+    this.name_val = this.$route.query.name;
   },
+  watch: {},
 };
 </script>

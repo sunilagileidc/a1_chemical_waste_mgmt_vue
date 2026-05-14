@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <page-title
-      :heading="$t('dashboard')"
-      :google_icon="google_icon"
-    ></page-title>
-    <content-loader v-if="loader"></content-loader>
-    <Comingsoon></Comingsoon>
+  <div fluid class="page-wrapper background-inner">
+    <div class="main-section">
+      <page-title
+        :heading="$t('dashboard')"
+        :google_icon="google_icon"
+      ></page-title>
+      <content-loader v-if="loader"></content-loader>
+      <stats-page :stats="stats" />
+    </div>
   </div>
 </template>
 <script>
@@ -30,6 +32,12 @@ export default {
       color: "google_icon_gradient",
       icon: "material-symbols-outlined",
     },
+    stats: [
+      { label: "Total PAFs", value: 0 },
+      { label: "Total patients", value: 0 },
+      { label: "Overdue PAF (Action Required)", value: 0 },
+      { label: "Rejected PAF", value: 0 },
+    ],
   }),
   watch: {
     "$i18n.locale"(newLocale) {
@@ -42,6 +50,7 @@ export default {
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem("user_data"));
+    this.getPafStats();
     // this.fetchDashboard(this.user.id, this.user.rolename);
   },
 
@@ -98,53 +107,68 @@ export default {
       this.loader = true;
       if (Role == "SuperUser") {
         this.$axios
-          .get(
-            
-              "fetchDashboardSuperUser/" +
-              userId
-          )
+          .get("fetchDashboardSuperUser/" + userId)
           .then((res) => {
             this.dashboard_count = res.data.count_dashboard;
             this.loader = false;
           })
           .catch((err) => {
             this.$toast.error(this.$t("something_went_wrong"));
+            this.loader = false;
             this.initval = false;
             console.log(err);
           });
       } else if (Role == "MallAdmin") {
         this.$axios
-          .get(
-            
-              "fetchDashboardMallAdmin/" +
-              userId
-          )
+          .get("fetchDashboardMallAdmin/" + userId)
           .then((res) => {
             this.dashboard_count = res.data.count_dashboard;
             this.loader = false;
           })
           .catch((err) => {
             this.$toast.error(this.$t("something_went_wrong"));
+            this.loader = false;
             this.initval = false;
             console.log(err);
           });
       } else {
         this.$axios
-          .get(
-            
-              "fetchDashboardStoreAdmin/" +
-              userId
-          )
+          .get("fetchDashboardStoreAdmin/" + userId)
           .then((res) => {
             this.dashboard_count = res.data.count_dashboard;
             this.loader = false;
           })
           .catch((err) => {
             this.$toast.error(this.$t("something_went_wrong"));
+            this.loader = false;
             this.initval = false;
             console.log(err);
           });
       }
+    },
+    getPafStats() {
+      this.loader = true;
+      // decide URL based on role
+
+      this.$axios
+        .get("get_all_paf_stats", {
+          params: {
+            institution_id: this.sel_institution?.institution_id,
+          },
+        })
+        .then((res) => {
+          if (res.data.status === "S") {
+            this.stats = res.data.stats;
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch(() => {
+          this.$toast.error(this.$t("something_went_wrong"));
+        })
+        .finally(() => {
+          this.loader = false;
+        });
     },
 
     route_to_page(page) {

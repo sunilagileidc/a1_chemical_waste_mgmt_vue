@@ -1,116 +1,131 @@
 <template>
-  <div class="mx-2 mt-3 p-0">
-    <div class="mt-8 p-0">
-      <page-title
-        class="col-md-4"
-        :heading="$t('create_lookup')"
-        :google_icon="google_icon"
-      ></page-title>
-    </div>
-    <div class="card-body">
+  <div>
+    <v-container fluid class="page-wrapper background-inner">
       <content-loader v-if="loader"></content-loader>
-      <v-form ref="form" v-model="valid">
-        <v-row class="mx-auto mt-2" max-width="344">
-          <v-col cols="12" sm="12" md="6">
-            <v-tooltip :text="$t('shortname')" location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-text-field
-                  v-on="on"
-                  v-model="lookup.shortname"
-                  :rules="fieldRules"
-                  v-bind:label="$t('shortname')"
-                  v-bind="props"
-                  required
-                  class="required_field"
-                  variant="outlined"
-                  density="compact"
-                  maxlength="100"
-                ></v-text-field>
-              </template>
-            </v-tooltip>
-          </v-col>
-          <v-col md="6">
-            <v-tooltip :text="$t('longname')" location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-text-field
-                  v-on="on"
-                  v-model="lookup.longname"
-                  :rules="fieldRules"
-                  v-bind:label="$t('longname')"
-                  v-bind="props"
-                  required
-                  class="required_field"
-                  variant="outlined"
-                  density="compact"
-                  maxlength="500"
-                ></v-text-field>
-              </template>
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-layout>
-          <v-row class="mx-auto mt-2" max-width="344">
-            <v-col md="12">
-              <v-tooltip :text="$t('longname')" location="bottom">
+      <confirmation-dialog
+        ref="confirmationDialog"
+        :title="dialogTitle"
+        :message="dialogMessage"
+      ></confirmation-dialog>
+      <div class="main-section">
+        <div>
+          <div class="d-flex justify-space-between align-center">
+            <page-title
+              class="col-md-5"
+              :heading="$t('create_lookup') + ' - ' + name_val"
+              :google_icon="google_icon"
+            ></page-title>
+          </div>
+          <!-- Data Table Card -->
+          <div class="mb-3 mx-auto">
+            <div class="card-body">
+              <content-loader v-if="loader"></content-loader>
+              <v-form ref="form" v-model="valid">
+                <v-row class="mx-auto mt-2" max-width="344">
+                  <v-col cols="12" sm="12" md="6">
+                    <v-tooltip :text="$t('shortname')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-text-field
+                          v-on="on"
+                          v-model="lookup.shortname"
+                          :rules="fieldRules"
+                          v-bind:label="$t('shortname')"
+                          v-bind="props"
+                          required
+                          class="required_field"
+                          variant="outlined"
+                          density="compact"
+                          maxlength="100"
+                        ></v-text-field>
+                      </template>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col md="6">
+                    <v-tooltip :text="$t('longname')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-text-field
+                          v-on="on"
+                          v-model="lookup.longname"
+                          :rules="fieldRules"
+                          v-bind:label="$t('longname')"
+                          v-bind="props"
+                          required
+                          class="required_field"
+                          variant="outlined"
+                          density="compact"
+                          maxlength="500"
+                        ></v-text-field>
+                      </template>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
+                <v-layout>
+                  <v-row class="mx-auto mt-2" max-width="344">
+                    <v-col md="12">
+                      <v-tooltip :text="$t('longname')" location="bottom">
+                        <template v-slot:activator="{ props }">
+                          <v-textarea
+                            v-on="on"
+                            rows="2"
+                            v-model="lookup.description"
+                            maxlength="100"
+                            v-bind="props"
+                            v-bind:label="$t('description')"
+                            variant="outlined"
+                            counter="true"
+                          ></v-textarea>
+                        </template>
+                        <span>{{ $t("description") }}</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                </v-layout>
+              </v-form>
+            </div>
+            <div class="d-block mr-4 mt-3 pb-3 text-right">
+              <v-tooltip :text="$t('cancel')" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-textarea
-                    v-on="on"
-                    rows="2"
-                    v-model="lookup.description"
-                    maxlength="100"
-                    v-bind="props"
-                    v-bind:label="$t('description')"
-                    variant="outlined"
-                    counter="true"
-                  ></v-textarea>
+                  <div v-bind="props" class="d-inline-block mr-2">
+                    <v-btn
+                      v-bind="props"
+                      size="small"
+                      @click="$router.go(-1)"
+                      :disabled="loading"
+                      class="btn-cancel ma-1"
+                      color="cancel"
+                      >{{ $t("cancel") }}</v-btn
+                    >
+                  </div>
                 </template>
-                <span>{{ $t("description") }}</span>
               </v-tooltip>
-            </v-col>
-          </v-row>
-        </v-layout>
-      </v-form>
-    </div>
-    <div class="d-block mr-4 mt-3 pb-3 text-right">
-      <v-tooltip :text="$t('cancel')" location="bottom">
-        <template v-slot:activator="{ props }">
-          <div v-bind="props" class="d-inline-block mr-2">
-            <v-btn
-              v-bind="props"
-              size="small"
-              @click="$router.go(-1)"
-              :disabled="loading"
-              class="ma-1"
-              color="cancel"
-              >{{ $t("cancel") }}</v-btn
-            >
+              <v-tooltip :text="$t('submit')" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <div v-bind="props" class="d-inline-block">
+                    <v-btn
+                      :disabled="isDisabled"
+                      @click="submit"
+                      size="small"
+                      class="btn-approved mr-2"
+                      color="success"
+                    >
+                      {{ $t("submit") }}
+                      <v-progress-circular
+                        v-if="isBtnLoading"
+                        indeterminate
+                        width="1"
+                        color="cancel"
+                        size="x-small"
+                        class="ml-2"
+                      ></v-progress-circular>
+                    </v-btn>
+                  </div>
+                </template>
+              </v-tooltip>
+            </div>
           </div>
-        </template>
-      </v-tooltip>
-      <v-tooltip :text="$t('submit')" location="bottom">
-        <template v-slot:activator="{ props }">
-          <div v-bind="props" class="d-inline-block">
-            <v-btn
-              :disabled="isDisabled"
-              @click="submit"
-              size="small"
-              class="mr-2"
-              color="success"
-            >
-              {{ $t("submit") }}
-              <v-progress-circular
-                v-if="isBtnLoading"
-                indeterminate
-                width="1"
-                color="cancel"
-                size="x-small"
-                class="ml-2"
-              ></v-progress-circular>
-            </v-btn>
-          </div>
-        </template>
-      </v-tooltip>
-    </div>
+        </div>
+      </div>
+    </v-container>
   </div>
 </template>
 
@@ -137,6 +152,7 @@ export default {
     },
     noimagepreview: "",
     items: [],
+    name_val: "",
   }),
 
   computed: {
@@ -149,7 +165,9 @@ export default {
     },
   },
 
-  created() {},
+  created() {
+    this.name_val = this.$route.query.slug;
+  },
   watch: {
     "$route.query.slug": {
       immediate: true,
@@ -159,8 +177,8 @@ export default {
           this.$axios
             .get("lookups/" + this.$route.query.slug + "/edit")
             .then((res) => {
-              console.log("CALLED IN ROUTE");
-              console.log(res);
+              // console.log("CALLED IN ROUTE");
+              // console.log(res);
               this.lookup = res.data.lookup;
               this.loader = false;
             });
@@ -206,7 +224,9 @@ export default {
           })
           .catch((err) => {
             console.log(err);
-            this.$toast.error(err.response.data.errordata || this.$t("something_went_wrong"));
+            this.$toast.error(
+              err.response.data.errordata || this.$t("something_went_wrong")
+            );
           })
           .finally(() => {
             this.isBtnLoading = false;

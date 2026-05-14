@@ -17,7 +17,7 @@
                         <span>
                           <img
                             v-bind:src="app_image_url"
-                            style="width: 130px"
+                            style="width: 235px"
                           />
                         </span>
                       </div>
@@ -34,12 +34,30 @@
                     </div>
                     <div class="page-title-row">
                       <div class="title-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <rect
+                            x="3"
+                            y="11"
+                            width="18"
+                            height="11"
+                            rx="2"
+                            ry="2"
+                          ></rect>
                           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                       </div>
-                      <span class="font-sign-in-msg">{{ $t("reset_password") }}</span>
+                      <span class="font-sign-in-msg">{{
+                        $t("reset_password")
+                      }}</span>
                     </div>
                   </div>
                 </div>
@@ -49,7 +67,16 @@
                 <div class="card-body">
                   <transition name="slide-fade">
                     <div class="alert-error" v-if="status == 'E'">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -59,7 +86,16 @@
                   </transition>
                   <transition name="slide-fade">
                     <div class="alert-success" v-if="status == 'S'">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                       {{ message }}
@@ -102,7 +138,8 @@
                     <span v-show="textvisible" class="countdown-row">
                       <span class="countdown-dot"></span>
                       <span class="time_data">
-                        {{ $t("resend_code_format") }} <strong>{{ timecount }}</strong> {{ $t("seconds") }}
+                        {{ $t("resend_code_format") }}
+                        <strong>{{ timecount }}</strong> {{ $t("seconds") }}
                       </span>
                     </span>
 
@@ -124,7 +161,11 @@
                               :loading="isbtnLoading"
                               v-show="btnvisible"
                               class="resend-btn"
-                              ><v-icon icon="mdi-email-sync-outline" start></v-icon>{{ $t("resend_code") }}
+                              ><v-icon
+                                icon="mdi-email-sync-outline"
+                                start
+                              ></v-icon
+                              >{{ $t("resend_code") }}
                             </v-chip>
                           </div>
                         </template>
@@ -133,8 +174,9 @@
                   </div>
 
                   <div class="row password-fields">
+                    <!-- PASSWORD -->
                     <div class="col-md-12 mt-5 pb-2">
-                      <v-tooltip :text="this.$t('password')" location="bottom">
+                      <v-tooltip :text="$t('password')" location="bottom">
                         <template v-slot:activator="{ props }">
                           <v-text-field
                             v-bind="props"
@@ -145,18 +187,22 @@
                             :type="show2 ? 'text' : 'password'"
                             @click:append-inner="show2 = !show2"
                             v-model="new_password"
-                            :rules="[...passwordRules, ...fieldRules]"
-                            v-bind:label="$t('password')"
+                            :label="$t('password')"
                             variant="outlined"
                             density="compact"
-                            hide-details="auto"
+                            hide-details
                             required
-                          ></v-text-field>
+                          />
                         </template>
                       </v-tooltip>
                     </div>
+
+                    <!-- CONFIRM PASSWORD -->
                     <div class="col-md-12 pb-2">
-                      <v-tooltip :text="this.$t('lastname')" location="bottom">
+                      <v-tooltip
+                        :text="$t('confirm_password')"
+                        location="bottom"
+                      >
                         <template v-slot:activator="{ props }">
                           <v-text-field
                             v-bind="props"
@@ -167,20 +213,75 @@
                             :type="show1 ? 'text' : 'password'"
                             @click:append-inner="show1 = !show1"
                             v-model="password_confirmation"
-                            :rules="[
-                              !!password_confirmation || $t('password_confirm'),
-                              new_password === password_confirmation ||
-                                $t('confirm_password_match'),
-                            ]"
-                            v-bind:label="$t('confirm_password')"
-                            required
-                            hide-details="auto"
-                            @keyup.enter="resetPassword"
+                            :label="$t('confirm_password')"
                             variant="outlined"
                             density="compact"
-                          ></v-text-field>
+                            hide-details
+                            required
+                          />
                         </template>
                       </v-tooltip>
+                    </div>
+
+                    <!-- 🔥 COMBINED VALIDATION BELOW BOTH -->
+                    <div
+                      v-if="new_password || password_confirmation"
+                      class="col-md-12 mt-2"
+                    >
+                      <div :class="ruleClass(hasMinLength)" class="rule-error">
+                        <v-icon size="16" class="mr-2">
+                          {{
+                            hasMinLength
+                              ? "mdi-check-circle"
+                              : "mdi-close-circle"
+                          }}
+                        </v-icon>
+                        Minimum 12 characters
+                      </div>
+
+                      <div :class="ruleClass(hasUppercase)" class="rule-error">
+                        <v-icon size="16" class="mr-2">
+                          {{
+                            hasUppercase
+                              ? "mdi-check-circle"
+                              : "mdi-close-circle"
+                          }}
+                        </v-icon>
+                        At least 1 uppercase letter
+                      </div>
+
+                      <div :class="ruleClass(hasNumber)" class="rule-error">
+                        <v-icon size="16" class="mr-2">
+                          {{
+                            hasNumber ? "mdi-check-circle" : "mdi-close-circle"
+                          }}
+                        </v-icon>
+                        At least 1 number
+                      </div>
+
+                      <div :class="ruleClass(hasSpecial)" class="rule-error">
+                        <v-icon size="16" class="mr-2">
+                          {{
+                            hasSpecial ? "mdi-check-circle" : "mdi-close-circle"
+                          }}
+                        </v-icon>
+                        At least 1 special character (~!@#$%)
+                      </div>
+
+                      <div
+                        v-if="password_confirmation"
+                        :class="ruleClass(passwordsMatch)"
+                        class="rule-error"
+                      >
+                        <v-icon size="16" class="mr-2">
+                          {{
+                            passwordsMatch
+                              ? "mdi-check-circle"
+                              : "mdi-close-circle"
+                          }}
+                        </v-icon>
+                        Passwords must match
+                      </div>
                     </div>
                   </div>
                 </v-form>
@@ -208,13 +309,13 @@
                     <template v-slot:activator="{ props }">
                       <div class="d-inline-block">
                         <v-btn
-                          :disabled="isDisabled"
+                          :disabled="isDisabled || !passwordsMatch"
                           :loading="isBtnLoading"
                           @click="resetPassword"
                           size="small"
                           color="green"
                           v-bind="props"
-                          class="submit-btn"
+                          class="btn-filled"
                           >{{ $t("submit") }}
                         </v-btn>
                       </div>
@@ -274,15 +375,28 @@ export default {
     fieldRules() {
       return [(v) => !!v || this.$t("field_required")];
     },
-    passwordRules() {
-      return [
-        (v) => !!v || "Password required",
-        (v) => v.length >= 12 || "Minimum 12 characters required",
-        (v) => /[A-Z]/.test(v) || "At least 1 uppercase letter required",
-        (v) =>
-          /[a-zA-Z0-9]/.test(v) || "At least 1 alphanumeric character required",
-        (v) => /\d/.test(v) || "At least 1 number required",
-      ];
+    hasMinLength() {
+      return this.new_password && this.new_password.length >= 12;
+    },
+    hasUppercase() {
+      return /[A-Z]/.test(this.new_password || "");
+    },
+    hasNumber() {
+      return /\d/.test(this.new_password || "");
+    },
+    hasSpecial() {
+      return /[~!@#$%]/.test(this.new_password || "");
+    },
+    passwordsMatch() {
+      return (
+        this.new_password &&
+        this.password_confirmation &&
+        this.new_password === this.password_confirmation &&
+        this.hasMinLength &&
+        this.hasUppercase &&
+        this.hasNumber &&
+        this.hasSpecial
+      );
     },
 
     emailRules() {
@@ -325,6 +439,9 @@ export default {
   },
 
   methods: {
+    ruleClass(condition) {
+      return condition ? "text-success" : "text-error";
+    },
     getAppImage() {
       if (localStorageWrapper.getItem("App_Image_Url") != null) {
         this.app_image_url = localStorageWrapper.getItem("App_Image_Url");
@@ -381,11 +498,6 @@ export default {
             })
             .then(
               (response) => {
-                if (Array.isArray(response.data.message)) {
-                  this.array_data = response.data.message.toString();
-                } else {
-                  this.array_data = response.data.message;
-                }
                 this.message = response.data.message;
                 this.status = response.data.status;
                 if (response.data.status == "S") {
@@ -428,7 +540,7 @@ export default {
         this.$axios
           .post("reset_password?email=" + this.email + "&role=User")
           .then((response) => {
-            console.log(response);
+            // console.log(response);
             this.response = response.data;
             this.message = response.data.message;
             this.status = response.data.status;
@@ -473,9 +585,16 @@ export default {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(99, 130, 220, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 85% 80%, rgba(130, 99, 180, 0.10) 0%, transparent 60%);
+  background: radial-gradient(
+      ellipse 60% 50% at 15% 20%,
+      rgba(99, 130, 220, 0.12) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 60% at 85% 80%,
+      rgba(130, 99, 180, 0.1) 0%,
+      transparent 60%
+    );
   pointer-events: none;
 }
 
@@ -498,8 +617,7 @@ export default {
 /* ── Card ── */
 .card-wrapper {
   border-radius: 20px !important;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07),
     0 20px 60px -10px rgba(80, 100, 180, 0.18) !important;
   overflow: hidden;
   background: #ffffff !important;
@@ -508,8 +626,7 @@ export default {
 }
 
 .card-wrapper:hover {
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08),
     0 28px 70px -12px rgba(80, 100, 180, 0.24) !important;
 }
 
@@ -545,7 +662,6 @@ export default {
   font-weight: 700;
   letter-spacing: -0.5px;
   color: #1a1f36;
-  font-family: 'Georgia', serif;
 }
 
 .page-title-row {
@@ -577,7 +693,12 @@ export default {
 /* ── Divider ── */
 .divider-line {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(79, 110, 247, 0.25), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(79, 110, 247, 0.25),
+    transparent
+  );
   margin: 20px 0 8px;
 }
 
@@ -692,8 +813,15 @@ export default {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.75); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
 }
 
 .time_data {

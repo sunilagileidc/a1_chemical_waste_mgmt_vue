@@ -1,121 +1,206 @@
 <template>
-  <div>
-    <div
-      flat
-      color="white"
-      class="row my-3 align-items-center component_app_bar position-relative"
-    >
-      <page-title
-        class="col-md-3"
-        heading="Documents"
-        :google_icon="google_icon"
-      ></page-title>
-      <div class="col-md-4">
-        <v-tooltip :text="this.$t('search')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <v-text-field
-              rounded
-              density="compact"
-              variant="outlined"
-              elevation="24"
-              v-bind="props"
-              v-model="search"
-              append-icon="search"
-              v-bind:label="$t('search')"
-              hide-details
-              class="srch_bar"
-            ></v-text-field>
-          </template>
-        </v-tooltip>
-      </div>
-      <div class="add_new_button">
-        <v-tooltip :text="this.$t('add_new')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <router-link :to="{ name: 'documents_amend' }" style="color: white">
-              <v-btn size="small" class="mb-2 create-btn" v-bind="props">
-                {{ $t("add_new") }}
-              </v-btn>
-            </router-link>
-          </template>
-        </v-tooltip>
-      </div>
-    </div>
-    <v-data-table
-      :headers="headers"
-      :items="documents"
-      :search="search"
-      :loading="initval"
-      v-bind:no-data-text="$t('no_data_available')"
-      :footer-props="{
-        'items-per-page-text': $t('rows_per_page'),
-      }"
-    >
-      <template v-slot:item="props">
-        <tr class="vdatatable_tbody">
-          <td>
-            <span v-if="props.item.title">{{ props.item.title }}</span>
-            <span v-else>{{ $t("not_appllicable") }}</span>
-          </td>
-          <td>
-            <span v-if="props.item.category">{{ props.item.category }}</span>
-            <span v-else>{{ $t("not_appllicable") }}</span>
-          </td>
-          <td>
-            <span v-if="props.item.description">{{
-              props.item.description
-            }}</span>
-            <span v-else>{{ $t("not_appllicable") }}</span>
-          </td>
-
-          <td class="px-0 text-center">
-            <router-link
-              :to="{
-                name: 'documents_amend',
-                query: { slug: props.item.slug },
-              }"
-            >
-              <v-tooltip :text="this.$t('edit')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    plain
-                    v-bind="props"
-                    dense
-                    class="mr-2 edit_btn icon_size"
-                    >mdi-pencil-outline</v-icon
-                  >
-                </template>
-              </v-tooltip>
-            </router-link>
-
-            <span @click="deleteItem(props.item.id)">
-              <v-tooltip :text="this.$t('delete')" location="bottom">
-                <template v-slot:activator="{ props }">
-                  <v-icon
-                    type="button"
-                    class="delete_btn icon_size"
-                    v-bind="props"
-                    dense
-                    color="error"
-                    >mdi-trash-can-outline</v-icon
-                  >
-                </template>
-              </v-tooltip>
-            </span>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
+  <v-container fluid class="page-wrapper background-inner">
+    <content-loader v-if="loader"></content-loader>
     <confirmation-dialog
       ref="confirmationDialog"
       :title="dialogTitle"
       :message="dialogMessage"
     ></confirmation-dialog>
-  </div>
+
+    <div class="main-section">
+      <div>
+        <div class="d-flex justify-space-between align-center">
+          <page-title
+            class="col-md-3"
+            heading="Documents"
+            :google_icon="google_icon"
+          ></page-title>
+          <div class="add_new_button">
+            <v-tooltip :text="this.$t('add_new')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link
+                  :to="{ name: 'documents_amend' }"
+                  style="color: white"
+                >
+                  <v-btn size="small" class="mb-2 create-btn" v-bind="props">
+                    {{ $t("add_new") }}
+                  </v-btn>
+                </router-link>
+              </template>
+            </v-tooltip>
+          </div>
+        </div>
+        <!-- Stats section -->
+        <stats-page :stats="stats" />
+        <!-- Stats section -->
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <v-text-field
+            density="comfortable"
+            variant="solo"
+            flat
+            placeholder="Search here..."
+            hide-details
+            append-inner-icon="mdi-magnify"
+            v-model="search"
+            class="search-field"
+          ></v-text-field>
+        </div>
+        <!-- Data Table Card -->
+        <v-card class="table-card pa-4">
+          <v-data-table
+            class="table-card"
+            :headers="headers"
+            :items="documents"
+            :search="search"
+            :loading="initval"
+            v-bind:no-data-text="$t('no_data_available')"
+            :footer-props="{
+              'items-per-page-text': $t('rows_per_page'),
+            }"
+          >
+            <template v-slot:item="props">
+              <tr class="vdatatable_tbody">
+                <td>
+                  <span v-if="props.item.title">{{ props.item.title }}</span>
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td>
+                  <span v-if="props.item.category">{{
+                    props.item.category
+                  }}</span>
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td>
+                  <span v-if="props.item.group">{{ props.item.group }}</span>
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td>
+                  <span v-if="props.item.drug_id">
+                    {{ getDrugName(props.item.drug_id) }}</span
+                  >
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td>
+                  <span v-if="props.item.description">{{
+                    props.item.description
+                  }}</span>
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td>
+                  <span v-if="props.item.sequence">{{
+                    props.item.sequence
+                  }}</span>
+                  <span v-else>{{ $t("not_appllicable") }}</span>
+                </td>
+                <td class="px-0 text-center">
+                  <div class="action-icons">
+                    <v-icon
+                      class="icon-btn"
+                      @click="copyLink(props.item.file_path)"
+                    >
+                      mdi-content-copy
+                    </v-icon>
+
+                    <v-icon
+                      class="icon-btn"
+                      @click="downloadFile(props.item.file_path)"
+                    >
+                      mdi-download
+                    </v-icon>
+
+                    <router-link
+                      :to="{
+                        name: 'documents_amend',
+                        query: { slug: props.item.slug },
+                      }"
+                    >
+                      <v-icon class="icon-btn edit_btn">
+                        mdi-pencil-outline
+                      </v-icon>
+                    </router-link>
+                    <v-icon
+                      class="icon-btn"
+                      v-if="props.item.parent_id != null"
+                      @click="openChildDialog(props.item)"
+                    >
+                      mdi-file-tree
+                    </v-icon>
+                    <!-- <span @click="deleteItem(props.item.id)">
+                    <v-tooltip :text="this.$t('delete')" location="bottom">
+                      <template v-slot:activator="{ props }">
+                        <v-icon
+                          type="button"
+                          class="delete_btn icon_size"
+                          v-bind="props"
+                          dense
+                          color="error"
+                          >mdi-trash-can-outline</v-icon
+                        >
+                      </template>
+                    </v-tooltip>
+                  </span> -->
+                    <!-- placeholder to keep alignment -->
+                    <div v-else class="icon-placeholder"></div>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card>
+        <v-dialog v-model="showChildDialog" max-width="1100">
+          <v-card>
+            <v-card-title class="d-flex justify-space-between">
+              <span>Document Versions</span>
+              <v-btn
+                size="small"
+                variant="outlined"
+                class="register-btn mt-2"
+                @click="showChildDialog = false"
+              >
+                Back
+              </v-btn>
+            </v-card-title>
+
+            <v-card-text style="height: 400px; overflow-y: auto">
+              <component :is="childComponent" :slug="selectedSlug" />
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
+import DocumentsChild from "../Documents/DocumentChildIndex.vue";
 export default {
+  props: {
+    modelValue: {
+      type: Object,
+      default: () => ({}),
+    },
+    folder: String,
+    label: {
+      type: String,
+      default: "Upload File",
+    },
+    disabled: Boolean,
+    baseUrl: {
+      type: String,
+      default: "/storage/",
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data: () => ({
+    showChildDialog: false,
+    selectedSlug: null,
+    childComponent: DocumentsChild,
+    loader: false,
     search: "",
     dialog: false,
     documents: [],
@@ -129,6 +214,8 @@ export default {
       color: "google_icon_gradient",
       icon: "material-symbols-outlined",
     },
+    ref_value_array: [],
+    // baseUrl: "/storage/app/public/",
   }),
 
   computed: {
@@ -148,8 +235,20 @@ export default {
           key: "category",
         },
         {
+          title: "Group",
+          key: "group",
+        },
+        {
+          title: "Drug",
+          key: "drug_id",
+        },
+        {
           title: "Description",
           key: "description",
+        },
+        {
+          title: "Sequence",
+          key: "sequence",
         },
         {
           title: this.$t("action"),
@@ -165,24 +264,49 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    "$i18n.locale"(newLocale) {
-      if (newLocale === "ar") {
-        this.sel_lang = "ar";
-      } else {
-        ("");
-        this.sel_lang = "en";
-      }
-    },
   },
 
   created() {
     this.initialize();
+    this.fetchDrugList("Drugs");
   },
   mounted() {
     this.initialize();
   },
 
   methods: {
+    openChildDialog(item) {
+      this.selectedSlug = item.slug;
+      this.showChildDialog = true;
+    },
+    fullPath(file_path) {
+      return this.baseUrl + (file_path || "");
+    },
+    getDrugName(id) {
+      const drug = this.ref_value_array.find((d) => d.drug_id == id);
+      return drug ? drug.drug_name : this.$t("not_appllicable");
+    },
+    fetchDrugList(type) {
+      this.refListLoader = true;
+      this.ref_value_array = [];
+      // this.policy_details.ref_value = null;
+
+      if (type === "Drugs") {
+        this.$axios
+          .get("fetch_active_drugs")
+          .then((res) => {
+            this.ref_value_array = res.data.drugs;
+          })
+          .catch(() => {
+            this.$toast.error(this.$t("something_went_wrong"));
+          })
+          .finally(() => {
+            this.refListLoader = false;
+          });
+      } else {
+        this.refListLoader = false;
+      }
+    },
     showConfirmation(title, message) {
       this.dialogTitle = title;
       this.dialogMessage = message;
@@ -192,7 +316,7 @@ export default {
     async deleteItem(deleteId) {
       const result = await this.showConfirmation(
         "Confirm",
-        "Are you sure you want to delete this Document ?"
+        "Are you sure you want to delete this Document ?",
       );
       if (!result) return;
       this.$axios.delete(`documents/${deleteId}`).then((res) => {
@@ -205,8 +329,6 @@ export default {
       this.$axios
         .get("fetch_documents")
         .then((res) => {
-          console.log("res.data");
-          console.log(res.data);
           this.documents = res.data.documents;
           this.initval = false;
         })
@@ -224,7 +346,56 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
+    copyLink(path) {
+      const fullUrl = import.meta.env.VITE_IMAGE_PATH + "/storage/" + path;
+
+      navigator.clipboard
+        .writeText(fullUrl)
+        .then(() => {
+          this.$toast.success("Link copied to clipboard");
+        })
+        .catch(() => {
+          this.$toast.error("Failed to copy link");
+        });
+    },
+    downloadFile(path) {
+      const fileUrl = import.meta.env.VITE_IMAGE_PATH + "/storage/" + path;
+
+      const lowerPath = path.toLowerCase();
+
+      //  Open PDF & TXT in new tab
+      if (lowerPath.endsWith(".pdf") || lowerPath.endsWith(".txt")) {
+        window.open(fileUrl, "_blank");
+        return;
+      }
+
+      // ✅ Download other files
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = path.split("/").pop();
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.action-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.icon-placeholder {
+  width: 24px;
+}
+</style>

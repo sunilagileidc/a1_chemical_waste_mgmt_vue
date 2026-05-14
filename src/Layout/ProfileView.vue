@@ -2,12 +2,47 @@
 import { apptheme } from "../store/apptheme.js";
 </script>
 <template>
-  <div class="d-flex">
+  <div class="d-flex align-center">
+    <v-tooltip
+      text="Switch Institution"
+      location="bottom"
+      v-if="
+        (user.rolename == 'Pharmacist' ||
+          user.rolename == 'Prescriber' ||
+          user.rolename == 'Nurse') &&
+        show_switch != 0
+      "
+    >
+      <template v-slot:activator="{ props }">
+        <router-link
+          :to="{
+            name: 'institution_selection',
+          }"
+          style="color: white"
+        >
+          <v-icon v-bind="props" size="28" class="down-arrow-icon mr-2">
+            mdi mdi-swap-horizontal
+          </v-icon>
+        </router-link>
+      </template>
+    </v-tooltip>
+
+    <span class="mr-2 d-flex flex-column">
+      <small>
+        {{ sel_institution?.institution_data?.name }}
+      </small>
+
+      <small v-if="sel_institution?.institution_data?.institution_type"
+        >({{
+          sel_institution?.institution_data?.institution_type || ""
+        }})</small
+      >
+    </span>
     <v-menu v-model="menu" :close-on-content-click="false">
       <template v-slot:activator="{ props }">
         <v-list-item>
           <template v-slot:prepend>
-            <v-avatar
+            <!-- <v-avatar
               v-if="user.image_url != null"
               v-bind="props"
               class="profile-card"
@@ -21,7 +56,11 @@ import { apptheme } from "../store/apptheme.js";
               class="defalut_src"
               :image="default_src"
             >
-            </v-avatar>
+            </v-avatar> -->
+
+            <v-icon v-bind="props" size="28" class="down-arrow-icon">
+              mdi mdi-account-circle
+            </v-icon>
           </template>
           <v-list-item-title
             style="font-weight: bold; font-size: 14px"
@@ -40,7 +79,6 @@ import { apptheme } from "../store/apptheme.js";
           > -->
         </v-list-item>
       </template>
-
       <v-card
         min-width="320"
         class="profile-menu-card"
@@ -48,21 +86,24 @@ import { apptheme } from "../store/apptheme.js";
       >
         <!-- HEADER -->
         <div class="profile-menu-header">
-          <p class="profile-menu-label">Signed in as</p>
+          <p class="profile-menu-label">Signed in as - {{ user.rolename }}</p>
+          <!-- <small v-if="user.pharmacist">
+              ({{ user.pharmacist.institution_type }})</small
+            > -->
 
+          <!-- {{ user }} -->
           <div class="profile-menu-user">
-            <v-avatar
+            <!-- <v-avatar
               size="36"
               :image="
                 user.image_url ? envImagePath + user.image_url : default_src
               "
-            />
+            /> -->
             <span class="profile-menu-email">
               {{ user.email }}
             </span>
           </div>
         </div>
-
         <!-- MENU ITEMS -->
         <v-list class="profile-menu-list">
           <!-- Profile -->
@@ -72,10 +113,82 @@ import { apptheme } from "../store/apptheme.js";
               query: { slug: user.slug, from: 'amend' },
             }"
             class="profile-menu-item"
+            @click="menu = false"
           >
             <span class="accent blue"></span>
             <v-icon size="20" color="primary">mdi-account</v-icon>
             <span class="text">My Profile</span>
+            <v-icon size="16">mdi-chevron-right</v-icon>
+          </router-link>
+          <!-- v-if="user.pharmacist.institution_type == 'Inpatient Pharmacy'" -->
+
+          <router-link
+            v-if="
+              action_permissions.includes('CONNECTED USERS') &&
+              user.pharmacist &&
+              user.pharmacist.institution_type == 'Inpatient Pharmacy'
+            "
+            :to="{
+              name: 'connected-pharmacy',
+            }"
+            class="profile-menu-item"
+            @click="menu = false"
+          >
+            <span class="accent blue"></span>
+            <v-icon size="20" color="primary">mdi mdi-account-switch</v-icon>
+            <span class="text">Connected Users</span>
+            <v-icon size="16">mdi-chevron-right</v-icon>
+          </router-link>
+
+          <!-- Nurse cration -->
+          <router-link
+            v-if="action_permissions.includes('CONNECTED NURSES')"
+            :to="{
+              name: 'connected_nurses',
+            }"
+            class="profile-menu-item"
+            @click="menu = false"
+          >
+            <span class="accent blue"></span>
+            <v-icon size="20" color="primary"
+              >mdi-account-multiple-check</v-icon
+            >
+            <span class="text">Connected Nurses</span>
+            <v-icon size="16">mdi-chevron-right</v-icon>
+          </router-link>
+
+          <router-link
+            v-if="
+              action_permissions.includes('TRAINING DOCUMENTS') ||
+              (user.pharmacist &&
+                user.pharmacist.institution_type == 'Inpatient Pharmacy')
+            "
+            :to="{
+              name: 'training_documents',
+            }"
+            class="profile-menu-item"
+            @click="menu = false"
+          >
+            <span class="accent blue"></span>
+            <v-icon size="20" color="primary"
+              >mdi mdi-file-document-multiple</v-icon
+            >
+            <span class="text">Training Documents</span>
+            <v-icon size="16">mdi-chevron-right</v-icon>
+          </router-link>
+
+          <!-- action_permissions.includes('CREATE WHOLESALERS') && -->
+          <router-link
+            v-if="user.pharmacist"
+            :to="{
+              name: 'add-wholesaler',
+            }"
+            class="profile-menu-item"
+            @click="menu = false"
+          >
+            <span class="accent blue"></span>
+            <v-icon size="20" color="primary">mdi mdi-account-switch</v-icon>
+            <span class="text">Wholesalers</span>
             <v-icon size="16">mdi-chevron-right</v-icon>
           </router-link>
 
@@ -112,13 +225,26 @@ export default {
     message: false,
     hints: true,
     default_src: defaultAvatar,
+    show_switch: 0,
+    sel_institution: "",
+    action_permissions: [],
+    permissions: [],
   }),
   mounted() {
     if (JSON.parse(localStorage.getItem("user_data"))) {
       this.user = JSON.parse(localStorage.getItem("user_data"));
+
       this.role_id = this.user.role_id;
     }
+    const inst = JSON.parse(localStorage.getItem("sel_inst"));
+    if (inst) {
+      this.sel_institution = inst;
+    }
+
+    this.show_switch = localStorage.getItem("inst_length");
+    this.loadPermissions(this.role_id);
   },
+
   watch: {
     user: {
       immediate: true,
@@ -133,9 +259,35 @@ export default {
     this.emitter.on("updateProfileImage", () => {
       this.fetchUserData();
     });
+
+    this.emitter.on("institutionChanged", (inst) => {
+      this.sel_institution = inst;
+    });
   },
   methods: {
+    async loadPermissions(role_id) {
+      try {
+        const res = await this.$axios.get("check_action_permission", {
+          params: {
+            role_id: role_id,
+          },
+        });
+        if (res.data.status === "S") {
+          this.permissions = res.data.permissions;
+          localStorage.setItem(
+            "action_permissions",
+            JSON.stringify(this.permissions)
+          );
+          this.action_permissions = JSON.parse(
+            localStorage.getItem("action_permissions") || "[]"
+          );
+        }
+      } catch (error) {
+        this.permissions = [];
+      }
+    },
     resetPasswordRedirect() {
+      this.menu = false;
       this.$router.push({
         name: "reset_password",
       });
@@ -145,6 +297,7 @@ export default {
     },
     ...mapActions("auth", ["logoutUser"]),
     logoutUser() {
+      this.menu = false;
       this.$store
         .dispatch("auth/logoutUser")
         .then(() => {
@@ -178,7 +331,7 @@ export default {
 /* HEADER */
 .profile-menu-header {
   padding: 16px;
-  background: linear-gradient(135deg, #1e40af, #2563eb);
+  background: linear-gradient(135deg, #05668d, #034a66);
   color: white;
 }
 
@@ -265,5 +418,12 @@ export default {
 .profile-menu-card.dark {
   background: #1f1f1f;
   color: white;
+}
+.v-list-item:deep(.v-list-item__prepend) {
+  display: block;
+}
+.down-arrow-icon {
+  color: #05668d !important;
+  opacity: 10 !important;
 }
 </style>

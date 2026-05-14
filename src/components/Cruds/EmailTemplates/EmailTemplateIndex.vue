@@ -33,7 +33,7 @@
       <!-- ADD BUTTON -->
       <div class="add_new_button">
         <router-link :to="{ name: 'email_template_amend' }">
-          <v-btn size="small" class="green_btn_color">
+          <v-btn size="small" class="btn-filled">
             {{ $t("add_new") }}
           </v-btn>
         </router-link>
@@ -61,9 +61,9 @@
               <v-icon class="mr-2">mdi-pencil-outline</v-icon>
             </router-link>
 
-            <v-icon color="error" @click="deleteEmailTemplate(item.id)">
+            <!-- <v-icon color="error" @click="deleteEmailTemplate(item.id)">
               mdi-trash-can-outline
-            </v-icon>
+            </v-icon> -->
           </td>
         </tr>
       </template>

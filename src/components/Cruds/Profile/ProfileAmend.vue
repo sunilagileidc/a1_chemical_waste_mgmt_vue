@@ -164,6 +164,8 @@
                       <v-text-field
                         v-bind:label="$t('postcode')"
                         :rules="postcodeRules"
+                        hint="Enter a valid UK postcode (e.g. SW1A 1AA)"
+                        persistent-hint
                         v-bind="props"
                         variant="outlined"
                         density="compact"
@@ -183,7 +185,7 @@
                         v-bind="props"
                         variant="outlined"
                         density="compact"
-                        maxlength="12"
+                        maxlength="11"
                         v-model="profile_details.phone"
                         required
                       ></v-text-field>
@@ -351,7 +353,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import PageTitle from "../../CustomComponents/PageTitle.vue";
 import DatePicker from "../../CustomComponents/DatePicker.vue";
@@ -411,7 +413,9 @@ export default {
     },
     phoneRules() {
       return [
-        (v) => (v >= 0 && v <= 999999999999) || this.$t("number_required"),
+        (v) => !!v || this.$t("number_required"),
+        (v) =>
+          /^0[1-9]\d{8,9}$/.test(v) || this.$t("enter_valid_uk_phone_number"),
       ];
     },
     numberRules() {
@@ -419,7 +423,12 @@ export default {
     },
 
     postcodeRules() {
-      return [(v) => (v >= 0 && v <= 999999) || this.$t("postcode_valid")];
+      return [
+        (v) => !!v || "Postcode is required",
+        (v) =>
+          /^[a-zA-Z0-9 ]+$/.test(v) ||
+          "Postcode must be alphanumeric (letters & numbers only)",
+      ];
     },
 
     fieldRules() {
@@ -546,4 +555,3 @@ export default {
   },
 };
 </script>
-  

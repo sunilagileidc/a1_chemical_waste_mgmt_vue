@@ -12,7 +12,7 @@
     >
       <page-title
         class="col-md-3"
-        :heading="$t('suburb')"
+        :heading="$t('suburb') + ' of ' + name_val"
         :google_icon="google_icon"
       ></page-title>
       <div class="col-md-4">
@@ -34,24 +34,6 @@
         </v-tooltip>
       </div>
       <div class="add_new_button">
-        <v-tooltip :text="$t('add_new')" location="bottom">
-          <template v-slot:activator="{ props }">
-            <router-link
-              :to="{
-                name: 'cities_amend',
-                query: {
-                  countryslug: countryname,
-                  statesslug: statename,
-                },
-              }"
-              style="color: white"
-            >
-              <v-btn size="small" class="mb-2 create-btn" v-bind="props">{{
-                $t("add_new")
-              }}</v-btn>
-            </router-link>
-          </template>
-        </v-tooltip>
         <v-tooltip :text="$t('back')" location="bottom">
           <template v-slot:activator="{ props }">
             <router-link
@@ -65,11 +47,29 @@
             >
               <v-btn
                 size="small"
-                class="mb-2 ml-2"
+                class="btn-cancel mb-2"
                 color="cancel"
                 v-bind="props"
                 >{{ $t("back") }}</v-btn
               >
+            </router-link>
+          </template>
+        </v-tooltip>
+        <v-tooltip :text="$t('add_new')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <router-link
+              :to="{
+                name: 'cities_amend',
+                query: {
+                  countryslug: countryname,
+                  statesslug: statename,
+                },
+              }"
+              style="color: white"
+            >
+              <v-btn size="small" class="mb-2 btn-filled ml-2" v-bind="props">{{
+                $t("add_new")
+              }}</v-btn>
             </router-link>
           </template>
         </v-tooltip>
@@ -157,6 +157,7 @@ export default {
     message: "",
     countryname: "",
     statename: "",
+    name_val: "",
     initval: true,
   }),
   watch: {
@@ -178,6 +179,7 @@ export default {
     },
   },
   mounted() {
+    this.name_val = this.$route.query.stateslug;
     this.fetchcities();
   },
   methods: {

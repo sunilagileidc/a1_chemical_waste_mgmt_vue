@@ -7,7 +7,6 @@ import DocumentUpload from "@/components/CustomComponents/DocumentUpload.vue";
 import HeaderPage from "@/components/CustomComponents/HeaderPage.vue";
 import FooterPage from "@/components/CustomComponents/FooterPage.vue";
 import PrescriberRegistration from "@/Admin/UserPages/PrescriberRegistration.vue";
-import PharmacistRegistration from "@/Admin/UserPages/PharmacistRegistration.vue";
 import StatsPage from "@/components/CustomComponents/Stats.vue";
 import Checkbox from "@/components/CustomComponents/Checkbox.vue";
 import Imageupload from "@/components/CustomComponents/ImageUpload.vue";
@@ -16,7 +15,6 @@ import UserDrugs from "@/components/CustomComponents/UserDrugs.vue";
 import DatePicker from "@/components/CustomComponents/DatePicker.vue";
 import MandatoryText from "@/components/CustomComponents/MandatoryText.vue";
 import PafHistory from "@/components/CustomComponents/PafHistory.vue";
-import PafDownload from "@/components/Cruds/PAF/PafDownload.vue";
 import UserAuthentication from "@/components/CustomComponents/UserAuthentication.vue";
 
 
@@ -34,7 +32,6 @@ export default {
     app.component("header-page", HeaderPage);
     app.component("footer-page", FooterPage);
     app.component("prescriber-registration", PrescriberRegistration);
-    app.component("pharmacist-registration", PharmacistRegistration);
     app.component("stats-page", StatsPage);
     app.component("checkbox", Checkbox);
     app.component("image-upload", Imageupload);
@@ -43,7 +40,6 @@ export default {
     app.component("date-picker", DatePicker);
     app.component("mandatory-text", MandatoryText);
     app.component("paf-history", PafHistory);
-    app.component("paf-download", PafDownload);
     app.component("user-authentication", UserAuthentication);
   },
 };

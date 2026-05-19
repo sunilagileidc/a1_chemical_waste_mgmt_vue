@@ -4,7 +4,7 @@ import ContentLoader from "@/components/CustomComponents/ContentLoader.vue";
 import ConfirmationDialog from "@/components/CustomComponents/ConfirmationDialog.vue";
 import NoDataFound from "@/components/CustomComponents/NoDataFound.vue";
 import DocumentUpload from "@/components/CustomComponents/DocumentUpload.vue";
-import HeaderPage from "@/components/CustomComponents/HeaderPage.vue";
+// import HeaderPage from "@/components/CustomComponents/HeaderPage.vue";
 import FooterPage from "@/components/CustomComponents/FooterPage.vue";
 import PrescriberRegistration from "@/Admin/UserPages/PrescriberRegistration.vue";
 import StatsPage from "@/components/CustomComponents/Stats.vue";
@@ -29,7 +29,7 @@ export default {
     app.component("confirmation-dialog", ConfirmationDialog);
     app.component("no-data-found", NoDataFound);
     app.component("document-upload", DocumentUpload);
-    app.component("header-page", HeaderPage);
+    // app.component("header-page", HeaderPage);
     app.component("footer-page", FooterPage);
     app.component("prescriber-registration", PrescriberRegistration);
     app.component("stats-page", StatsPage);

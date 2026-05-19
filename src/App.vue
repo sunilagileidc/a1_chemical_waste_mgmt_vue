@@ -68,7 +68,7 @@ import { apptheme } from "./store/apptheme.js";
         </v-app-bar>
 
         <!-- USERPAGES HEADER -->
-        <header-page v-if="$route.meta.layout === 'userpages'" />
+        <!-- <header-page v-if="$route.meta.layout === 'userpages'" /> -->
 
         <!-- MAIN CONTENT (SCROLLABLE AREA) -->
         <v-main class="main-content">

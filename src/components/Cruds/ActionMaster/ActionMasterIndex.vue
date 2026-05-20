@@ -84,7 +84,7 @@
                     </template>
                   </v-tooltip>
 
-                  <!-- <span>
+                  <span>
                     <v-tooltip text="Delete" location="bottom">
                       <template #activator="{ props }">
                         <v-icon
@@ -96,7 +96,7 @@
                         </v-icon>
                       </template>
                     </v-tooltip>
-                  </span> -->
+                  </span>
                 </td>
               </tr>
             </template>

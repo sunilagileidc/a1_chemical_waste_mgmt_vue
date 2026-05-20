@@ -127,11 +127,13 @@ export default {
 
   computed: {
     filteredActions() {
-      if (!this.search) return this.actions;
+      const activeActions = this.actions.filter((item) => item.status === 1);
+
+      if (!this.search) return activeActions;
 
       const searchLower = this.search.toLowerCase();
 
-      return this.actions.filter(
+      return activeActions.filter(
         (item) =>
           item.action_name.toLowerCase().includes(searchLower) ||
           (item.description &&

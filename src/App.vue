@@ -73,9 +73,9 @@ import { apptheme } from "./store/apptheme.js";
         <!-- MAIN CONTENT (SCROLLABLE AREA) -->
         <v-main class="main-content">
           <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
+            <!-- <transition name="fade" mode="out-in"> -->
               <component :is="Component" />
-            </transition>
+            <!-- </transition> -->
           </router-view>
         </v-main>
 

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 
 const routes = [
@@ -51,6 +51,42 @@ const routes = [
     name: "users",
     beforeEnter: guardMyroute,
     component: () => import("../components/Cruds/Users/IndexPage.vue"),
+  },
+  {
+    path: "/customers",
+    name: "customers",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/customers/IndexPage.vue"),
+  },
+  {
+    path: "/customer_creation",
+    name: "customer_creation",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/customers/CustomerAmend.vue"),
+  },
+  {
+    path: "/suppliers",
+    name: "suppliers",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/suppliers/IndexPage.vue"),
+  },
+  {
+    path: "/supplier_creation",
+    name: "supplier_creation",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/suppliers/SupplierAmend.vue"),
+  },
+  {
+    path: "/hauliers",
+    name: "hauliers",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/hauliers/IndexPage.vue"),
+  },
+  {
+    path: "/haulier_creation",
+    name: "haulier_creation",
+    beforeEnter: guardMyroute,
+    component: () => import("../components/Cruds/hauliers/HaulierAmend.vue"),
   },
   {
     path: "/locked_users",
@@ -251,7 +287,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 

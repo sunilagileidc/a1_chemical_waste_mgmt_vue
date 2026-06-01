@@ -33,7 +33,7 @@
             <div class="row">
               <div class="col-md-12 pl-6">
                 <v-row cols="12" class="px-4">
-                  <v-col md="2" cols="12">
+                  <!-- <v-col md="2" cols="12">
                     <v-tooltip :text="$t('salutation')" location="bottom">
                       <template v-slot:activator="{ props }">
                         <v-autocomplete
@@ -51,7 +51,7 @@
                         ></v-autocomplete>
                       </template>
                     </v-tooltip>
-                  </v-col>
+                  </v-col> -->
 
                   <v-col cols="12" md="6" lg="6" sm="6" px="2">
                     <v-tooltip :text="$t('firstname')" location="bottom">
@@ -71,7 +71,7 @@
                     </v-tooltip>
                   </v-col>
 
-                  <v-col cols="12" lg="4" sm="6" md="4">
+                  <v-col cols="12" md="6" lg="6" sm="6" px="2">
                     <v-tooltip :text="$t('lastname')" location="bottom">
                       <template v-slot:activator="{ props }">
                         <v-text-field
@@ -262,7 +262,7 @@
                       </template>
                     </v-tooltip>
                   </v-col> -->
-                  <v-col cols="12" md="3" lg="3" sm="3" px-2>
+                  <!-- <v-col cols="12" md="3" lg="3" sm="3" px-2>
                     <v-tooltip :text="$t('postcode')" location="bottom">
                       <template v-slot:activator="{ props }">
                         <v-text-field
@@ -278,11 +278,11 @@
                         ></v-text-field>
                       </template>
                     </v-tooltip>
-                  </v-col>
+                  </v-col> -->
                 <!-- </v-row>
 
                 <v-row class="mt-1 px-4"> -->
-                  <v-col cols="12" md="6" sm="6" lg="6">
+                  <!-- <v-col cols="12" md="6" sm="6" lg="6">
                     <v-tooltip :text="$t('address')" location="bottom">
                       <template v-slot:activator="{ props }">
                         <v-textarea
@@ -298,8 +298,8 @@
                         ></v-textarea>
                       </template>
                     </v-tooltip>
-                  </v-col>
-                  <v-col cols="12" md="8" sm="8" lg="8">
+                  </v-col> -->
+                  <!-- <v-col cols="12" md="8" sm="8" lg="8">
                     <v-tooltip :text="$t('description')" location="bottom">
                       <template v-slot:activator="{ props }">
                         <v-textarea
@@ -315,7 +315,7 @@
                         ></v-textarea>
                       </template>
                     </v-tooltip>
-                  </v-col>
+                  </v-col> -->
                   <v-col cols="12" md="2" sm="2" lg="2">
                     <v-switch
                       v-model="profile_details.status"

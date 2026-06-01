@@ -19,11 +19,7 @@
                   :to="{ name: 'supplier_creation' }"
                   style="color: white"
                 >
-                  <v-btn
-                    size="small"
-                    class="mb-2 create-btn"
-                    v-bind="props"
-                  >
+                  <v-btn size="small" class="mb-2 create-btn" v-bind="props">
                     {{ $t("add_new") }}
                   </v-btn>
                 </router-link>
@@ -59,47 +55,50 @@
             <template v-slot:item="props">
               <tr class="vdatatable_tbody">
                 <td>
-                  {{
-                    props.item.supplier_name || $t("not_appllicable")
-                  }}
+                  {{ props.item.supplier_name || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.supplier_telephone ||
-                    $t("not_appllicable")
-                  }}
+                  {{ props.item.supplier_telephone || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.supplier_email || $t("not_appllicable")
-                  }}
+                  {{ props.item.supplier_email || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.disposal_licence || $t("not_appllicable")
-                  }}
+                  {{ props.item.supplier_license || $t("not_appllicable") }}
                 </td>
 
                 <td>
                   <router-link
                     :to="{
                       name: 'supplier_creation',
-                      query: { id: props.item.id },
+                      query: { slug: props.item.slug },
                     }"
                   >
                     <v-icon class="mr-2 edit_btn icon_size">
                       mdi-pencil-outline
                     </v-icon>
                   </router-link>
+                  <!-- <v-icon
+                    color="red"
+                    class="icon_size"
+                    @click="deleteSupplier(props.item.id)"
+                  >
+                    mdi-delete-outline
+                  </v-icon> -->
                 </td>
               </tr>
             </template>
           </v-data-table>
         </v-card>
       </div>
+      <confirmation-dialog
+        ref="confirmationDialog"
+        :title="dialogTitle"
+        :message="dialogMessage"
+      ></confirmation-dialog>
     </div>
   </v-container>
 </template>
@@ -117,6 +116,9 @@ export default {
     suppliers: [],
     tableLoading: false,
     loader: false,
+    dialogTitle: "",
+    dialogMessage: "",
+    suppliers: [],
   }),
 
   mounted() {
@@ -148,7 +150,7 @@ export default {
           title: "Disposal Licence",
           align: "left",
           sortable: true,
-          key: "disposal_licence",
+          key: "supplier_license",
         },
         {
           title: this.$t("actions"),
@@ -165,7 +167,7 @@ export default {
       this.tableLoading = true;
 
       this.$axios
-        .get("fetch_suppliers")
+        .get("suppliers")
         .then((res) => {
           this.suppliers = res.data.suppliers;
         })
@@ -174,6 +176,34 @@ export default {
         })
         .finally(() => {
           this.tableLoading = false;
+        });
+    },
+    showConfirmation(title, message) {
+      this.dialogTitle = title;
+      this.dialogMessage = message;
+      return this.$refs.confirmationDialog.open();
+    },
+    async deleteSupplier(id) {
+      const result = await this.showConfirmation(
+        "Delete Supplier",
+        "Are you sure you want to delete this supplier?"
+      );
+
+      if (!result) return;
+
+      this.$axios
+        .delete("deletesupplier/" + id)
+        .then((res) => {
+          if (res.data.status == "S") {
+            this.$toast.success(res.data.message);
+            this.fetchSuppliers();
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$toast.error(this.$t("something_went_wrong"));
         });
     },
   },

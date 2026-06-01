@@ -190,7 +190,7 @@ export default {
       this.loader = true;
 
       this.$axios
-        .get("fetchhaulierbyslug/" + this.$route.query.slug)
+        .get("haulierbyslug/" + this.$route.query.slug)
         .then((res) => {
           if (res.data.status == "S") {
             this.profile_details = res.data.haulier;

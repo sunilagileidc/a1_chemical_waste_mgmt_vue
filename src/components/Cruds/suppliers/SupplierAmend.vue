@@ -190,7 +190,7 @@ export default {
       this.loader = true;
 
       this.$axios
-        .get("fetchsupplierbyslug/" + this.$route.query.slug)
+        .get("supplierbyslug/" + this.$route.query.slug)
         .then((res) => {
           if (res.data.status == "S") {
             this.profile_details = res.data.supplier;

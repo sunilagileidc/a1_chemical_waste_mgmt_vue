@@ -120,7 +120,7 @@
 
                 <!-- ROW 5 -->
                 <v-row class="px-4">
-                  <v-col cols="12">
+                  <v-col cols="12" md="10">
                     <v-textarea
                       v-model="profile_details.sic_desc"
                       variant="outlined"
@@ -130,10 +130,6 @@
                       maxlength="1000"
                     ></v-textarea>
                   </v-col>
-                </v-row>
-
-                <!-- STATUS -->
-                <v-row class="px-4">
                   <v-col cols="12" md="2">
                     <v-switch
                       v-model="profile_details.active"
@@ -246,7 +242,7 @@ export default {
       this.loader = true;
 
       this.$axios
-        .get("fetchcustomerbyslug/" + this.$route.query.slug)
+        .get("customerbyslug/" + this.$route.query.slug)
         .then((res) => {
           if (res.data.status == "S") {
             this.profile_details = res.data.customer;

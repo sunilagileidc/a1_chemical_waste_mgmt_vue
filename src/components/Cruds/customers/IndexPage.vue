@@ -19,11 +19,7 @@
                   :to="{ name: 'customer_creation' }"
                   style="color: white"
                 >
-                  <v-btn
-                    size="small"
-                    class="mb-2 create-btn"
-                    v-bind="props"
-                  >
+                  <v-btn size="small" class="mb-2 create-btn" v-bind="props">
                     {{ $t("add_new") }}
                   </v-btn>
                 </router-link>
@@ -59,60 +55,75 @@
             <template v-slot:item="props">
               <tr class="vdatatable_tbody">
                 <td>
-                  {{
-                    props.item.company_name || $t("not_appllicable")
-                  }}
+                  {{ props.item.company_name || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.company_telephone ||
-                    $t("not_appllicable")
-                  }}
+                  {{ props.item.company_telephone || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.company_email || $t("not_appllicable")
-                  }}
+                  {{ props.item.company_email || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.hwr_code || $t("not_appllicable")
-                  }}
+                  {{ props.item.hwr_code || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.hwr_expiry_date ||
-                    $t("not_appllicable")
-                  }}
+                  {{ props.item.hwr_expiry_date || $t("not_appllicable") }}
                 </td>
 
                 <td>
-                  {{
-                    props.item.sic_code || $t("not_appllicable")
-                  }}
+                  {{ props.item.sic_code || $t("not_appllicable") }}
+                </td>
+                <td>
+                  <v-btn
+                    class="hover_shine btn mr-2"
+                    size="small"
+                    :color="props.item.status == 1 ? 'success' : 'warning'"
+                    @click="changeStatus(props.item.id)"
+                  >
+                    <span
+                      v-if="props.item.status == 1"
+                      class="spanactivesize"
+                      >{{ $t("active") }}</span
+                    >
+                    <span v-else class="spanactivesize">{{
+                      $t("inactive")
+                    }}</span>
+                  </v-btn>
                 </td>
 
                 <td>
                   <router-link
                     :to="{
                       name: 'customer_creation',
-                      query: { id: props.item.id },
+                      query: { slug: props.item.slug },
                     }"
                   >
                     <v-icon class="mr-2 edit_btn icon_size">
                       mdi-pencil-outline
                     </v-icon>
                   </router-link>
+                  <!-- <v-icon
+                    color="red"
+                    class="icon_size"
+                    @click="deleteCustomer(props.item.id)"
+                  >
+                    mdi-delete-outline
+                  </v-icon> -->
                 </td>
               </tr>
             </template>
           </v-data-table>
         </v-card>
       </div>
+      <confirmation-dialog
+        ref="confirmationDialog"
+        :title="dialogTitle"
+        :message="dialogMessage"
+      ></confirmation-dialog>
     </div>
   </v-container>
 </template>
@@ -130,6 +141,9 @@ export default {
     customers: [],
     tableLoading: false,
     loader: false,
+    dialogTitle: "",
+    dialogMessage: "",
+    customers: [],
   }),
 
   mounted() {
@@ -176,6 +190,12 @@ export default {
           key: "sic_code",
         },
         {
+          title: this.$t("status"),
+          align: "left",
+          sortable: false,
+          key: "status",
+        },
+        {
           title: this.$t("actions"),
           align: "left",
           sortable: false,
@@ -190,7 +210,7 @@ export default {
       this.tableLoading = true;
 
       this.$axios
-        .get("fetch_customers")
+        .get("customers")
         .then((res) => {
           this.customers = res.data.customers;
         })
@@ -201,6 +221,68 @@ export default {
           this.tableLoading = false;
         });
     },
+    showConfirmation(title, message) {
+      this.dialogTitle = title;
+      this.dialogMessage = message;
+      return this.$refs.confirmationDialog.open();
+    },
+    async deleteCustomer(id) {
+      const result = await this.showConfirmation(
+        "Delete Customer",
+        "Are you sure you want to delete this customer?"
+      );
+
+      if (!result) return;
+
+      this.$axios
+        .delete("deletecustomer/" + id)
+        .then((res) => {
+          if (res.data.status == "S") {
+            this.$toast.success(res.data.message);
+            this.fetchCustomers();
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$toast.error(this.$t("something_went_wrong"));
+        });
+    },
+    // async changeStatus(id) {
+    //   const result = await this.showConfirmation(
+    //     "Confirm",
+    //     "Are you sure you want to change the status of this user ?",
+    //   );
+
+    //   if (!result) return;
+    //   this.$axios
+    //     .post("updateuserstatus", {
+    //       id: id,
+    //     })
+    //     .then((res) => {
+    //       if (Array.isArray(res.data.message)) {
+    //         this.array_data = res.data.message.toString();
+    //       } else {
+    //         this.array_data = res.data.message;
+    //       }
+    //       if (res.data.status == "S") {
+    //         this.$toast.success(this.array_data);
+    //         this.initval = true;
+    //         this.fetchUsers();
+    //       } else if (res.data.status == "E") {
+    //         this.$toast.error(this.$t("something_went_wrong"));
+    //       } else {
+    //         this.$toast.error(this.array_data);
+    //         this.initval = true;
+    //         this.fetchUsers();
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       this.$toast.error(this.$t("something_went_wrong"));
+    //       console.log("this error" + err);
+    //     });
+    // },
   },
 };
 </script>

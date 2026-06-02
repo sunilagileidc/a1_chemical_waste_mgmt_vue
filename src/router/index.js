@@ -78,6 +78,13 @@ const routes = [
     component: () => import("../components/Cruds/suppliers/IndexPage.vue"),
   },
   {
+    path: "/supplier_contact_creation",
+    name: "supplier_contact_creation",
+    beforeEnter: guardMyroute,
+    component: () =>
+      import("../components/Cruds/suppliers/SupplierContactAmend.vue"),
+  },
+  {
     path: "/supplier_creation",
     name: "supplier_creation",
     beforeEnter: guardMyroute,

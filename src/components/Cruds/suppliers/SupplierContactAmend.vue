@@ -4,7 +4,7 @@
       <div class="my-3 d-flex align-center justify-space-between">
         <page-title
           class="ml-2"
-          :heading="$t('Customer Contact')"
+          :heading="$t('Supplier Contact')"
           :google_icon="google_icon"
         ></page-title>
       </div>
@@ -137,7 +137,7 @@ export default {
 
       profile_details: {
         id: 0,
-        customer_id: null,
+        supplier_id: null,
         name: "",
         telephone: "",
         email: "",
@@ -167,8 +167,9 @@ export default {
   },
 
   mounted() {
-    if (this.$route.query.customer_id) {
-      this.profile_details.customer_id = this.$route.query.customer_id;
+    console.log("Route Query:", this.$route.query);
+    if (this.$route.query.supplier_id) {
+      this.profile_details.supplier_id = this.$route.query.supplier_id;
     }
 
     if (this.$route.query.id) {
@@ -181,10 +182,10 @@ export default {
       this.loader = true;
 
       this.$axios
-        .get("customerindividual/" + this.$route.query.id)
+        .get("supplierindividual/" + this.$route.query.id)
         .then((res) => {
           if (res.data.status == "S") {
-            this.profile_details = res.data.customer_individual;
+            this.profile_details = res.data.supplier_individual;
           } else {
             this.$toast.error(res.data.message);
           }
@@ -199,18 +200,18 @@ export default {
     },
 
     submit() {
-        console.log(this.profile_details);
+        console.log("Submitting Data:", this.profile_details);
       if (this.$refs.form.validate() && this.valid) {
         this.isDisabled = true;
 
         this.$axios
-          .post("savecustomercontact", this.profile_details)
+          .post("savesuppliercontact", this.profile_details)
           .then((res) => {
             if (res.data.status == "S") {
               this.$toast.success(res.data.message);
 
               this.$router.push({
-                name: "customers",
+                name: "suppliers",
               });
             } else {
               this.$toast.error(res.data.message);

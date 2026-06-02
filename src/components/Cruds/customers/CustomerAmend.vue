@@ -29,7 +29,7 @@
                       :rules="fieldRules"
                       variant="outlined"
                       density="compact"
-                      label="Name"
+                      label="Company Name"
                       class="required_field"
                       hide-details="auto"
                       maxlength="150"

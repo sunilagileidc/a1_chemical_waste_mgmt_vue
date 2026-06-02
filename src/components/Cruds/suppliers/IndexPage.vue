@@ -51,6 +51,7 @@
             :search="search"
             :loading="tableLoading"
             :items-per-page-text="$t('rows_per_page')"
+            show-expand
           >
             <template v-slot:item="props">
               <tr class="vdatatable_tbody">
@@ -97,6 +98,13 @@
                       mdi-pencil-outline
                     </v-icon>
                   </router-link>
+                  <v-icon
+                    color="success"
+                    class="mr-2 icon_size"
+                    @click="addContact(props.item)"
+                  >
+                    mdi-account-plus
+                  </v-icon>
                   <!-- <v-icon
                     color="red"
                     class="icon_size"
@@ -104,6 +112,67 @@
                   >
                     mdi-delete-outline
                   </v-icon> -->
+                </td>
+                <td>
+                  <v-btn
+                    icon
+                    size="small"
+                    variant="text"
+                    @click="props.toggleExpand(props.internalItem)"
+                  >
+                    <v-icon>
+                      {{
+                        props.isExpanded(props.internalItem)
+                          ? "mdi-chevron-up"
+                          : "mdi-chevron-down"
+                      }}
+                    </v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </template>
+            <!-- Expanded Row -->
+            <template v-slot:expanded-row="{ columns, item }">
+              <tr>
+                <td :colspan="columns.length">
+                  <v-sheet border rounded class="ma-2">
+                    <v-table density="compact">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Telephone</th>
+                          <th>Email</th>
+                          <th>Position</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr
+                          v-for="supplier in item.individuals || []"
+                          :key="supplier.id"
+                        >
+                          <td>{{ supplier.name }}</td>
+                          <td>{{ supplier.telephone }}</td>
+                          <td>{{ supplier.email }}</td>
+                          <td>{{ supplier.position }}</td>
+                          <td>
+                            {{ supplier.active == 1 ? "Active" : "Inactive" }}
+                          </td>
+                          <td>
+                            <v-icon
+                              color="primary"
+                              class="mr-2"
+                              @click="editContact(supplier)"
+                            >
+                              mdi-pencil-outline
+                            </v-icon>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                  </v-sheet>
                 </td>
               </tr>
             </template>
@@ -180,11 +249,35 @@ export default {
           sortable: false,
           key: "actions",
         },
+        {
+          title: "",
+          key: "data-table-expand",
+          sortable: false,
+          width: "50px",
+        },
       ];
     },
   },
 
   methods: {
+    addContact(supplier) {
+      console.log(supplier);
+
+      this.$router.push({
+        name: "supplier_contact_creation",
+        query: {
+          supplier_id: supplier.id,
+        },
+      });
+    },
+    editContact(supplier) {
+      this.$router.push({
+        name: "supplier_contact_creation",
+        query: {
+          id: supplier.id,
+        },
+      });
+    },
     fetchSuppliers() {
       this.tableLoading = true;
 

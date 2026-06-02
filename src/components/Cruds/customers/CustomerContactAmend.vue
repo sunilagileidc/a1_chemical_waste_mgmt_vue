@@ -4,11 +4,7 @@
       <div class="my-3 d-flex align-center justify-space-between">
         <page-title
           class="ml-2"
-          :heading="
-            profile_details.id > 0
-              ? 'Edit Haulier'
-              : 'Create Haulier'
-          "
+          :heading="$t('customer_contact')"
           :google_icon="google_icon"
         ></page-title>
       </div>
@@ -18,121 +14,96 @@
       <div class="mb-3 mx-auto">
         <div class="card-body">
           <v-form ref="form" v-model="valid">
-
             <v-row class="px-4">
+              <!-- Name -->
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="profile_details.haulier_name"
-                  label="Name"
                   variant="outlined"
                   density="compact"
-                  hide-details="auto"
+                  v-model="profile_details.name"
                   :rules="fieldRules"
+                  label="Name"
+                  class="required_field"
                 ></v-text-field>
               </v-col>
 
+              <!-- Telephone -->
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="profile_details.haulier_email"
-                  label="Email"
                   variant="outlined"
                   density="compact"
-                  hide-details="auto"
+                  v-model="profile_details.telephone"
+                  label="Telephone"
+                  :rules="phoneRules"
+                  maxlength="15"
+                ></v-text-field>
+              </v-col>
+
+              <!-- Email -->
+              <v-col cols="12" md="6">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  v-model="profile_details.email"
                   :rules="emailRules"
+                  label="Email"
                 ></v-text-field>
               </v-col>
-            </v-row>
 
-            <v-row class="px-4">
+              <!-- Position -->
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="profile_details.haulier_telephone"
-                  label="Phone"
                   variant="outlined"
                   density="compact"
-                  hide-details="auto"
+                  v-model="profile_details.position"
+                  label="Position"
                 ></v-text-field>
               </v-col>
 
+              <!-- Status -->
               <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="profile_details.haulier_postcode"
-                  label="Postcode"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row class="px-4">
-              <v-col cols="12">
-                <v-textarea
-                  v-model="profile_details.haulier_address"
-                  label="Address"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  rows="2"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-
-            <v-row class="px-4">
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="profile_details.haulier_license"
-                  label="Carrier License"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12" md="2">
                 <v-switch
                   v-model="profile_details.active"
+                  label="Status"
                   :true-value="1"
                   :false-value="0"
-                  label="Active"
                   color="success"
                   inset
                 ></v-switch>
               </v-col>
             </v-row>
-
           </v-form>
         </div>
 
         <div class="d-block mr-4 mt-3 text-right">
           <v-btn
             size="small"
-            color="cancel"
-            class="btn-cancel ma-1"
             @click="cancel"
+            class="btn-cancel mr-2"
+            color="cancel"
           >
-            Cancel
+            {{ $t("cancel") }}
           </v-btn>
 
           <v-btn
-            size="small"
-            color="success"
-            class="status-approved mr-2"
             :disabled="isDisabled"
             @click="submit"
+            size="small"
+            class="status-approved"
+            color="success"
           >
-            Submit
+            {{ $t("submit") }}
 
             <v-progress-circular
               v-if="isDisabled"
               indeterminate
               width="1"
+              color="cancel"
               size="x-small"
               class="ml-2"
             ></v-progress-circular>
           </v-btn>
         </div>
-
       </div>
     </div>
   </v-container>
@@ -146,64 +117,75 @@ export default {
     PageTitle,
   },
 
-  data: () => ({
-    valid: false,
-    loader: false,
-    isDisabled: false,
+  data() {
+    return {
+      valid: false,
+      loader: false,
+      isDisabled: false,
 
-    google_icon: {
-      icon_name: "local_shipping",
-      color: "google_icon_gradient",
-      icon: "material-symbols-outlined",
-    },
+      google_icon: {
+        icon_name: "person_add",
+        color: "google_icon_gradient",
+        icon: "material-symbols-outlined",
+      },
 
-    profile_details: {
-      id: 0,
-      haulier_name: "",
-      haulier_address: "",
-      haulier_postcode: "",
-      haulier_telephone: "",
-      haulier_email: "",
-      haulier_license: "",
-      active: 1,
-    },
-  }),
+      profile_details: {
+        id: 0,
+        customer_id: null,
+        name: "",
+        telephone: "",
+        email: "",
+        position: "",
+        active: 1,
+      },
+    };
+  },
 
   computed: {
     fieldRules() {
-      return [(v) => !!v || "This field is required"];
+      return [(v) => !!v || this.$t("field_required")];
     },
 
     emailRules() {
       return [
-        (v) => !!v || "Email is required",
         (v) =>
           !v ||
           /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          "Enter valid email",
+          this.$t("email_valid"),
       ];
+    },
+
+    phoneRules() {
+      return [(v) => !v || /^[0-9]+$/.test(v) || "Only numbers are allowed"];
     },
   },
 
   mounted() {
-    if (this.$route.query.slug) {
-      this.fetchHaulier();
+    if (this.$route.query.customer_id) {
+      this.profile_details.customer_id = this.$route.query.customer_id;
+    }
+
+    if (this.$route.query.id) {
+      this.fetchContact();
     }
   },
 
   methods: {
-    fetchHaulier() {
+    fetchContact() {
       this.loader = true;
 
       this.$axios
-        .get("haulierbyslug/" + this.$route.query.slug)
+        .get("customerindividual/" + this.$route.query.id)
         .then((res) => {
           if (res.data.status == "S") {
-            this.profile_details = res.data.haulier;
+            this.profile_details = res.data.customer_individual;
+          } else {
+            this.$toast.error(res.data.message);
           }
         })
         .catch((err) => {
           console.log(err);
+          this.$toast.error(this.$t("something_went_wrong"));
         })
         .finally(() => {
           this.loader = false;
@@ -211,17 +193,17 @@ export default {
     },
 
     submit() {
-      if (this.$refs.form.validate() && this.valid == true) {
+      if (this.$refs.form.validate() && this.valid) {
         this.isDisabled = true;
 
         this.$axios
-          .post("savehaulier", this.profile_details)
+          .post("savecustomercontact", this.profile_details)
           .then((res) => {
             if (res.data.status == "S") {
               this.$toast.success(res.data.message);
 
               this.$router.push({
-                name: "hauliers",
+                name: "customers",
               });
             } else {
               this.$toast.error(res.data.message);
@@ -229,7 +211,7 @@ export default {
           })
           .catch((err) => {
             console.log(err);
-            this.$toast.error("Something went wrong");
+            this.$toast.error(this.$t("something_went_wrong"));
           })
           .finally(() => {
             this.isDisabled = false;

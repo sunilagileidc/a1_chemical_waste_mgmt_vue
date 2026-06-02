@@ -51,6 +51,7 @@
             :search="search"
             :loading="tableLoading"
             :items-per-page-text="$t('rows_per_page')"
+            show-expand
           >
             <template v-slot:item="props">
               <tr class="vdatatable_tbody">
@@ -79,13 +80,13 @@
                 </td>
                 <td>
                   <v-btn
-                    class="hover_shine btn mr-2"
+                    class="hover_shine btn mr-2 status-btn"
                     size="small"
-                    :color="props.item.status == 1 ? 'success' : 'warning'"
-                    @click="changeStatus(props.item.id)"
+                    :color="props.item.active == 1 ? 'success' : 'warning'"
+                    elevation="0"
                   >
                     <span
-                      v-if="props.item.status == 1"
+                      v-if="props.item.active == 1"
                       class="spanactivesize"
                       >{{ $t("active") }}</span
                     >
@@ -106,6 +107,13 @@
                       mdi-pencil-outline
                     </v-icon>
                   </router-link>
+                  <v-icon
+                    color="success"
+                    class="mr-2 icon_size"
+                    @click="addContact(props.item)"
+                  >
+                    mdi-account-plus
+                  </v-icon>
                   <!-- <v-icon
                     color="red"
                     class="icon_size"
@@ -113,6 +121,67 @@
                   >
                     mdi-delete-outline
                   </v-icon> -->
+                </td>
+                <td>
+                  <v-btn
+                    icon
+                    size="small"
+                    variant="text"
+                    @click="props.toggleExpand(props.internalItem)"
+                  >
+                    <v-icon>
+                      {{
+                        props.isExpanded(props.internalItem)
+                          ? "mdi-chevron-up"
+                          : "mdi-chevron-down"
+                      }}
+                    </v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </template>
+            <!-- Expanded Row -->
+            <template v-slot:expanded-row="{ columns, item }">
+              <tr>
+                <td :colspan="columns.length">
+                  <v-sheet border rounded class="ma-2">
+                    <v-table density="compact">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Telephone</th>
+                          <th>Email</th>
+                          <th>Position</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr
+                          v-for="contact in item.individuals || []"
+                          :key="contact.id"
+                        >
+                          <td>{{ contact.name }}</td>
+                          <td>{{ contact.telephone }}</td>
+                          <td>{{ contact.email }}</td>
+                          <td>{{ contact.position }}</td>
+                          <td>
+                            {{ contact.active == 1 ? "Active" : "Inactive" }}
+                          </td>
+                          <td>
+                            <v-icon
+                              color="primary"
+                              class="mr-2"
+                              @click="editContact(contact)"
+                            >
+                              mdi-pencil-outline
+                            </v-icon>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                  </v-sheet>
                 </td>
               </tr>
             </template>
@@ -201,11 +270,35 @@ export default {
           sortable: false,
           key: "actions",
         },
+        {
+          title: "",
+          key: "data-table-expand",
+          sortable: false,
+          width: "50px",
+        },
       ];
     },
   },
 
   methods: {
+    addContact(customer) {
+      console.log(customer);
+
+      this.$router.push({
+        name: "customer_contact_creation",
+        query: {
+          customer_id: customer.id,
+        },
+      });
+    },
+    editContact(contact) {
+      this.$router.push({
+        name: "customer_contact_creation",
+        query: {
+          id: contact.id,
+        },
+      });
+    },
     fetchCustomers() {
       this.tableLoading = true;
 
@@ -249,40 +342,6 @@ export default {
           this.$toast.error(this.$t("something_went_wrong"));
         });
     },
-    // async changeStatus(id) {
-    //   const result = await this.showConfirmation(
-    //     "Confirm",
-    //     "Are you sure you want to change the status of this user ?",
-    //   );
-
-    //   if (!result) return;
-    //   this.$axios
-    //     .post("updateuserstatus", {
-    //       id: id,
-    //     })
-    //     .then((res) => {
-    //       if (Array.isArray(res.data.message)) {
-    //         this.array_data = res.data.message.toString();
-    //       } else {
-    //         this.array_data = res.data.message;
-    //       }
-    //       if (res.data.status == "S") {
-    //         this.$toast.success(this.array_data);
-    //         this.initval = true;
-    //         this.fetchUsers();
-    //       } else if (res.data.status == "E") {
-    //         this.$toast.error(this.$t("something_went_wrong"));
-    //       } else {
-    //         this.$toast.error(this.array_data);
-    //         this.initval = true;
-    //         this.fetchUsers();
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       this.$toast.error(this.$t("something_went_wrong"));
-    //       console.log("this error" + err);
-    //     });
-    // },
   },
 };
 </script>
@@ -290,5 +349,9 @@ export default {
 <style scoped>
 .v-icon--size-default {
   font-size: calc(var(--v-icon-size-multiplier) * 2em) !important;
+}
+.status-btn {
+  cursor: default !important;
+  pointer-events: none;
 }
 </style>

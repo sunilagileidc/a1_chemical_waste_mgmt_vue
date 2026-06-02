@@ -27,6 +27,7 @@
                   variant="outlined"
                   density="compact"
                   :rules="fieldRules"
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
 
@@ -37,6 +38,7 @@
                   variant="outlined"
                   density="compact"
                   :rules="emailRules"
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -48,6 +50,7 @@
                   label="Phone"
                   variant="outlined"
                   density="compact"
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
 
@@ -57,6 +60,7 @@
                   label="Postcode"
                   variant="outlined"
                   density="compact"
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -68,6 +72,7 @@
                   label="Address"
                   variant="outlined"
                   density="compact"
+                  hide-details="auto"
                   rows="2"
                 ></v-textarea>
               </v-col>
@@ -80,6 +85,7 @@
                   label="Disposal License"
                   variant="outlined"
                   density="compact"
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
 

@@ -31,6 +31,7 @@
                       density="compact"
                       label="Name"
                       class="required_field"
+                      hide-details="auto"
                       maxlength="150"
                     ></v-text-field>
                   </v-col>
@@ -43,6 +44,7 @@
                       density="compact"
                       label="Email"
                       class="required_field"
+                      hide-details="auto"
                       maxlength="150"
                     ></v-text-field>
                   </v-col>
@@ -57,6 +59,7 @@
                       density="compact"
                       label="Phone"
                       maxlength="20"
+                      hide-details="auto"
                     ></v-text-field>
                   </v-col>
 
@@ -67,6 +70,7 @@
                       density="compact"
                       label="Post Code"
                       maxlength="20"
+                      hide-details="auto"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -81,6 +85,7 @@
                       label="Address"
                       rows="2"
                       maxlength="500"
+                      hide-details="auto"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -94,6 +99,7 @@
                       density="compact"
                       label="HWR Code"
                       maxlength="100"
+                      hide-details="auto"
                     ></v-text-field>
                   </v-col>
 
@@ -104,6 +110,7 @@
                       density="compact"
                       label="HWR Expiry Date"
                       type="date"
+                      hide-details="auto"
                     ></v-text-field>
                   </v-col>
 
@@ -114,6 +121,7 @@
                       density="compact"
                       label="SIC Code"
                       maxlength="100"
+                      hide-details="auto"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -128,6 +136,7 @@
                       label="SIC Description"
                       rows="2"
                       maxlength="1000"
+                      hide-details="auto"
                     ></v-textarea>
                   </v-col>
                   <v-col cols="12" md="2">

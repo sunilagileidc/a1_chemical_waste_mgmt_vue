@@ -69,6 +69,22 @@
                 <td>
                   {{ props.item.supplier_license || $t("not_appllicable") }}
                 </td>
+                <td>
+                  <v-btn
+                    class="hover_shine btn mr-2 status-btn"
+                    size="small"
+                    :color="props.item.active == 1 ? 'success' : 'warning'"
+                  >
+                    <span
+                      v-if="props.item.active == 1"
+                      class="spanactivesize"
+                      >{{ $t("active") }}</span
+                    >
+                    <span v-else class="spanactivesize">{{
+                      $t("inactive")
+                    }}</span>
+                  </v-btn>
+                </td>
 
                 <td>
                   <router-link
@@ -153,6 +169,12 @@ export default {
           key: "supplier_license",
         },
         {
+          title: this.$t("status"),
+          align: "left",
+          sortable: false,
+          key: "status",
+        },
+        {
           title: this.$t("actions"),
           align: "left",
           sortable: false,
@@ -213,5 +235,9 @@ export default {
 <style scoped>
 .v-icon--size-default {
   font-size: calc(var(--v-icon-size-multiplier) * 2em) !important;
+}
+.status-btn {
+  cursor: default !important;
+  pointer-events: none;
 }
 </style>

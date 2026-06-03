@@ -158,7 +158,24 @@
                           <td>{{ supplier.email }}</td>
                           <td>{{ supplier.position }}</td>
                           <td>
-                            {{ supplier.active == 1 ? "Active" : "Inactive" }}
+                            <v-btn
+                              class="hover_shine btn mr-2 status-btn"
+                              size="small"
+                              :color="
+                                supplier.active == 1 ? 'success' : 'warning'
+                              "
+                              elevation="0"
+                            >
+                              <span
+                                v-if="supplier.active == 1"
+                                class="spanactivesize"
+                                >{{ $t("active") }}</span
+                              >
+                              <span v-else class="spanactivesize">{{
+                                $t("inactive")
+                              }}</span>
+                            </v-btn>
+                            <!-- {{ supplier.active == 1 ? "Active" : "Inactive" }} -->
                           </td>
                           <td>
                             <v-icon

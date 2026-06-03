@@ -167,7 +167,24 @@
                           <td>{{ contact.email }}</td>
                           <td>{{ contact.position }}</td>
                           <td>
-                            {{ contact.active == 1 ? "Active" : "Inactive" }}
+                            <v-btn
+                              class="hover_shine btn mr-2 status-btn"
+                              size="small"
+                              :color="
+                                contact.active == 1 ? 'success' : 'warning'
+                              "
+                              elevation="0"
+                            >
+                              <span
+                                v-if="contact.active== 1"
+                                class="spanactivesize"
+                                >{{ $t("active") }}</span
+                              >
+                              <span v-else class="spanactivesize">{{
+                                $t("inactive")
+                              }}</span>
+                            </v-btn>
+                            <!-- {{ contact.active == 1 ? "Active" : "Inactive" }} -->
                           </td>
                           <td>
                             <v-icon

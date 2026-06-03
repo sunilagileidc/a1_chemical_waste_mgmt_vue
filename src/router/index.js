@@ -97,10 +97,30 @@ const routes = [
     component: () => import("../components/Cruds/hauliers/IndexPage.vue"),
   },
   {
+    path: "/haulier_contact_creation",
+    name: "haulier_contact_creation",
+    beforeEnter: guardMyroute,
+    component: () =>
+      import("../components/Cruds/hauliers/HaulierContactAmend.vue"),
+  },
+  {
     path: "/haulier_creation",
     name: "haulier_creation",
     beforeEnter: guardMyroute,
     component: () => import("../components/Cruds/hauliers/HaulierAmend.vue"),
+  },
+  {
+    path: "/waste-streams",
+    name: "waste_streams",
+    component: () =>
+      import("../components/Cruds/WasteStreams/IndexPage.vue"),
+  },
+
+  {
+    path: "/waste-stream-creation",
+    name: "waste_stream_creation",
+    component: () =>
+      import("../components/Cruds/WasteStreams/WasteStreamAmend.vue"),
   },
   {
     path: "/locked_users",

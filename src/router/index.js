@@ -123,6 +123,31 @@ const routes = [
       import("../components/Cruds/WasteStreams/WasteStreamAmend.vue"),
   },
   {
+    path: "/sales-quotations",
+    name: "sales_quotations",
+    component: () =>
+      import("../components/Cruds/SalesQuotation/IndexPage.vue"),
+  },
+
+  {
+    path: "/sales-quotation-creation",
+    name: "sales_quotation_creation",
+    component: () =>
+      import("../components/Cruds/SalesQuotation/SalesQuotationAmend.vue"),
+  },
+  {
+    path: "/quotation-partners",
+    name: "quotation_partners",
+    component: () =>
+      import("../components/Cruds/QuotationPartners/IndexPage.vue")
+  },
+  {
+    path: "/quotation-partner-creation",
+    name: "quotation_partner_creation",
+    component: () =>
+      import("../components/Cruds/QuotationPartners/QuotationPartnerAmend.vue")
+  },
+  {
     path: "/locked_users",
     name: "locked_users",
     beforeEnter: guardMyroute,

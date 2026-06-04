@@ -218,7 +218,7 @@
 export default {
   data: () => ({
     google_icon: {
-      icon_name: "groups",
+      icon_name: "account_circle",
       color: "google_icon_gradient",
       icon: "material-symbols-outlined",
     },

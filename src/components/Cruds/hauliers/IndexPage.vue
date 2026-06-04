@@ -208,7 +208,7 @@
 export default {
   data: () => ({
     google_icon: {
-      icon_name: "groups",
+      icon_name: "local_shipping",
       color: "google_icon_gradient",
       icon: "material-symbols-outlined",
     },

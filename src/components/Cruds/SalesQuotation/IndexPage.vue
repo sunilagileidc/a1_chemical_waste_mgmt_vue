@@ -23,14 +23,11 @@
           :loading="tableLoading"
         >
           <!-- Status -->
-          <template #item.status="{ item }">
-            <v-btn
-              size="small"
-              :color="item.status == 'draft' ? 'warning' : 'success'"
-            >
+          <!-- <template #item.status="{ item }">
+            <v-btn class="status-btn" size="small" :color="getStatusColor(item.status)">
               {{ item.status }}
             </v-btn>
-          </template>
+          </template> -->
 
           <!-- Actions -->
           <template #item.actions="{ item }">
@@ -93,10 +90,10 @@ export default {
           key: "total_cost",
         },
 
-        {
-          title: "Status",
-          key: "status",
-        },
+        // {
+        //   title: "Status",
+        //   key: "status",
+        // },
 
         {
           title: "Actions",
@@ -112,6 +109,18 @@ export default {
   },
 
   methods: {
+    getStatusColor(status) {
+      switch (status) {
+        case "draft":
+          return "warning";
+        case "finalised":
+          return "success";
+        case "cancelled":
+          return "error"; // red
+        default:
+          return "grey";
+      }
+    },
     getQuotations() {
       this.tableLoading = true;
 
@@ -129,3 +138,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.status-btn {
+  cursor: default !important;
+  pointer-events: none;
+}
+</style>

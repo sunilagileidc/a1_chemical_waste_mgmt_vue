@@ -57,17 +57,17 @@
                 {{ props.item.waste_code || "-" }}
               </td>
 
-              <!-- <td class="description-column">
-                {{ props.item.waste_description || "-" }}
-              </td> -->
+              <td class="description-column">
+                {{ props.item.waste_components || "-" }}
+              </td>
 
               <td>
                 {{ props.item.waste_ewc || "-" }}
               </td>
 
-              <td>
+              <!-- <td>
                 {{ props.item.waste_physical_form || "-" }}
-              </td>
+              </td> -->
 
               <td>
                 {{ props.item.waste_haz_code || "-" }}
@@ -159,20 +159,20 @@ export default {
           key: "waste_code",
         },
 
-        // {
-        //   title: "Desc",
-        //   key: "waste_description",
-        // },
+        {
+          title: "Component",
+          key: "waste_components",
+        },
 
         {
           title: "EWC",
           key: "waste_ewc",
         },
 
-        {
-          title: "Phys Form",
-          key: "waste_physical_form",
-        },
+        // {
+        //   title: "Phys Form",
+        //   key: "waste_physical_form",
+        // },
 
         {
           title: "Haz Code",

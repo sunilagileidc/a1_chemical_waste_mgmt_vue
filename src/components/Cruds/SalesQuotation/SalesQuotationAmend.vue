@@ -98,9 +98,9 @@
                 class="table-input"
                 density="compact"
                 variant="outlined"
-                type="number"
                 hide-details
                 v-model="item.quote_qty"
+                @keydown="allowDecimal"
               />
             </template>
 
@@ -109,20 +109,40 @@
                 class="table-input"
                 density="compact"
                 variant="outlined"
-                type="number"
                 hide-details
                 v-model="item.quote_unit_price"
+                @keydown="allowDecimal"
+              />
+            </template>
+            <template v-slot:item.vat="{ item }">
+              <v-checkbox
+                density="compact"
+                hide-details
+                v-model="item.quote_vat_exclude"
+                :true-value="1"
+                :false-value="0"
               />
             </template>
 
             <template v-slot:item.total="{ item }">
               {{
-                Number(item.quote_qty || 0) * Number(item.quote_unit_price || 0)
+                Number(item.quote_qty || 0) *
+                  Number(item.quote_unit_price || 0) +
+                (item.quote_vat_exclude == 1
+                  ? Number(item.quote_qty || 0) *
+                    Number(item.quote_unit_price || 0) *
+                    0.2
+                  : 0)
               }}
             </template>
 
             <template v-slot:item.actions="{ index }">
-              <v-btn icon size="x-small" color="red" @click="removeItem(index)">
+              <v-btn
+                icon
+                size="x-small"
+                color="red"
+                @click="openDeleteDialog(index)"
+              >
                 <v-icon> mdi-delete-outline </v-icon>
               </v-btn>
             </template>
@@ -167,16 +187,16 @@
                     density="compact"
                     variant="outlined"
                     hide-details
-                    type="number"
                     v-model="quotation.transport_cost"
+                    @keydown="allowDecimal"
                   />
 
                   <v-text-field
                     density="compact"
                     variant="outlined"
                     hide-details
-                    type="number"
                     v-model="quotation.document_cost"
+                    @keydown="allowDecimal"
                   />
 
                   <v-text-field
@@ -198,10 +218,10 @@
                 @update:items-per-page="setItemsPerPage"
                 @next="nextPage"
                 @prev="prevPage"
-                
               />
             </template>
           </v-data-table>
+          <confirmation-dialog ref="confirmationDialog" />
 
           <!-- ADD ITEM POPUP -->
 
@@ -218,7 +238,7 @@
                   variant="outlined"
                   density="compact"
                   clearable
-                  class="mb-3"
+                  class="mb-0"
                 />
                 <v-data-table
                   class="waste-select-table"
@@ -230,7 +250,7 @@
                   v-model="selectedWasteItems"
                   density="compact"
                   :items-per-page="10"
-                  :items-per-page-options="[5,10, 20, 50]"
+                  :items-per-page-options="[5, 10, 20, 50]"
                 >
                   <template v-slot:item.waste_code="{ item }">
                     <strong>
@@ -275,40 +295,6 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-
-          <!-- COST -->
-
-          <v-row class="px-4 mt-5">
-            <v-col cols="12" md="4">
-              <v-text-field
-                variant="outlined"
-                density="compact"
-                label="Transport Cost"
-                type="number"
-                v-model="quotation.transport_cost"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4">
-              <v-text-field
-                variant="outlined"
-                density="compact"
-                label="Document Cost"
-                type="number"
-                v-model="quotation.document_cost"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4">
-              <v-text-field
-                variant="outlined"
-                density="compact"
-                label="Total Cost"
-                :model-value="totalCost"
-                readonly
-              />
-            </v-col>
-          </v-row>
 
           <!-- PARTNERS -->
 
@@ -417,6 +403,8 @@ export default {
       partners: [],
       selectedWasteItems: [],
       wasteSearch: "",
+      confirmationDialog: false,
+      deleteIndex: null,
       wasteHeaders: [
         {
           title: "Waste Code",
@@ -464,6 +452,11 @@ export default {
           key: "quote_unit_price",
         },
         {
+          title: "VAT",
+          key: "vat",
+          width: "100",
+        },
+        {
           title: "Total",
           key: "total",
         },
@@ -485,21 +478,13 @@ export default {
 
       quotation: {
         id: 0,
-
         quotation_number: "QT-" + Date.now(),
-
         customer_id: null,
-
         job_name: "",
-
         quotation_date: new Date().toISOString().substr(0, 10),
-
         transport_cost: 0,
-
         document_cost: 0,
-
         status: "draft",
-
         items: [],
       },
     };
@@ -525,8 +510,10 @@ export default {
       let total = 0;
 
       this.quotation.items.forEach((item) => {
-        total +=
+        let itemTotal =
           Number(item.quote_qty || 0) * Number(item.quote_unit_price || 0);
+
+        total += itemTotal + this.vatAmount(item);
       });
 
       return (
@@ -547,6 +534,58 @@ export default {
   },
 
   methods: {
+    vatAmount(item) {
+      let amount =
+        Number(item.quote_qty || 0) * Number(item.quote_unit_price || 0);
+
+      if (item.quote_vat_exclude == 1) {
+        return amount * 0.2;
+      }
+
+      return 0;
+    },
+    allowDecimal(event) {
+      const allowedKeys = [
+        "Backspace",
+        "Delete",
+        "Tab",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End",
+      ];
+      if (allowedKeys.includes(event.key)) {
+        return;
+      }
+      if (/^[0-9]$/.test(event.key)) {
+        return;
+      }
+      if (event.key === "." && !event.target.value.includes(".")) {
+        return;
+      }
+      event.preventDefault();
+    },
+    openDeleteDialog(index) {
+      this.deleteIndex = index;
+
+      this.$refs.confirmationDialog.open().then((result) => {
+        if (result) {
+          this.quotation.items.splice(this.deleteIndex, 1);
+        }
+
+        this.deleteIndex = null;
+      });
+    },
+
+    confirmDelete() {
+      if (this.deleteIndex !== null) {
+        this.quotation.items.splice(this.deleteIndex, 1);
+      }
+
+      this.deleteIndex = null;
+
+      this.confirmationDialog = false;
+    },
     openItemDialog() {
       this.selectedWasteItems = this.quotation.items.map(
         (item) => item.waste_stream_id
@@ -581,6 +620,8 @@ export default {
                 quote_size: item.quote_size,
                 quote_qty: Math.floor(item.quote_qty),
                 quote_unit_price: item.quote_unit_price,
+                quote_vat_exclude: item.quote_vat_exclude ?? 0,
+                vat: item.vat ?? 0,
                 wasteStream: item.waste_stream,
               })),
             };
@@ -631,12 +672,11 @@ export default {
             wasteStream: {
               ...waste,
             },
-
             quote_size: "",
-
             quote_qty: 0,
-
             quote_unit_price: 0,
+            quote_vat_exclude: 0,
+            vat: 0,
           });
         }
       });
@@ -684,14 +724,12 @@ export default {
 
         items: this.quotation.items.map((item) => ({
           waste_stream_id: item.waste_stream_id,
-
           supplier_id: item.supplier_id,
-
           quote_size: item.quote_size,
-
           quote_qty: item.quote_qty,
-
           quote_unit_price: item.quote_unit_price,
+          quote_vat_exclude: item.quote_vat_exclude,
+          vat: this.vatAmount(item),
         })),
       };
 

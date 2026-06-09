@@ -22,6 +22,9 @@
           :items="quotations"
           :loading="tableLoading"
         >
+          <template v-slot:item.quotation_date="{ item }">
+            {{ formatDatewithshortMonth(item.quotation_date) }}
+          </template>
           <!-- Status -->
           <!-- <template #item.status="{ item }">
             <v-btn class="status-btn" size="small" :color="getStatusColor(item.status)">

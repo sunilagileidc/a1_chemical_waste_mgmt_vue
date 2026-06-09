@@ -295,70 +295,31 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-
-          <!-- PARTNERS -->
-
-          <v-divider class="my-5" />
-
-          <!-- <div class="d-flex justify-space-between align-center px-4">
-            <h4>Quotation Partners</h4>
-
-            <v-btn
-              size="small"
-              color="primary"
-              :disabled="!quotation.id"
-              @click="
-                $router.push({
-                  name: 'quotation_partner_creation',
-                  query: {
-                    sales_quotation_id: quotation.id,
-                  },
-                })
-              "
-            >
-              Add Partner
-            </v-btn>
-          </div> -->
-
-          <!-- <v-data-table
-            class="mx-4 mt-3"
-            :headers="partnerHeaders"
-            :items="partners"
-            density="compact"
-          >
-            <template #item.partner="{ item }">
-              <span v-if="item.partner_type == 'supplier'">
-                {{ item.supplier?.supplier_name }}
-              </span>
-
-              <span v-if="item.partner_type == 'haulier'">
-                {{ item.haulier?.haulier_name }}
-              </span>
-            </template>
-
-            <template #item.total_cost="{ item }">
-              {{
-                Number(item.transport_cost || 0) +
-                Number(item.document_cost || 0) +
-                Number(item.fuel_charge || 0) +
-                Number(item.demurrage_charge || 0)
-              }}
-            </template>
-
-            <template #item.status="{ item }">
-              <v-chip size="small">
-                {{ item.status }}
-              </v-chip>
-            </template>
-
-            <template #no-data> No partners added </template>
-          </v-data-table> -->
         </v-form>
       </div>
 
       <!-- BUTTONS -->
 
       <div class="d-block mr-4 mt-3 text-right">
+        <v-badge
+          v-if="partners.length"
+          :content="partners.length"
+          color="white"
+          text-color="primary"
+          offset-x="8"
+          offset-y="7"
+        >
+          <v-btn
+            size="small"
+            class="mr-2"
+            color="primary"
+            :disabled="!quotation.id"
+            @click="partnerDialog = true"
+          >
+            <v-icon start size="18">mdi-account-plus</v-icon>
+            Add Partner
+          </v-btn>
+        </v-badge>
         <v-btn size="small" class="btn-cancel mr-2" @click="cancel">
           {{ $t("cancel") }}
         </v-btn>
@@ -382,6 +343,147 @@
         </v-btn>
       </div>
     </div>
+    <v-dialog v-model="partnerDialog" max-width="900" persistent>
+      <v-card>
+        <v-card-title> Add Quotation Partner </v-card-title>
+
+        <v-card-text>
+          <v-form ref="partnerForm">
+            <v-row>
+              <!-- Partner Type -->
+
+              <v-col cols="12" md="6">
+                <v-select
+                  variant="outlined"
+                  density="compact"
+                  label="Partner Type"
+                  :items="[
+                    {
+                      title: 'Supplier',
+                      value: 'supplier',
+                    },
+                    {
+                      title: 'Haulier',
+                      value: 'haulier',
+                    },
+                  ]"
+                  v-model="partner.partner_type"
+                />
+              </v-col>
+
+              <!-- Partner -->
+
+              <v-col cols="12" md="6">
+                <v-select
+                  variant="outlined"
+                  density="compact"
+                  label="Partner"
+                  :items="filteredPartners"
+                  item-title="name"
+                  item-value="id"
+                  v-model="partner.partner_id"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Quotation Date"
+                  type="date"
+                  v-model="partner.quotation_date"
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Transport Cost"
+                  type="number"
+                  v-model="partner.transport_cost"
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Document Cost"
+                  type="number"
+                  v-model="partner.document_cost"
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Fuel Charge"
+                  type="number"
+                  v-model="partner.fuel_charge"
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Demurrage"
+                  type="number"
+                  v-model="partner.demurrage_charge"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Number Pallets"
+                  v-model="partner.number_pallets"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Load Type"
+                  v-model="partner.load_type"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  label="Load Other"
+                  v-model="partner.load_other"
+                />
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                  variant="outlined"
+                  density="compact"
+                  label="Haulier Notes"
+                  rows="3"
+                  v-model="partner.haulier_notes"
+                />
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="cancel" @click="partnerDialog = false"> Cancel </v-btn>
+
+          <v-btn color="success" @click="savePartner"> Save </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -400,7 +502,9 @@ export default {
       itemDialog: false,
       customers: [],
       wasteStreams: [],
-      partners: [],
+      partnerDialog: false,
+      suppliers: [],
+      hauliers: [],
       selectedWasteItems: [],
       wasteSearch: "",
       confirmationDialog: false,
@@ -427,6 +531,31 @@ export default {
           key: "is_hazard",
         },
       ],
+      partner: {
+        sales_quotation_id: null,
+
+        partner_type: "supplier",
+
+        partner_id: null,
+
+        quotation_date: new Date().toISOString().substr(0, 10),
+
+        transport_cost: 0,
+
+        document_cost: 0,
+
+        fuel_charge: 0,
+
+        demurrage_charge: 0,
+
+        load_type: "",
+
+        load_other: "",
+
+        number_pallets: "",
+
+        haulier_notes: "",
+      },
 
       google_icon: {
         icon_name: "request_quote",
@@ -467,15 +596,6 @@ export default {
         },
       ],
 
-      partnerHeaders: [
-        { title: "Type", key: "partner_type" },
-        { title: "Partner", key: "partner" },
-        { title: "Transport", key: "transport_cost" },
-        { title: "Document", key: "document_cost" },
-        { title: "Total", key: "total_cost" },
-        { title: "Status", key: "status" },
-      ],
-
       quotation: {
         id: 0,
         quotation_number: "QT-" + Date.now(),
@@ -491,6 +611,13 @@ export default {
   },
 
   computed: {
+    filteredPartners() {
+      if (this.partner.partner_type == "haulier") {
+        return this.hauliers;
+      }
+
+      return this.suppliers;
+    },
     filteredWasteStreams() {
       if (!this.wasteSearch) {
         return this.wasteStreams;
@@ -525,6 +652,9 @@ export default {
   },
 
   mounted() {
+    this.loadSuppliers();
+
+    this.loadHauliers();
     this.loadCustomers();
     this.loadWasteStreams();
 
@@ -534,6 +664,74 @@ export default {
   },
 
   methods: {
+    loadSuppliers() {
+      this.$axios.get("suppliers").then((res) => {
+        this.suppliers = res.data.suppliers.map((item) => ({
+          id: item.id,
+
+          name: item.supplier_name,
+        }));
+      });
+    },
+
+    loadHauliers() {
+      this.$axios.get("hauliers").then((res) => {
+        this.hauliers = res.data.hauliers.map((item) => ({
+          id: item.id,
+
+          name: item.haulier_name,
+        }));
+      });
+    },
+
+    savePartner() {
+      this.partner.sales_quotation_id = this.quotation.id;
+
+      this.$axios
+        .post("savequotationpartner", this.partner)
+        .then((res) => {
+          if (res.data.status == "S") {
+            this.$toast.success(res.data.message);
+
+            this.partnerDialog = false;
+
+            // refresh partner table
+
+            this.loadQuotationPartners();
+
+            this.partner = {
+              sales_quotation_id: this.quotation.id,
+
+              partner_type: "supplier",
+
+              partner_id: null,
+
+              quotation_date: new Date().toISOString().substr(0, 10),
+
+              transport_cost: 0,
+
+              document_cost: 0,
+
+              fuel_charge: 0,
+
+              demurrage_charge: 0,
+
+              load_type: "",
+
+              load_other: "",
+
+              number_pallets: "",
+
+              haulier_notes: "",
+            };
+          } else {
+            this.$toast.error(res.data.message);
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Something went wrong");
+        });
+    },
     vatAmount(item) {
       let amount =
         Number(item.quote_qty || 0) * Number(item.quote_unit_price || 0);

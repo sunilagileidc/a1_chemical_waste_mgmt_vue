@@ -235,8 +235,8 @@ export default {
   },
 
   mounted() {
-    if (this.$route.query.sales_quotation_id) {
-      this.partner.sales_quotation_id = this.$route.query.sales_quotation_id;
+    if (this.quotationId) {
+      this.partner.sales_quotation_id = this.quotationId;
     }
 
     this.loadSuppliers();
@@ -269,12 +269,9 @@ export default {
           if (res.data.status == "S") {
             this.$toast.success(res.data.message);
 
-            this.$router.push({
-              name: "sales_quotation_creation",
-              query: {
-                id: res.data.quotation_id,
-              },
-            });
+            this.$emit("saved");
+
+            this.$emit("close");
           } else {
             this.$toast.error(res.data.message);
           }

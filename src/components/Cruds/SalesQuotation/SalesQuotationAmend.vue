@@ -296,11 +296,20 @@
               <v-card-actions class="sticky-actions">
                 <v-spacer />
 
-                <v-btn class="btn-cancel" @click="itemDialog = false">
+                <v-btn
+                  size="small"
+                  class="btn-cancel mr-2"
+                  @click="itemDialog = false"
+                >
                   Cancel
                 </v-btn>
 
-                <v-btn color="success" class="add-btn" @click="saveItem">
+                <v-btn
+                  size="small"
+                  color="success"
+                  class="status-approved"
+                  @click="saveItem"
+                >
                   Add
                 </v-btn>
               </v-card-actions>
@@ -416,6 +425,7 @@
                   label="Transport Cost"
                   type="number"
                   v-model="partner.transport_cost"
+                  @keydown="allowDecimal"
                 />
               </v-col>
 
@@ -427,6 +437,7 @@
                   hide-details="auto"
                   type="number"
                   v-model="partner.document_cost"
+                  @keydown="allowDecimal"
                 />
               </v-col>
 
@@ -438,6 +449,7 @@
                   label="Fuel Charge"
                   type="number"
                   v-model="partner.fuel_charge"
+                  @keydown="allowDecimal"
                 />
               </v-col>
 
@@ -449,6 +461,7 @@
                   hide-details="auto"
                   type="number"
                   v-model="partner.demurrage_charge"
+                  @keydown="allowDecimal"
                 />
               </v-col>
 
@@ -494,11 +507,20 @@
           </v-form>
 
           <div class="d-flex justify-end mt-4 px-2">
-            <v-btn class="btn-cancel mr-2" @click="closePartnerDialog">
+            <v-btn
+              size="small"
+              class="btn-cancel mr-2"
+              @click="closePartnerDialog"
+            >
               Cancel
             </v-btn>
 
-            <v-btn color="success" class="add-btn" @click="savePartner">
+            <v-btn
+              size="small"
+              color="success"
+              class="status-approved"
+              @click="savePartner"
+            >
               {{ editingPartnerId ? "Update" : "Save" }}
             </v-btn>
           </div>
@@ -1230,10 +1252,6 @@ export default {
   z-index: 10;
   border-top: 1px solid #ddd;
   padding: 5px 15px;
-}
-.add-btn {
-  background: green !important;
-  color: white !important;
 }
 .quotation-summary {
   display: grid;

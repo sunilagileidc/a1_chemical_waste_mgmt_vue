@@ -50,7 +50,7 @@ export default {
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem("user_data"));
-    this.getPafStats();
+    // this.getPafStats();
     // this.fetchDashboard(this.user.id, this.user.rolename);
   },
 
@@ -146,30 +146,29 @@ export default {
           });
       }
     },
-    getPafStats() {
-      this.loader = true;
-      // decide URL based on role
+    // getPafStats() {
+    //   this.loader = true;
 
-      this.$axios
-        .get("get_all_paf_stats", {
-          params: {
-            institution_id: this.sel_institution?.institution_id,
-          },
-        })
-        .then((res) => {
-          if (res.data.status === "S") {
-            this.stats = res.data.stats;
-          } else {
-            this.$toast.error(res.data.message);
-          }
-        })
-        .catch(() => {
-          this.$toast.error(this.$t("something_went_wrong"));
-        })
-        .finally(() => {
-          this.loader = false;
-        });
-    },
+    //   this.$axios
+    //     .get("get_all_paf_stats", {
+    //       params: {
+    //         institution_id: this.sel_institution?.institution_id,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       if (res.data.status === "S") {
+    //         this.stats = res.data.stats;
+    //       } else {
+    //         this.$toast.error(res.data.message);
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.$toast.error(this.$t("something_went_wrong"));
+    //     })
+    //     .finally(() => {
+    //       this.loader = false;
+    //     });
+    // },
 
     route_to_page(page) {
       if (page == "Users") {

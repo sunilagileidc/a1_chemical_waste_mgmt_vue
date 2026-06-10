@@ -72,7 +72,7 @@
                 </td>
 
                 <td>
-                  {{ props.item.hwr_expiry_date || $t("not_appllicable") }}
+                  {{ formatDatewithshortMonth(props.item.hwr_expiry_date) || $t("not_appllicable") }}
                 </td>
 
                 <td>
@@ -264,7 +264,7 @@ export default {
           key: "hwr_code",
         },
         {
-          title: "HWR Expiry Date",
+          title: "Expiry Date",
           align: "left",
           sortable: true,
           key: "hwr_expiry_date",

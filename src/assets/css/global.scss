@@ -377,7 +377,7 @@ $color-theme-dark: #fff;
 .background {
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.32)),
-    url("/src/assets/images/bg.jpeg");
+    url("/src/assets/images/bgg.png");
   background-size: cover;
   // display: flex;
   align-items: center;
@@ -390,7 +390,7 @@ $color-theme-dark: #fff;
 .background-inner {
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0.32)),
-    url("/src/assets/images/bg-inner.jpeg");
+    url("/src/assets/images/bgg1.png");
   background-size: cover;
   // display: flex;
   align-items: center;
@@ -752,7 +752,7 @@ input::placeholder {
 
 .user-page-bg {
   min-height: 100vh;
-  background-image: url("../images/bg.jpeg");
+  background-image: url("../images/bgg.png");
   // background: linear-gradient(180deg,
   //     #f6f4ec 0%,
   //     #f3e7c7 100%);

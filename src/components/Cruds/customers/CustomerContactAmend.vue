@@ -27,20 +27,6 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-
-              <!-- Telephone -->
-              <v-col cols="12" md="6">
-                <v-text-field
-                  variant="outlined"
-                  density="compact"
-                  v-model="profile_details.telephone"
-                  label="Telephone"
-                  :rules="phoneRules"
-                  hide-details="auto"
-                  maxlength="15"
-                ></v-text-field>
-              </v-col>
-
               <!-- Email -->
               <v-col cols="12" md="6">
                 <v-text-field
@@ -52,6 +38,19 @@
                   class="required_field"
                   hide-details="auto"
                   maxlength="150"
+                ></v-text-field>
+              </v-col>
+
+              <!-- Telephone -->
+              <v-col cols="12" md="4">
+                <v-text-field
+                  variant="outlined"
+                  density="compact"
+                  v-model="profile_details.telephone"
+                  label="Telephone"
+                  :rules="phoneRules"
+                  hide-details="auto"
+                  maxlength="15"
                 ></v-text-field>
               </v-col>
 
@@ -67,7 +66,7 @@
               </v-col>
 
               <!-- Status -->
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="2">
                 <v-switch
                   v-model="profile_details.active"
                   label="Status"
@@ -199,7 +198,7 @@ export default {
     },
 
     submit() {
-        console.log(this.profile_details);
+      console.log(this.profile_details);
       if (this.$refs.form.validate() && this.valid) {
         this.isDisabled = true;
 

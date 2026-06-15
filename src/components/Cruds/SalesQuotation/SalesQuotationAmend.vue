@@ -417,7 +417,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="2">
+              <!-- <v-col cols="12" md="2">
                 <v-text-field
                   variant="outlined"
                   density="compact"
@@ -463,9 +463,9 @@
                   v-model="partner.demurrage_charge"
                   @keydown="allowDecimal"
                 />
-              </v-col>
+              </v-col> -->
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="2">
                 <v-text-field
                   variant="outlined"
                   density="compact"
@@ -493,11 +493,11 @@
                   v-model="partner.load_other"
                 />
               </v-col>
-              <v-col cols="6">
+              <v-col cols="4">
                 <v-textarea
                   variant="outlined"
                   density="compact"
-                  label="Haulier Notes"
+                  label="Notes"
                   hide-details="auto"
                   rows="1"
                   v-model="partner.haulier_notes"
